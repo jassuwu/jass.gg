@@ -1,22 +1,37 @@
 ---
 import ASSETS from "@/assets";
+
+const isHomePage = Astro.url.pathname === "/";
 ---
 
 <header
-  class="container-narrow bg-background/70 sticky top-0 z-50 flex h-24 items-center justify-between [mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)] py-4 backdrop-blur-md [-webkit-mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)]">
-  <img {...ASSETS.GIF.SHINJI} class="h-10 w-10 rounded-full" alt="jass" />
-  <div class="flex items-center gap-16">
-    <a href="/blog">
-      <p>blog</p>
-    </a>
-    <a href="/typing">
-      <p>typing</p>
-    </a>
-    <a href="/framework">
-      <p>framework</p>
-    </a>
-    <a href="/resume">
-      <p>résumé</p>
-    </a>
+  class="bg-background/70 sticky top-0 z-50 w-full [mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)]">
+  <div class="container-narrow flex h-24 items-center justify-between py-4">
+    {
+      isHomePage ? (
+        <img {...ASSETS.GIF.SHINJI} class="h-10 w-10 rounded-full" alt="jass" />
+      ) : (
+        <a href="/">
+          <div class="flex items-center gap-2">
+            <img {...ASSETS.ICONS.MOVE_LEFT} class="h-6 w-6" alt="move left" />
+            <p class="text-primary">back to home</p>
+          </div>
+        </a>
+      )
+    }
+    <div class="flex items-center gap-16">
+      <a href="/blog">
+        <p>blog</p>
+      </a>
+      <a href="/typing">
+        <p>typing</p>
+      </a>
+      <a href="/framework">
+        <p>framework</p>
+      </a>
+      <a href="/resume">
+        <p>résumé</p>
+      </a>
+    </div>
   </div>
 </header>

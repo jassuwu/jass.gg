@@ -24,22 +24,24 @@ const initialTime24 = new Date().toLocaleTimeString("en-IN", {
 ---
 
 <footer
-  class="container-narrow bg-background/70 text-primary/70 sticky bottom-0 z-50 flex h-24 items-center justify-evenly [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] py-4 backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
-  <p>jass.gg &copy;</p>
-  <span aria-hidden="true">•</span>
-  <p>
-    last updated on <time datetime={new Date().toISOString()}
-      >{lastUpdated}</time
-    >
-  </p>
-  <span aria-hidden="true">•</span>
-  <p>{country}</p>
-  <span aria-hidden="true">•</span>
-  <p>
-    <time id="live-time" datetime={new Date().toISOString()}>
-      {initialTime12} / {initialTime24} IST
-    </time>
-  </p>
+  class="bg-background/70 text-primary/70 sticky bottom-0 z-50 w-full [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
+  <div class="container-narrow flex h-24 items-center justify-evenly py-4">
+    <p>jass.gg &copy;</p>
+    <span aria-hidden="true">•</span>
+    <p>
+      last updated on <time datetime={new Date().toISOString()}
+        >{lastUpdated}</time
+      >
+    </p>
+    <span aria-hidden="true">•</span>
+    <p>{country}</p>
+    <span aria-hidden="true">•</span>
+    <p>
+      <time id="live-time" datetime={new Date().toISOString()}>
+        {initialTime12} / {initialTime24} IST
+      </time>
+    </p>
+  </div>
 </footer>
 
 <script>
