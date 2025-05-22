@@ -1,16 +1,17 @@
 ---
-import '@/styles/global.css';
+import "@/styles/global.css";
 ---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/webp" href="/favicon.webp" />
-		<meta name="generator" content={Astro.generator} />
-		<title>jass</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
+    <meta name="generator" content={Astro.generator} />
+    <title>jass</title>
+  </head>
+  <body class="dark bg-background text-foreground min-h-screen">
+    <slot />
+  </body>
 </html>
