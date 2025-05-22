@@ -1,6 +1,7 @@
 ---
 import "@/styles/global.css";
 import { Header, Footer } from "@/components";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
@@ -11,6 +12,7 @@ import { Header, Footer } from "@/components";
     <link rel="icon" type="image/webp" href="/favicon.webp" />
     <meta name="generator" content={Astro.generator} />
     <title>jass</title>
+    <ClientRouter />
   </head>
   <body class="dark bg-background text-foreground h-full min-h-screen w-full">
     <Header />
