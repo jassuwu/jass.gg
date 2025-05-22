@@ -2,11 +2,19 @@
 import ASSETS from "@/assets";
 
 const isHomePage = Astro.url.pathname === "/";
+
+// Navigation links
+const navLinks = [
+  { href: "/blog", label: "blog" },
+  { href: "/typing", label: "typing" },
+  { href: "/framework", label: "framework" },
+  { href: "/resume", label: "résumé" },
+];
 ---
 
 <header
   class="bg-background/70 sticky top-0 z-50 w-full [mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)]">
-  <div class="container-narrow flex h-24 items-center justify-between py-4">
+  <nav class="container-narrow flex h-24 items-center justify-between py-4">
     {
       isHomePage ? (
         <img {...ASSETS.GIF.SHINJI} class="h-10 w-10 rounded-full" alt="jass" />
@@ -19,19 +27,190 @@ const isHomePage = Astro.url.pathname === "/";
         </a>
       )
     }
-    <div class="flex items-center gap-16">
-      <a href="/blog">
-        <p>blog</p>
-      </a>
-      <a href="/typing">
-        <p>typing</p>
-      </a>
-      <a href="/framework">
-        <p>framework</p>
-      </a>
-      <a href="/resume">
-        <p>résumé</p>
-      </a>
+
+    <!-- Desktop navigation -->
+    <div class="hidden md:flex md:items-center md:gap-16">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-foreground hover:text-primary text-sm font-normal transition-colors">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Hamburger menu button -->
+    <button
+      id="hamburger-btn"
+      class="flex h-8 w-8 cursor-pointer flex-col items-center justify-center border-0 bg-transparent md:hidden"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu">
+      <img
+        {...ASSETS.ICONS.HAMBURGER_MENU}
+        class="h-6 w-6 transition-opacity duration-300 ease-in-out"
+        alt="Menu"
+        id="menu-icon"
+      />
+    </button>
+  </nav>
+</header>
+
+<!-- Backdrop overlay - separate from content for better animation -->
+<div
+  id="menu-backdrop"
+  class="bg-background/80 pointer-events-none fixed inset-0 z-[90] opacity-0 backdrop-blur-md transition-opacity duration-300 ease-in-out">
+</div>
+
+<!-- Mobile menu content -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-[100] hidden translate-y-4 transform flex-col px-6 pt-20 transition-all duration-300 ease-in-out">
+  <!-- Menu container with close button at the top -->
+  <div class="mx-auto w-full max-w-md">
+    <div class="border-border flex items-center justify-between border-b p-4">
+      <h2 class="text-primary text-xl font-normal">Menu</h2>
+      <!-- Close button -->
+      <button
+        id="close-menu-btn"
+        class="text-foreground hover:text-primary hover:bg-muted flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-0 transition-all"
+        aria-label="Close menu">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-col space-y-0 p-4">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-nav-link text-foreground hover:text-primary border-border border-b py-4 text-lg font-normal transition-colors">
+            {link.label}
+          </a>
+        ))
+      }
     </div>
   </div>
-</header>
+</div>
+
+<script>
+  function setupMobileMenu() {
+    const hamburgerBtn = document.getElementById("hamburger-btn");
+    const closeMenuBtn = document.getElementById("close-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuBackdrop = document.getElementById("menu-backdrop");
+    const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+    // Don't setup if elements don't exist
+    if (!hamburgerBtn || !closeMenuBtn || !mobileMenu || !menuBackdrop) return;
+
+    // Remove existing event listeners to prevent duplicates
+    const newHamburgerBtn = hamburgerBtn.cloneNode(true) as HTMLButtonElement;
+    const newCloseMenuBtn = closeMenuBtn.cloneNode(true) as HTMLButtonElement;
+    hamburgerBtn.parentNode?.replaceChild(newHamburgerBtn, hamburgerBtn);
+    closeMenuBtn.parentNode?.replaceChild(newCloseMenuBtn, closeMenuBtn);
+
+    function openMenu() {
+      if (!mobileMenu || !menuBackdrop) return;
+
+      // Make elements visible and interactive
+      mobileMenu.classList.remove("hidden");
+      mobileMenu.classList.add("flex");
+      menuBackdrop.classList.add("pointer-events-auto");
+
+      // Start animations (slight delay to ensure display:flex is applied)
+      setTimeout(() => {
+        mobileMenu.classList.remove("opacity-0", "translate-y-4");
+        mobileMenu.classList.add("opacity-100", "translate-y-0");
+        menuBackdrop.classList.remove("opacity-0");
+        menuBackdrop.classList.add("opacity-100");
+
+        // Update other states
+        newHamburgerBtn?.setAttribute("aria-expanded", "true");
+        document.body.classList.add("overflow-hidden");
+      }, 10);
+    }
+
+    function closeMenu() {
+      if (!mobileMenu || !menuBackdrop) return;
+
+      // Start closing animations
+      mobileMenu.classList.remove("opacity-100", "translate-y-0");
+      mobileMenu.classList.add("opacity-0", "translate-y-4");
+      menuBackdrop.classList.remove("opacity-100");
+      menuBackdrop.classList.add("opacity-0");
+
+      // Wait for animation to complete before hiding
+      setTimeout(() => {
+        mobileMenu.classList.remove("flex");
+        mobileMenu.classList.add("hidden");
+        menuBackdrop.classList.remove("pointer-events-auto");
+        newHamburgerBtn?.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("overflow-hidden");
+      }, 300);
+    }
+
+    // Setup event listeners on the new elements
+    newHamburgerBtn.addEventListener("click", openMenu);
+    newCloseMenuBtn.addEventListener("click", closeMenu);
+    menuBackdrop.addEventListener("click", closeMenu);
+
+    // Close menu when clicking a link
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    // Close menu when pressing Escape key (only add once)
+    document.removeEventListener("keydown", handleEscapeKey);
+    document.addEventListener("keydown", handleEscapeKey);
+
+    function handleEscapeKey(e: KeyboardEvent) {
+      if (
+        e.key === "Escape" &&
+        newHamburgerBtn?.getAttribute("aria-expanded") === "true"
+      ) {
+        closeMenu();
+      }
+    }
+  }
+
+  // Run on initial load
+  document.addEventListener("DOMContentLoaded", setupMobileMenu);
+
+  // Run on every page navigation (for Astro view transitions)
+  document.addEventListener("astro:page-load", setupMobileMenu);
+</script>
+
+<style>
+  /* Only add styles that can't be done with Tailwind */
+  body.overflow-hidden {
+    overflow: hidden;
+  }
+
+  /* Ensure all elements in the mobile menu are clickable */
+  #mobile-menu button,
+  #mobile-menu a {
+    cursor: pointer;
+    position: relative;
+    z-index: 110;
+  }
+
+  /* Fix for smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

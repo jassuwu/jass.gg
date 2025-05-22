@@ -25,22 +25,47 @@ const initialTime24 = new Date().toLocaleTimeString("en-IN", {
 
 <footer
   class="bg-background/70 text-primary/70 sticky bottom-0 z-50 w-full [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
-  <div class="container-narrow flex h-24 items-center justify-evenly py-4">
-    <p>jass.gg &copy;</p>
-    <span aria-hidden="true">•</span>
-    <p>
-      last updated on <time datetime={new Date().toISOString()}
-        >{lastUpdated}</time
-      >
-    </p>
-    <span aria-hidden="true">•</span>
-    <p>{country}</p>
-    <span aria-hidden="true">•</span>
-    <p>
-      <time id="live-time" datetime={new Date().toISOString()}>
-        {initialTime12} / {initialTime24} IST
-      </time>
-    </p>
+  <div class="container-narrow flex h-24 items-center py-4">
+    <!-- Mobile layout: stack vertically -->
+    <div class="flex w-full flex-col items-center gap-1 text-xs md:hidden">
+      <div class="flex items-center gap-2">
+        <p>jass.gg &copy;</p>
+        <span aria-hidden="true">•</span>
+        <p>{country}</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <p>
+          <time datetime={new Date().toISOString()}>
+            {lastUpdated}
+          </time>
+        </p>
+        <span aria-hidden="true">•</span>
+        <p>
+          <time id="live-time" datetime={new Date().toISOString()}>
+            {initialTime12} IST
+          </time>
+        </p>
+      </div>
+    </div>
+
+    <!-- Desktop layout: horizontal -->
+    <div class="hidden w-full items-center justify-evenly text-sm md:flex">
+      <p>jass.gg &copy;</p>
+      <span aria-hidden="true">•</span>
+      <p>
+        last updated on <time datetime={new Date().toISOString()}
+          >{lastUpdated}</time
+        >
+      </p>
+      <span aria-hidden="true">•</span>
+      <p>{country}</p>
+      <span aria-hidden="true">•</span>
+      <p>
+        <time id="live-time-desktop" datetime={new Date().toISOString()}>
+          {initialTime12} / {initialTime24} IST
+        </time>
+      </p>
+    </div>
   </div>
 </footer>
 
@@ -62,10 +87,18 @@ const initialTime24 = new Date().toLocaleTimeString("en-IN", {
       hour12: false,
     });
 
-    const timeElement = document.getElementById("live-time");
-    if (timeElement) {
-      timeElement.textContent = `${time12} / ${time24} IST`;
-      timeElement.setAttribute("datetime", now.toISOString());
+    // Update mobile time (only 12-hour format)
+    const mobileTimeElement = document.getElementById("live-time");
+    if (mobileTimeElement) {
+      mobileTimeElement.textContent = `${time12} IST`;
+      mobileTimeElement.setAttribute("datetime", now.toISOString());
+    }
+
+    // Update desktop time (both formats)
+    const desktopTimeElement = document.getElementById("live-time-desktop");
+    if (desktopTimeElement) {
+      desktopTimeElement.textContent = `${time12} / ${time24} IST`;
+      desktopTimeElement.setAttribute("datetime", now.toISOString());
     }
   }
 

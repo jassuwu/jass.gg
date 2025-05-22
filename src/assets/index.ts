@@ -6,6 +6,7 @@ import DISCORD from "./icons/discord.svg";
 import LINKEDIN from "./icons/linkedin.svg";
 import MAIL from "./icons/mail.svg";
 import MOVE_LEFT from "./icons/move-left.svg";
+import HAMBURGER_MENU from "./icons/hamburger-menu.svg";
 
 // GIF
 import SHINJI from "./shinji.gif";
@@ -19,6 +20,7 @@ const ASSETS = {
     LINKEDIN,
     MAIL,
     MOVE_LEFT,
+    HAMBURGER_MENU,
   },
   GIF: {
     SHINJI,

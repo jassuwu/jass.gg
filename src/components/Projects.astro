@@ -23,19 +23,19 @@ const PROJECTS = [
 ];
 ---
 
-<section class="my-12 flex flex-col justify-between gap-6">
-  <h2 class="text-xl font-bold">projects</h2>
-  <div class="flex flex-col gap-6">
+<section class="my-8 flex flex-col justify-between gap-6 md:my-12">
+  <h2 class="text-lg font-bold md:text-xl">projects</h2>
+  <div class="flex flex-col gap-4 md:gap-6">
     {
       PROJECTS.map((project) => (
         <div class="flex flex-col gap-2">
-          <h3 class="font-bold">{project.name}</h3>
-          <div class="flex items-center gap-2">
+          <h3 class="text-base font-bold md:text-lg">{project.name}</h3>
+          <div class="flex flex-wrap items-center gap-2">
             {project.tags.map((tag) => (
               <Badge>{tag}</Badge>
             ))}
           </div>
-          <p>{project.description}</p>
+          <p class="text-sm md:text-base">{project.description}</p>
         </div>
       ))
     }
