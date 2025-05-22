@@ -1,0 +1,62 @@
+---
+import ASSETS from "@/assets";
+import { URLS, USERNAMES } from "@/constants";
+---
+
+<section class="container-narrow my-12 flex flex-col justify-between gap-6">
+  <div class="flex flex-col gap-2">
+    <h1 class="font-comic-neue text-primary text-5xl font-bold">jass</h1>
+    <h2 class="text-xl font-bold">developer • terminally online</h2>
+  </div>
+  <div class="flex flex-col gap-2">
+    <p>
+      fullstack web/app dev. i love building seamless experiences & strongly
+      advocate for UDD (user-driven development) over anything else.
+    </p>
+    <p>
+      im into bleeding edge tech. i know not to chase the shiny thing tho.
+      <br /> i also think low-level systems & dev tools are cool. workin' on myself
+      to work on 'em.
+      <br /> when im not coding, im probably getting lost in a good game world or
+      the real one.
+    </p>
+  </div>
+  <div class="flex items-center gap-8">
+    <a href={URLS.RESUME} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.RESUME} alt="résumé" class="h-6 w-6" />
+        <p>résumé</p>
+      </div>
+    </a>
+    <a href={URLS.TWITTER} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.TWITTER} alt="twitter" class="h-6 w-6" />
+        <p>twitter</p>
+      </div>
+    </a>
+    <a href={URLS.GITHUB} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.GITHUB} alt="github" class="h-6 w-6" />
+        <p>github</p>
+      </div>
+    </a>
+    <a href={URLS.DISCORD} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.DISCORD} alt="discord" class="h-6 w-6" />
+        <p>discord</p>
+      </div>
+    </a>
+    <a href={URLS.LINKEDIN} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.LINKEDIN} alt="linkedin" class="h-6 w-6" />
+        <p>linkedin</p>
+      </div>
+    </a>
+    <a href={URLS.EMAIL} target="_blank">
+      <div class="flex items-center gap-2">
+        <img {...ASSETS.ICONS.MAIL} alt="email" class="h-6 w-6" />
+        <p>email</p>
+      </div>
+    </a>
+  </div>
+</section>

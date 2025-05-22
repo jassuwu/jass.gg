@@ -1,11 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-atkinson);
+  --font-sans: var(--font-atkinson-hyperlegible-next);
+  --font-atkinson-hyperlegible-next: var(--font-atkinson-hyperlegible-next);
+  --font-comic-neue: var(--font-comic-neue);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
@@ -45,16 +47,16 @@
 }
 
 :root {
-  --font-atkinson: "Atkinson Hyperlegible Next", sans-serif;
+  --font-atkinson-hyperlegible-next: "Atkinson Hyperlegible Next", sans-serif;
+  --font-comic-neue: "Comic Neue", cursive;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-  --primary: oklch(0.9392 0.1588 124.39);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.9392 0.1588 124.39);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -84,12 +86,11 @@
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --primary: oklch(0.9392 0.1588 124.39);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: oklch(0.9392 0.1588 124.39);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
