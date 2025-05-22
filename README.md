@@ -2,8 +2,6 @@
 
 ## TODOS
 
-- [ ] eslint, prettier
-- [ ] page transitions
-- [ ] env checker
-- [ ] posthog
-- [ ] sentry
+- page transitions
+- posthog
+- sentry
