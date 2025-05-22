@@ -1,0 +1,43 @@
+---
+import { Badge } from "@/components";
+
+const PROJECTS = [
+  {
+    name: "psgoogle",
+    description:
+      "a fast search engine for my college's website psgtech.edu. rewrote the previous slow backend to make it actually viable. overkilled it.",
+    tags: ["golang", "next.js"],
+  },
+  {
+    name: "kaching",
+    description:
+      "a prototype payment gateway for receiving payments with cryptocurrency. kinda like 'Stripe for web3'. yes, now stripe has it in-house.",
+    tags: ["web3", "next.js"],
+  },
+  {
+    name: "askupi",
+    description:
+      "upload ur txn history pdf, let gemini process it, and talk to it. ask questions, and tips to not go broke. first-try vibecoding.",
+    tags: ["ai", "next.js", "vibe-coded"],
+  },
+];
+---
+
+<section class="container-narrow my-12 flex flex-col justify-between gap-6">
+  <h2 class="text-xl font-bold">projects</h2>
+  <div class="flex flex-col gap-6">
+    {
+      PROJECTS.map((project) => (
+        <div class="flex flex-col gap-2">
+          <h3 class="font-bold">{project.name}</h3>
+          <div class="flex items-center gap-2">
+            {project.tags.map((tag) => (
+              <Badge>{tag}</Badge>
+            ))}
+          </div>
+          <p>{project.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
