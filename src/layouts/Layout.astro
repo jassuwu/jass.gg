@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css";
-import { Header, Footer } from "@/components";
+import { Header, Footer, PostHog } from "@/components";
 import { ClientRouter } from "astro:transitions";
 ---
 
@@ -13,6 +13,7 @@ import { ClientRouter } from "astro:transitions";
     <meta name="generator" content={Astro.generator} />
     <title>jass</title>
     <ClientRouter />
+    <PostHog />
   </head>
   <body class="dark bg-background text-foreground h-full min-h-screen w-full">
     <Header />
