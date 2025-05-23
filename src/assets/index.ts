@@ -2,6 +2,7 @@
 import RESUME from "./icons/resume.svg";
 import TWITTER from "./icons/twitter.svg";
 import GITHUB from "./icons/github.svg";
+import GITHUB_PRIMARY from "./icons/github-primary.svg";
 import DISCORD from "./icons/discord.svg";
 import LINKEDIN from "./icons/linkedin.svg";
 import MAIL from "./icons/mail.svg";
@@ -16,6 +17,7 @@ const ASSETS = {
     RESUME,
     TWITTER,
     GITHUB,
+    GITHUB_PRIMARY,
     DISCORD,
     LINKEDIN,
     MAIL,

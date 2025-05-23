@@ -1,5 +1,7 @@
 ---
+import ASSETS from "@/assets";
 import { Badge } from "@/components";
+import { URLS } from "@/constants";
 
 const PROJECTS = [
   {
@@ -39,5 +41,17 @@ const PROJECTS = [
         </div>
       ))
     }
+  </div>
+  <div class="text-primary flex items-center gap-2">
+    <img {...ASSETS.ICONS.GITHUB_PRIMARY} alt="github" />
+    <p>
+      checkout
+      <a
+        href={URLS.GITHUB}
+        target="_blank"
+        class="decoration-primary font-bold italic underline">github</a
+      >
+      for everything else. i like to keep them MIT :)
+    </p>
   </div>
 </section>
