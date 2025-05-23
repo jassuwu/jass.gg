@@ -1,0 +1,30 @@
+---
+import { URLS } from "@/constants";
+import { Layout } from "@/layouts";
+---
+
+<Layout>
+  <main class="container-narrow h-full">
+    <section class="my-8 flex flex-col justify-between gap-6 md:my-12">
+      <div class="flex flex-col gap-2">
+        <h1 class="font-comic-neue text-primary text-4xl font-bold md:text-5xl">
+          resume
+        </h1>
+        <h2 class="text-lg font-bold md:text-xl">
+          the pdf's here:
+          <a
+            href={URLS.RESUME}
+            class="decoration-primary text-primary font-bold underline"
+            >jass.gg/resume.pdf
+          </a>.
+        </h2>
+      </div>
+      <div class="flex flex-col gap-2">
+        <p class="text-sm md:text-base">
+          there should be a web version here. i will get around to it.
+          eventually...
+        </p>
+      </div>
+    </section>
+  </main>
+</Layout>
