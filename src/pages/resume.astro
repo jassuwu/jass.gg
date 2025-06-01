@@ -1,28 +1,190 @@
 ---
-import { URLS } from "@/constants";
+import { URLS, USERNAMES } from "@/constants";
 import { Layout } from "@/layouts";
+import { Badge } from "@/components";
+
+const EXPERIENCES = [
+  {
+    company: "P2P.me",
+    homepage: "https://p2p.me",
+    role: "Software Developer",
+    period: "Jan 2024 -- Present",
+    hook: "turning mobile apps into PWAs that perform better than the originals (somehow)",
+    impact: "Remote",
+  },
+  {
+    company: "Cypher Wallet",
+    homepage: "https://cypherhq.io",
+    role: "Frontend Developer Intern",
+    period: "May 2023 -- Dec 2023",
+    hook: "built React Native / React apps for 10k+ users who spend crypto daily with our card",
+    impact: "Chennai, India",
+  },
+];
+
+const PROJECTS = [
+  {
+    name: "PSGOOGLE",
+    year: "2024",
+    hook: "made my college's website searchable in <400 microseconds (it was painfully slow before)",
+    tags: ["Go", "Next.js", "Redis"],
+    link: "https://github.com/jassuwu/psgoogle",
+  },
+  {
+    name: "Kaching",
+    year: "2023",
+    hook: "built 'Stripe for web3' before Stripe actually did it (great timing, right?)",
+    tags: ["Next.js", "Web3", "Polygon"],
+    link: "https://github.com/jassuwu/kaching",
+  },
+];
+
+const SKILL_CATEGORIES = [
+  {
+    name: "languages i actually use",
+    skills: ["TypeScript", "Go"],
+  },
+  {
+    name: "frontend wizardry",
+    skills: ["React", "Next.js", "React Native", "Tailwind", "Astro"],
+  },
+  {
+    name: "backend & databases",
+    skills: ["Node.js", "Go", "Redis", "PostgreSQL"],
+  },
+  {
+    name: "web3 & blockchain",
+    skills: ["thirdweb", "viem", "wagmi", "Reown", "subgraph"],
+  },
+  {
+    name: "devops & tools",
+    skills: ["Docker", "AWS", "Git", "Linux", "CI/CD"],
+  },
+];
 ---
 
 <Layout>
   <main class="container-narrow h-full">
-    <section class="my-8 flex flex-col justify-between gap-6 md:my-12">
-      <div class="flex flex-col gap-2">
-        <h1 class="font-comic-neue text-primary text-4xl font-bold md:text-5xl">
-          resume
-        </h1>
-        <h2 class="text-lg font-bold md:text-xl">
-          the pdf's here:
+    <section class="my-8 flex flex-col gap-8 md:my-12">
+      <!-- Header with personality -->
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <h1
+            class="font-comic-neue text-primary text-4xl font-bold md:text-5xl">
+            résumé
+          </h1>
+          <div class="flex flex-col gap-1">
+            <h2 class="text-lg font-bold md:text-xl">
+              Karthickpranav S N • aka jass
+            </h2>
+            <p class="text-muted-foreground text-sm md:text-base">
+              i build cool things.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="flex flex-col gap-4">
+        <h2 class="flex items-center gap-2 text-lg font-bold md:text-xl">
+          where i've worked
+          <span class="text-muted-foreground text-sm font-normal"
+            >(and what i actually did)</span
+          >
+        </h2>
+        <div class="grid gap-4">
+          {
+            EXPERIENCES.map((job) => (
+              <div class="border-border/50 hover:border-primary/50 flex flex-col gap-2 rounded-lg border p-4 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <a
+                      href={job.homepage}
+                      target="_blank"
+                      class="hover:text-primary transition-colors">
+                      <h3 class="text-base font-bold hover:underline">
+                        {job.company}
+                      </h3>
+                    </a>
+                    <p class="text-muted-foreground text-sm">{job.role}</p>
+                  </div>
+                  <div class="text-muted-foreground text-right text-xs">
+                    <div>{job.period}</div>
+                    <div>{job.impact}</div>
+                  </div>
+                </div>
+                <p class="text-sm md:text-base">{job.hook}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="flex flex-col gap-4">
+        <h2 class="flex items-center gap-2 text-lg font-bold md:text-xl">
+          stuff i've built
+        </h2>
+        <div class="grid gap-4">
+          {
+            PROJECTS.map((project) => (
+              <div class="border-border/50 hover:border-primary/50 flex flex-col gap-3 rounded-lg border p-4 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-base font-bold">{project.name}</h3>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      class="text-primary hover:text-primary/80 text-xs transition-colors hover:underline">
+                      gh →
+                    </a>
+                  </div>
+                  <span class="text-muted-foreground text-xs">
+                    {project.year}
+                  </span>
+                </div>
+                <p class="text-sm md:text-base">{project.hook}</p>
+                <div class="flex flex-wrap gap-1">
+                  {project.tags.map((tag) => (
+                    <Badge>{tag}</Badge>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Skills in a more interesting format -->
+      <div class="flex flex-col gap-4">
+        <h2 class="text-lg font-bold md:text-xl">tech stack</h2>
+        <div class="grid gap-3">
+          {
+            SKILL_CATEGORIES.map((category) => (
+              <div class="flex flex-col gap-2">
+                <h3 class="text-primary text-sm font-semibold">
+                  {category.name}
+                </h3>
+                <div class="flex flex-wrap gap-1">
+                  {category.skills.map((skill) => (
+                    <Badge>{skill}</Badge>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="text-primary flex items-center gap-2">
+        <p>
+          checkout
           <a
             href={URLS.RESUME}
-            class="decoration-primary text-primary font-bold underline"
-            >jass.gg/resume.pdf
-          </a>
-        </h2>
-      </div>
-      <div class="flex flex-col gap-2">
-        <p class="text-sm md:text-base">
-          there should be a web version here. i will get around to it.
-          eventually...
+            target="_blank"
+            class="decoration-primary font-bold italic underline">resume.pdf</a
+          >
+          for the ats-maxxing version.
         </p>
       </div>
     </section>

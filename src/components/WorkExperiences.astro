@@ -1,0 +1,59 @@
+---
+import { Badge } from "@/components";
+
+const EXPERIENCES = [
+  {
+    company: "P2P.me",
+    role: "Software Developer, Intern + Full-time",
+    period: "Jan 2024 -- Present",
+    location: "Remote",
+    description:
+      "turning mobile apps into PWAs that perform better than the originals (somehow)",
+    tags: ["react", "typescript", "pwa", "web3"],
+    homepage: "https://p2p.me",
+  },
+  {
+    company: "Cypher Wallet",
+    role: "Software Developer, Intern",
+    period: "May 2023 -- Dec 2023",
+    location: "Chennai, India",
+    description:
+      "built React Native / React apps for 10k+ users who spend crypto daily with our card",
+    tags: ["react native", "react.js", "next.js", "web3"],
+    homepage: "https://cypherhq.io",
+  },
+];
+---
+
+<section class="my-8 flex flex-col justify-between gap-6 md:my-12">
+  <h2 class="text-lg font-bold md:text-xl">work experience</h2>
+  <div class="flex flex-col gap-4 md:gap-6">
+    {
+      EXPERIENCES.map((job) => (
+        <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+            <a
+              href={job.homepage}
+              target="_blank"
+              class="hover:text-primary transition-colors">
+              <h3 class="text-base font-bold hover:underline md:text-lg">
+                {job.company}
+              </h3>
+            </a>
+            <span class="text-muted-foreground text-sm">{job.period}</span>
+          </div>
+          <div class="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+            <span class="text-sm font-medium">{job.role}</span>
+            <span class="text-muted-foreground text-sm">{job.location}</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            {job.tags.map((tag) => (
+              <Badge>{tag}</Badge>
+            ))}
+          </div>
+          <p class="text-sm md:text-base">{job.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
