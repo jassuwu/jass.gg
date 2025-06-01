@@ -9,8 +9,8 @@ import MAIL from "./icons/mail.svg";
 import MOVE_LEFT from "./icons/move-left.svg";
 import HAMBURGER_MENU from "./icons/hamburger-menu.svg";
 
-// GIF
-import SHINJI from "./shinji.gif";
+// AVATAR
+import AVATAR from "./avatar.png";
 
 const ASSETS = {
   ICONS: {
@@ -24,9 +24,7 @@ const ASSETS = {
     MOVE_LEFT,
     HAMBURGER_MENU,
   },
-  GIF: {
-    SHINJI,
-  },
+  AVATAR,
 };
 
 export default ASSETS;

@@ -16,7 +16,11 @@ const navLinks = [
   <nav class="container-narrow flex h-24 items-center justify-between py-4">
     {
       isHomePage ? (
-        <img {...ASSETS.GIF.SHINJI} class="h-10 w-10 rounded-full" alt="jass" />
+        <img
+          {...ASSETS.AVATAR}
+          class="border-primary size-10 rounded-full border object-cover object-top"
+          alt="jass"
+        />
       ) : (
         <a href="/">
           <div class="flex items-center gap-2">
