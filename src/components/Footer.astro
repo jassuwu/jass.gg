@@ -108,7 +108,7 @@ const initialTime24 = new Date().toLocaleTimeString("en-IN", {
     updateLiveTime();
 
     // Update time every minute
-    const intervalId = setInterval(updateLiveTime, 60 * 1000);
+    const intervalId = setInterval(updateLiveTime, 1000);
 
     // Cleanup on page unload (good practice for SPAs)
     window.addEventListener("beforeunload", () => {
