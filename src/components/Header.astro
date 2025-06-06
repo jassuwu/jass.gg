@@ -1,5 +1,6 @@
 ---
 import ASSETS from "@/assets";
+import BlurTop from "./blur-top.astro";
 
 const isHomePage = Astro.url.pathname === "/";
 
@@ -10,8 +11,9 @@ const navLinks = [
 ];
 ---
 
+<BlurTop />
 <header
-  class="bg-background/70 sticky top-0 z-50 w-full [mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)]">
+  class="bg-background/70 sticky top-0 z-50 w-full [mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,var(--background)_60%,transparent_100%)]">
   <nav class="container-narrow flex h-24 items-center justify-between py-4">
     {
       isHomePage ? (

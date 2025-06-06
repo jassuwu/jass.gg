@@ -1,4 +1,6 @@
 ---
+import BlurBottom from "./blur-bottom.astro";
+
 // Static build-time timestamp
 const lastUpdated = new Date().toLocaleDateString("en-IN", {
   year: "numeric",
@@ -23,8 +25,9 @@ const initialTime24 = new Date().toLocaleTimeString("en-IN", {
 });
 ---
 
+<BlurBottom />
 <footer
-  class="bg-background/70 text-primary/70 sticky bottom-0 z-50 w-full [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
+  class="bg-background/70 text-primary/70 sticky bottom-0 z-50 w-full [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
   <div class="container-narrow flex h-24 items-center py-4">
     <!-- Mobile layout: stack vertically -->
     <div class="flex w-full flex-col items-center gap-1 text-xs md:hidden">
