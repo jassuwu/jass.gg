@@ -1,5 +1,28 @@
 ---
+import { Badge } from "@/components";
 import { Layout } from "@/layouts";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+// Get all blog posts and sort by date (newest first)
+const allPosts = (await getCollection("blog")).sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.createdAt.getTime() - a.data.createdAt.getTime(),
+);
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+};
+
+const getReadingTime = (content: string) => {
+  const wordsPerMinute = 200;
+  const wordCount = content?.trim().split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+  return readingTime;
+};
 ---
 
 <Layout>
@@ -13,11 +36,197 @@ import { Layout } from "@/layouts";
           kinda structured brain dumps
         </h2>
       </div>
-      <div class="flex flex-col gap-2">
-        <p class="text-sm md:text-base">
-          nothin' to see here, <span class="font-bold">yet</span>.
-        </p>
+    </section>
+
+    <!-- All Posts -->
+    <section>
+      <div class="space-y-8">
+        {
+          allPosts.map((post) => (
+            <article class="group">
+              <a
+                href={`/blog/${post.id}`}
+                class="block"
+                data-ph-capture-attribute-post-title={post.data.title}
+                data-ph-capture-attribute-post-id={post.id}
+                data-ph-capture-attribute-post-tags={
+                  post.data.tags?.join(", ") || ""
+                }
+                data-ph-capture-attribute-reading-time={getReadingTime(
+                  post.body ?? "",
+                )}>
+                <div class="flex justify-between">
+                  <div class="flex flex-col gap-2">
+                    <h3 class="text-foreground group-hover:text-primary text-xl font-bold transition-colors">
+                      {post.data.title}
+                    </h3>
+
+                    <p class="text-muted-foreground text-sm leading-relaxed">
+                      {post.data.description || ""}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-col items-end justify-between">
+                    <div class="text-muted-foreground flex items-center gap-2 text-sm">
+                      <span>{getReadingTime(post.body ?? "")} min read</span>
+                      <span>•</span>
+                      <time datetime={post.data.createdAt.toISOString()}>
+                        {formatDate(post.data.createdAt)}
+                      </time>
+                    </div>
+
+                    {post.data.tags && post.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {post.data.tags.slice(0, 4).map((tag: string) => (
+                          <Badge
+                            data-ph-capture-attribute-tag={tag}
+                            data-ph-capture-attribute-action="tag_click">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {post.data.tags.length > 4 && (
+                          <span class="text-muted-foreground px-2 py-1 text-xs">
+                            +{post.data.tags.length - 4} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))
+        }
       </div>
     </section>
   </main>
 </Layout>
+
+<script>
+  // TypeScript declarations for PostHog
+  declare global {
+    interface Window {
+      posthog?: {
+        capture: (event: string, properties?: Record<string, any>) => void;
+        identify: (
+          distinctId: string,
+          properties?: Record<string, any>,
+        ) => void;
+        reset: () => void;
+        isFeatureEnabled: (flag: string) => boolean;
+        onFeatureFlags: (callback: (flags: string[]) => void) => void;
+        get_distinct_id: () => string;
+        people: {
+          set: (properties: Record<string, any>) => void;
+        };
+      };
+    }
+  }
+
+  // Track blog page view
+  if (typeof window !== "undefined" && window.posthog) {
+    window.posthog.capture("blog_page_viewed", {
+      total_posts: document.querySelectorAll("article").length,
+      page_url: window.location.href,
+      page_title: document.title,
+    });
+
+    // Track blog post clicks
+    document.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      const postLink = target.closest("a[data-ph-capture-attribute-post-id]");
+
+      if (postLink) {
+        const postTitle = postLink.getAttribute(
+          "data-ph-capture-attribute-post-title",
+        );
+        const postId = postLink.getAttribute(
+          "data-ph-capture-attribute-post-id",
+        );
+        const postTags = postLink.getAttribute(
+          "data-ph-capture-attribute-post-tags",
+        );
+        const readingTime = postLink.getAttribute(
+          "data-ph-capture-attribute-reading-time",
+        );
+
+        window.posthog?.capture("blog_post_clicked", {
+          post_title: postTitle,
+          post_id: postId,
+          post_tags: postTags?.split(", ").filter(Boolean) || [],
+          estimated_reading_time: parseInt(readingTime || "0"),
+          click_position:
+            Array.from(document.querySelectorAll("article")).indexOf(
+              postLink.closest("article")!,
+            ) + 1,
+          source_page: "blog_listing",
+        });
+      }
+    });
+
+    // Track tag interactions (if tags become clickable in the future)
+    document.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      const tagElement = target.closest("[data-ph-capture-attribute-tag]");
+
+      if (
+        tagElement &&
+        tagElement.getAttribute("data-ph-capture-attribute-action") ===
+          "tag_click"
+      ) {
+        const tag = tagElement.getAttribute("data-ph-capture-attribute-tag");
+
+        window.posthog?.capture("blog_tag_clicked", {
+          tag_name: tag,
+          source_page: "blog_listing",
+          page_url: window.location.href,
+        });
+      }
+    });
+
+    // Track scroll depth for engagement analysis
+    let maxScrollDepth = 0;
+    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    window.addEventListener("scroll", () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
+      scrollTimeout = setTimeout(() => {
+        const scrollDepth = Math.round(
+          (window.scrollY /
+            (document.documentElement.scrollHeight - window.innerHeight)) *
+            100,
+        );
+
+        if (scrollDepth > maxScrollDepth) {
+          maxScrollDepth = scrollDepth;
+
+          // Track significant scroll milestones
+          if (scrollDepth >= 25 && scrollDepth % 25 === 0) {
+            window.posthog?.capture("blog_listing_scroll_depth", {
+              scroll_depth: scrollDepth,
+              page_url: window.location.href,
+              total_posts: document.querySelectorAll("article").length,
+            });
+          }
+        }
+      }, 100);
+    });
+
+    // Track time spent on blog listing page
+    const startTime = Date.now();
+
+    window.addEventListener("beforeunload", () => {
+      const timeSpent = Math.round((Date.now() - startTime) / 1000);
+
+      window.posthog?.capture("blog_listing_session_end", {
+        time_spent_seconds: timeSpent,
+        max_scroll_depth: maxScrollDepth,
+        total_posts: document.querySelectorAll("article").length,
+        page_url: window.location.href,
+      });
+    });
+  }
+</script>

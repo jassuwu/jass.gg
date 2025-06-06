@@ -7,6 +7,7 @@ import DISCORD from "./icons/discord.svg";
 import LINKEDIN from "./icons/linkedin.svg";
 import MAIL from "./icons/mail.svg";
 import MOVE_LEFT from "./icons/move-left.svg";
+import MOVE_LEFT_MUTED from "./icons/move-left-muted.svg";
 import HAMBURGER_MENU from "./icons/hamburger-menu.svg";
 
 // AVATAR
@@ -22,6 +23,7 @@ const ASSETS = {
     LINKEDIN,
     MAIL,
     MOVE_LEFT,
+    MOVE_LEFT_MUTED,
     HAMBURGER_MENU,
   },
   AVATAR,

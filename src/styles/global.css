@@ -153,3 +153,239 @@
 .blur-mask-6.top { -webkit-mask-image: linear-gradient(to top, transparent 62.5%, black 75% 87.5%, transparent 100%); mask-image: linear-gradient(to top, transparent 62.5%, black 75% 87.5%, transparent 100%); }
 .blur-mask-7.top { -webkit-mask-image: linear-gradient(to top, transparent 75%, black 87.5%); mask-image: linear-gradient(to top, transparent 75%, black 87.5%); }
 .blur-mask-8.top { -webkit-mask-image: linear-gradient(to top, transparent 87.5%, black 100%); mask-image: linear-gradient(to top, transparent 87.5%, black 100%); }
+
+
+/* Beautiful prose styling with modern typography */
+.prose {
+  @apply text-foreground leading-relaxed;
+  max-width: 65ch;
+  line-height: 1.75;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+/* Headings with perfect hierarchy */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-foreground font-bold leading-tight tracking-tight;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "case" 1;
+}
+
+.prose h1 {
+  @apply text-4xl md:text-5xl mt-0 mb-8;
+  line-height: 1.1;
+}
+
+.prose h2 {
+  @apply text-3xl md:text-4xl mt-16 mb-8 first:mt-0;
+  line-height: 1.2;
+}
+
+.prose h3 {
+  @apply text-2xl md:text-3xl mt-12 mb-6;
+  line-height: 1.3;
+}
+
+.prose h4 {
+  @apply text-xl md:text-2xl mt-10 mb-4;
+  line-height: 1.4;
+}
+
+.prose h5 {
+  @apply text-lg md:text-xl mt-8 mb-3;
+  line-height: 1.5;
+}
+
+.prose h6 {
+  @apply text-base md:text-lg mt-6 mb-2 font-semibold;
+  line-height: 1.6;
+}
+
+/* Paragraphs with optimal reading flow */
+.prose p {
+  @apply mb-6 leading-relaxed;
+  text-wrap: pretty;
+}
+
+.prose p:last-child {
+  @apply mb-0;
+}
+
+/* Beautiful links with subtle animations */
+.prose a {
+  @apply text-primary font-medium decoration-primary/30 underline-offset-4 transition-all duration-200;
+  text-decoration-thickness: 1px;
+}
+
+.prose a:hover {
+  @apply text-primary/80 decoration-primary/60;
+  text-decoration-thickness: 2px;
+}
+
+/* Enhanced code styling */
+.prose code:not(pre code) {
+  @apply bg-muted text-foreground rounded-md px-2 py-1 text-sm font-mono;
+  font-weight: 500;
+  border: 1px solid oklch(from var(--border) l c h / 0.5);
+}
+
+.prose pre {
+  @apply bg-muted border border-border/50 overflow-x-auto rounded-xl p-6 my-8;
+  font-variant-ligatures: none;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-sm leading-relaxed;
+  font-weight: 400;
+}
+
+/* Beautiful blockquotes */
+.prose blockquote {
+  @apply border-l-4 border-primary/30 bg-muted/50 pl-6 pr-4 py-4 my-8 rounded-r-lg;
+  font-style: italic;
+}
+
+.prose blockquote p {
+  @apply text-muted-foreground mb-2 last:mb-0;
+  font-size: 1.1em;
+}
+
+.prose blockquote cite {
+  @apply text-sm text-muted-foreground/80 not-italic font-medium;
+}
+
+/* Enhanced lists */
+.prose ul,
+.prose ol {
+  @apply my-6 space-y-2;
+}
+
+.prose ul {
+  @apply pl-6;
+  list-style-type: none;
+}
+
+.prose ul li {
+  @apply relative;
+}
+
+.prose ul li::before {
+  content: "•";
+  @apply absolute -left-4 text-primary font-bold;
+  top: 0;
+}
+
+.prose ol {
+  @apply pl-6;
+  counter-reset: list-counter;
+}
+
+.prose ol li {
+  @apply relative;
+  counter-increment: list-counter;
+}
+
+.prose ol li::before {
+  content: counter(list-counter) ".";
+  @apply absolute -left-6 text-primary font-semibold tabular-nums;
+  top: 0;
+  width: 1.5rem;
+  text-align: right;
+}
+
+.prose li {
+  @apply text-foreground leading-relaxed;
+}
+
+.prose li p {
+  @apply mb-2;
+}
+
+/* Nested lists */
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  @apply mt-2 mb-2;
+}
+
+/* Strong and emphasis */
+.prose strong {
+  @apply text-foreground font-semibold;
+  font-weight: 650;
+}
+
+.prose em {
+  @apply italic;
+  font-style: italic;
+}
+
+/* Tables */
+.prose table {
+  @apply w-full border-collapse border border-border rounded-lg overflow-hidden my-8;
+}
+
+.prose thead {
+  @apply bg-muted;
+}
+
+.prose th {
+  @apply border border-border px-4 py-3 text-left font-semibold text-foreground;
+}
+
+.prose td {
+  @apply border border-border px-4 py-3;
+}
+
+.prose tbody tr:nth-child(even) {
+  @apply bg-muted/50;
+}
+
+/* Images */
+.prose img {
+  @apply rounded-lg my-8 shadow-lg;
+}
+
+.prose figure {
+  @apply my-8;
+}
+
+.prose figcaption {
+  @apply text-sm text-muted-foreground text-center mt-3 italic;
+}
+
+/* Horizontal rules */
+.prose hr {
+  @apply border-0 h-px bg-gradient-to-r from-transparent via-border to-transparent my-12;
+}
+
+/* Mark/highlight */
+.prose mark {
+  @apply bg-primary/20 text-foreground px-1 rounded;
+}
+
+/* Small text */
+.prose small {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Abbreviations */
+.prose abbr {
+  @apply underline decoration-dotted cursor-help;
+}
+
+/* Definition lists */
+.prose dl {
+  @apply my-6;
+}
+
+.prose dt {
+  @apply font-semibold text-foreground mt-4 first:mt-0;
+}
+
+.prose dd {
+  @apply ml-6 text-muted-foreground;
+}
