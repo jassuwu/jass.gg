@@ -1,3 +1,6 @@
+// AVATAR
+import AVATAR from "./avatar.png";
+
 // ICONS
 import RESUME from "./icons/resume.svg";
 import TWITTER from "./icons/twitter.svg";
@@ -10,10 +13,8 @@ import MOVE_LEFT from "./icons/move-left.svg";
 import MOVE_LEFT_MUTED from "./icons/move-left-muted.svg";
 import HAMBURGER_MENU from "./icons/hamburger-menu.svg";
 
-// AVATAR
-import AVATAR from "./avatar.png";
-
 const ASSETS = {
+  AVATAR,
   ICONS: {
     RESUME,
     TWITTER,
@@ -26,7 +27,6 @@ const ASSETS = {
     MOVE_LEFT_MUTED,
     HAMBURGER_MENU,
   },
-  AVATAR,
 };
 
 export default ASSETS;

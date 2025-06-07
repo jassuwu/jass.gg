@@ -1,5 +1,5 @@
 ---
-import { Badge } from "@/components";
+import { Badge, BlurBottomBlogBanner } from "@/components";
 import { Layout } from "@/layouts";
 import { getCollection, type CollectionEntry } from "astro:content";
 
@@ -22,6 +22,16 @@ const getReadingTime = (content: string) => {
   const wordCount = content?.trim().split(/\s+/).length;
   const readingTime = Math.ceil(wordCount / wordsPerMinute);
   return readingTime;
+};
+
+const getBannerImagePath = (bannerImage: string | undefined) => {
+  if (!bannerImage) return null;
+  // If it's already a full path (starts with / or http), use as-is
+  if (bannerImage.startsWith("/") || bannerImage.startsWith("http")) {
+    return bannerImage;
+  }
+  // Otherwise, construct path to public/blog folder
+  return `/src/assets/blog/${bannerImage}`;
 };
 ---
 
@@ -55,43 +65,129 @@ const getReadingTime = (content: string) => {
                 data-ph-capture-attribute-reading-time={getReadingTime(
                   post.body ?? "",
                 )}>
-                <div class="flex justify-between">
-                  <div class="flex flex-col gap-2">
-                    <h3 class="text-foreground group-hover:text-primary text-xl font-bold transition-colors">
-                      {post.data.title}
-                    </h3>
+                <div class="relative overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-[1.02]">
+                  {getBannerImagePath(post.data.bannerImage) ? (
+                    // Card with background image
+                    <div class="relative h-48 md:h-56">
+                      <img
+                        src={getBannerImagePath(post.data.bannerImage)}
+                        alt={post.data.bannerImageAlt || post.data.title}
+                        class="absolute inset-0 h-full w-full object-cover brightness-75 contrast-125 transition-all duration-300 group-hover:brightness-50"
+                        loading="lazy"
+                      />
 
-                    <p class="text-muted-foreground text-sm leading-relaxed">
-                      {post.data.description || ""}
-                    </p>
-                  </div>
-
-                  <div class="flex flex-col items-end justify-between">
-                    <div class="text-muted-foreground flex items-center gap-2 text-sm">
-                      <span>{getReadingTime(post.body ?? "")} min read</span>
-                      <span>•</span>
-                      <time datetime={post.data.createdAt.toISOString()}>
-                        {formatDate(post.data.createdAt)}
-                      </time>
-                    </div>
-
-                    {post.data.tags && post.data.tags.length > 0 && (
-                      <div class="flex flex-wrap gap-2">
-                        {post.data.tags.slice(0, 4).map((tag: string) => (
-                          <Badge
-                            data-ph-capture-attribute-tag={tag}
-                            data-ph-capture-attribute-action="tag_click">
-                            {tag}
-                          </Badge>
-                        ))}
-                        {post.data.tags.length > 4 && (
-                          <span class="text-muted-foreground px-2 py-1 text-xs">
-                            +{post.data.tags.length - 4} more
-                          </span>
-                        )}
+                      {/* Blur effect overlay */}
+                      <div class="absolute inset-0 z-[1]">
+                        <BlurBottomBlogBanner />
                       </div>
-                    )}
-                  </div>
+
+                      {/* Gradient overlay */}
+                      <div class="absolute inset-0 z-[2] bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                      {/* Content overlay */}
+                      <div class="absolute inset-0 z-[10] flex flex-col justify-end p-6">
+                        <div class="flex flex-col gap-3">
+                          <h3 class="text-xl font-bold text-white transition-colors md:text-2xl">
+                            {post.data.title}
+                          </h3>
+
+                          <p class="line-clamp-2 text-sm leading-relaxed text-white/90">
+                            {post.data.description || ""}
+                          </p>
+
+                          <div class="flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-2 text-sm text-white/80">
+                              <span>
+                                {getReadingTime(post.body ?? "")} min read
+                              </span>
+                              <span>•</span>
+                              <time
+                                datetime={post.data.createdAt.toISOString()}>
+                                {formatDate(post.data.createdAt)}
+                              </time>
+                            </div>
+
+                            {post.data.tags &&
+                              post.data.tags.filter((tag) => tag.trim())
+                                .length > 0 && (
+                                <div class="flex flex-wrap gap-2">
+                                  {post.data.tags
+                                    .filter((tag) => tag.trim())
+                                    .slice(0, 3)
+                                    .map((tag: string) => (
+                                      <Badge
+                                        class="border-white/30 bg-white/20 text-white hover:bg-white/30"
+                                        data-ph-capture-attribute-tag={tag}
+                                        data-ph-capture-attribute-action="tag_click">
+                                        {tag}
+                                      </Badge>
+                                    ))}
+                                  {post.data.tags.filter((tag) => tag.trim())
+                                    .length > 3 && (
+                                    <span class="px-2 py-1 text-xs text-white/70">
+                                      +
+                                      {post.data.tags.filter((tag) =>
+                                        tag.trim(),
+                                      ).length - 3}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    // Card without background image (fallback)
+                    <div class="border-border bg-card hover:bg-accent/50 rounded-xl border p-6 transition-colors">
+                      <div class="flex flex-col gap-3">
+                        <h3 class="text-foreground group-hover:text-primary text-xl font-bold transition-colors md:text-2xl">
+                          {post.data.title}
+                        </h3>
+
+                        <p class="text-muted-foreground text-sm leading-relaxed">
+                          {post.data.description || ""}
+                        </p>
+
+                        <div class="flex items-center justify-between gap-4">
+                          <div class="text-muted-foreground flex items-center gap-2 text-sm">
+                            <span>
+                              {getReadingTime(post.body ?? "")} min read
+                            </span>
+                            <span>•</span>
+                            <time datetime={post.data.createdAt.toISOString()}>
+                              {formatDate(post.data.createdAt)}
+                            </time>
+                          </div>
+
+                          {post.data.tags &&
+                            post.data.tags.filter((tag) => tag.trim()).length >
+                              0 && (
+                              <div class="flex flex-wrap gap-2">
+                                {post.data.tags
+                                  .filter((tag) => tag.trim())
+                                  .slice(0, 4)
+                                  .map((tag: string) => (
+                                    <Badge
+                                      data-ph-capture-attribute-tag={tag}
+                                      data-ph-capture-attribute-action="tag_click">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                {post.data.tags.filter((tag) => tag.trim())
+                                  .length > 4 && (
+                                  <span class="text-muted-foreground px-2 py-1 text-xs">
+                                    +
+                                    {post.data.tags.filter((tag) => tag.trim())
+                                      .length - 4}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </a>
             </article>

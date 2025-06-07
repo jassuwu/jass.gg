@@ -5,5 +5,17 @@ import WorkExperiences from "./WorkExperiences.astro";
 import Badge from "./Badge.astro";
 import Footer from "./Footer.astro";
 import PostHog from "./posthog.astro";
+import BlurBottom from "./blur-bottom.astro";
+import BlurBottomBlogBanner from "./blur-bottom-blog-banner.astro";
 
-export { Header, Hero, Projects, WorkExperiences, Badge, Footer, PostHog };
+export {
+  Header,
+  Hero,
+  Projects,
+  WorkExperiences,
+  Badge,
+  Footer,
+  PostHog,
+  BlurBottom,
+  BlurBottomBlogBanner,
+};

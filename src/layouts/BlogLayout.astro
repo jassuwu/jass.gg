@@ -1,6 +1,6 @@
 ---
 import ASSETS from "@/assets";
-import { Badge } from "@/components";
+import { Badge, BlurBottomBlogBanner } from "@/components";
 import { Layout } from "@/layouts";
 import type { CollectionEntry } from "astro:content";
 
@@ -9,7 +9,8 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, createdAt, updatedAt, tags } = post.data;
+const { title, createdAt, updatedAt, tags, bannerImage, bannerImageAlt } =
+  post.data;
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat("en-US", {
@@ -24,6 +25,16 @@ const getReadingTime = (content: string) => {
   const wordCount = content?.trim().split(/\s+/).length;
   const readingTime = Math.ceil(wordCount / wordsPerMinute);
   return readingTime;
+};
+
+const getBannerImagePath = (bannerImage: string | undefined) => {
+  if (!bannerImage) return null;
+  // If it's already a full path (starts with / or http), use as-is
+  if (bannerImage.startsWith("/") || bannerImage.startsWith("http")) {
+    return bannerImage;
+  }
+  // Otherwise, construct path to public/blog folder
+  return `/src/assets/blog/${bannerImage}`;
 };
 ---
 
@@ -45,51 +56,117 @@ const getReadingTime = (content: string) => {
       </a>
     </nav>
 
-    <!-- Article header -->
-    <header class="mb-8">
-      <h1
-        class="font-comic-neue text-primary mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
-        {title}
-      </h1>
+    <!-- Banner Image with overlay -->
+    {
+      getBannerImagePath(bannerImage) && (
+        <div class="relative -mx-4 mb-8 md:-mx-8 lg:-mx-12">
+          <div class="relative h-64 overflow-hidden rounded-xs md:h-80 lg:h-96">
+            <img
+              src={getBannerImagePath(bannerImage)}
+              alt={bannerImageAlt || title}
+              class="h-full w-full object-cover brightness-75 contrast-125 transition-all duration-300"
+              loading="eager"
+            />
 
-      <div class="mb-4 flex items-center justify-between">
-        <div class="text-muted-foreground flex items-center gap-2 text-sm">
-          <span>{getReadingTime(post.body ?? "")} min read</span>
-          <span>•</span>
-          <time datetime={createdAt.toISOString()}>
-            {formatDate(createdAt)}
-          </time>
-          {
-            updatedAt && updatedAt.getTime() !== createdAt.getTime() && (
-              <>
-                <span>•</span>
-                <span>Updated {formatDate(updatedAt)}</span>
-              </>
-            )
-          }
+            <div class="absolute inset-0">
+              <BlurBottomBlogBanner />
+            </div>
+
+            <div class="absolute right-0 bottom-0 left-0 z-10 p-6 md:p-8">
+              <h1 class="font-comic-neue mb-4 text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+                {title}
+              </h1>
+
+              <div class="flex flex-wrap items-center gap-4 text-white/90">
+                <div class="flex items-center gap-2 text-sm">
+                  <span>{getReadingTime(post.body ?? "")} min read</span>
+                  <span>•</span>
+                  <time datetime={createdAt.toISOString()}>
+                    {formatDate(createdAt)}
+                  </time>
+                  {updatedAt && updatedAt.getTime() !== createdAt.getTime() && (
+                    <>
+                      <span>•</span>
+                      <span>Updated {formatDate(updatedAt)}</span>
+                    </>
+                  )}
+                </div>
+
+                {tags && tags.filter((tag) => tag.trim()).length > 0 && (
+                  <div class="flex flex-wrap gap-2">
+                    {tags
+                      .filter((tag) => tag.trim())
+                      .slice(0, 4)
+                      .map((tag: string) => (
+                        <Badge
+                          class="border-white/30 bg-white/20 text-white hover:bg-white/30"
+                          data-ph-capture-attribute-tag={tag}
+                          data-ph-capture-attribute-action="tag_view"
+                          data-ph-capture-attribute-source="blog_post">
+                          {tag}
+                        </Badge>
+                      ))}
+                    {tags.filter((tag) => tag.trim()).length > 4 && (
+                      <span class="px-2 py-1 text-xs text-white/80">
+                        +{tags.filter((tag) => tag.trim()).length - 4} more
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+      )
+    }
 
-        {
-          tags && tags.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              {tags.slice(0, 4).map((tag: string) => (
-                <Badge
-                  data-ph-capture-attribute-tag={tag}
-                  data-ph-capture-attribute-action="tag_view"
-                  data-ph-capture-attribute-source="blog_post">
-                  {tag}
-                </Badge>
-              ))}
-              {tags.length > 4 && (
-                <span class="text-muted-foreground px-2 py-1 text-xs">
-                  +{tags.length - 4} more
-                </span>
+    <!-- Article header (fallback for posts without banner) -->
+    {
+      !getBannerImagePath(bannerImage) && (
+        <header class="mb-8">
+          <h1 class="font-comic-neue text-primary mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
+            {title}
+          </h1>
+
+          <div class="mb-4 flex items-center justify-between">
+            <div class="text-muted-foreground flex items-center gap-2 text-sm">
+              <span>{getReadingTime(post.body ?? "")} min read</span>
+              <span>•</span>
+              <time datetime={createdAt.toISOString()}>
+                {formatDate(createdAt)}
+              </time>
+              {updatedAt && updatedAt.getTime() !== createdAt.getTime() && (
+                <>
+                  <span>•</span>
+                  <span>Updated {formatDate(updatedAt)}</span>
+                </>
               )}
             </div>
-          )
-        }
-      </div>
-    </header>
+
+            {tags && tags.filter((tag) => tag.trim()).length > 0 && (
+              <div class="flex flex-wrap gap-2">
+                {tags
+                  .filter((tag) => tag.trim())
+                  .slice(0, 4)
+                  .map((tag: string) => (
+                    <Badge
+                      data-ph-capture-attribute-tag={tag}
+                      data-ph-capture-attribute-action="tag_view"
+                      data-ph-capture-attribute-source="blog_post">
+                      {tag}
+                    </Badge>
+                  ))}
+                {tags.filter((tag) => tag.trim()).length > 4 && (
+                  <span class="text-muted-foreground px-2 py-1 text-xs">
+                    +{tags.filter((tag) => tag.trim()).length - 4} more
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </header>
+      )
+    }
 
     <!-- Article content -->
     <article
