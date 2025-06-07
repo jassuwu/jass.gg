@@ -1,5 +1,5 @@
 // AVATAR
-import AVATAR from "./avatar.png";
+import AVATAR from "./avatar.webp";
 
 // ICONS
 import RESUME from "./icons/resume.svg";
