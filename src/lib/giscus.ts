@@ -31,7 +31,7 @@ export const GISCUS_CONFIG = {
 
   // Custom theme URL using jsdelivr CDN for proper MIME type
   theme:
-    "https://cdn.jsdelivr.net/gh/jassuwu/jass.gg@main/src/styles/giscus.css",
+    "https://cdn.jsdelivr.net/gh/jassuwu/jass.gg@main/src/styles/giscus.min.css",
 
   // Script source
   src: "https://giscus.app/client.js",
