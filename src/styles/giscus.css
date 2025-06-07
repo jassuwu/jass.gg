@@ -1,102 +1,12 @@
 /*!
- * Giscus theming integrated with site's design system
- * Based on GitHub's theme structure but using site-consistent colors
+ * Giscus theming using dark theme from site's design system
+ * Dark-first approach matching the site's primary dark theme
  */
 
 :root {
-  /* Syntax highlighting colors for light theme */
-  --color-prettylights-syntax-comment: oklch(0.556 0 0);
-  --color-prettylights-syntax-constant: oklch(0.646 0.222 41.116);
-  --color-prettylights-syntax-entity: oklch(0.769 0.188 70.08);
-  --color-prettylights-syntax-storage-modifier-import: oklch(0.145 0 0);
-  --color-prettylights-syntax-entity-tag: oklch(0.828 0.189 84.429);
-  --color-prettylights-syntax-keyword: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-string: oklch(0.6 0.118 184.704);
-  --color-prettylights-syntax-variable: oklch(0.646 0.222 41.116);
-  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-invalid-illegal-text: oklch(0.145 0 0);
-  --color-prettylights-syntax-invalid-illegal-bg: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-carriage-return-text: oklch(0.145 0 0);
-  --color-prettylights-syntax-carriage-return-bg: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-string-regexp: oklch(0.828 0.189 84.429);
-  --color-prettylights-syntax-markup-list: oklch(0.769 0.188 70.08);
-  --color-prettylights-syntax-markup-heading: oklch(0.9392 0.1588 124.39);
-  --color-prettylights-syntax-markup-italic: oklch(0.556 0 0);
-  --color-prettylights-syntax-markup-bold: oklch(0.145 0 0);
-  --color-prettylights-syntax-markup-deleted-text: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-markup-deleted-bg: oklch(0.577 0.245 27.325 / 0.1);
-  --color-prettylights-syntax-markup-inserted-text: oklch(0.828 0.189 84.429);
-  --color-prettylights-syntax-markup-inserted-bg: oklch(0.828 0.189 84.429 / 0.1);
-  --color-prettylights-syntax-markup-changed-text: oklch(0.769 0.188 70.08);
-  --color-prettylights-syntax-markup-changed-bg: oklch(0.769 0.188 70.08 / 0.1);
-  --color-prettylights-syntax-markup-ignored-text: oklch(0.556 0 0);
-  --color-prettylights-syntax-markup-ignored-bg: oklch(0.9392 0.1588 124.39);
-  --color-prettylights-syntax-meta-diff-range: oklch(0.769 0.188 70.08);
-  --color-prettylights-syntax-brackethighlighter-angle: oklch(0.556 0 0);
-  --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.556 0 0);
-  --color-prettylights-syntax-constant-other-reference-link: oklch(0.6 0.118 184.704);
-
-  /* Button colors */
-  --color-btn-text: oklch(0.145 0 0);
-  --color-btn-bg: oklch(0.97 0 0);
-  --color-btn-border: oklch(0.922 0 0);
-  --color-btn-shadow: 0 0 transparent;
-  --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: oklch(0.97 0 0);
-  --color-btn-hover-border: oklch(0.922 0 0);
-  --color-btn-active-bg: oklch(0.97 0 0);
-  --color-btn-active-border: oklch(0.922 0 0);
-  --color-btn-selected-bg: oklch(0.97 0 0);
-  --color-btn-primary-text: oklch(0.985 0 0);
-  --color-btn-primary-bg: oklch(0.9392 0.1588 124.39);
-  --color-btn-primary-border: oklch(0.922 0 0);
-  --color-btn-primary-shadow: 0 0 transparent;
-  --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: oklch(0.9392 0.1588 124.39);
-  --color-btn-primary-hover-border: oklch(0.922 0 0);
-  --color-btn-primary-selected-bg: oklch(0.9392 0.1588 124.39);
-  --color-btn-primary-selected-shadow: 0 0 transparent;
-  --color-btn-primary-disabled-text: oklch(0.556 0 0);
-  --color-btn-primary-disabled-bg: oklch(0.97 0 0);
-  --color-btn-primary-disabled-border: oklch(0.922 0 0);
-
-  /* Interface colors */
-  --color-action-list-item-default-hover-bg: oklch(0.97 0 0);
-  --color-segmented-control-bg: oklch(0.97 0 0);
-  --color-segmented-control-button-bg: oklch(1 0 0);
-  --color-segmented-control-button-selected-border: oklch(0.922 0 0);
-  --color-fg-default: oklch(0.145 0 0);
-  --color-fg-muted: oklch(0.556 0 0);
-  --color-fg-subtle: oklch(0.556 0 0);
-  --color-canvas-default: oklch(1 0 0);
-  --color-canvas-overlay: oklch(1 0 0);
-  --color-canvas-inset: oklch(0.97 0 0);
-  --color-canvas-subtle: oklch(0.97 0 0);
-  --color-border-default: oklch(0.922 0 0);
-  --color-border-muted: oklch(0.922 0 0);
-  --color-neutral-muted: oklch(0.556 0 0);
-  --color-accent-fg: oklch(0.9392 0.1588 124.39);
-  --color-accent-emphasis: oklch(0.9392 0.1588 124.39);
-  --color-accent-muted: oklch(0.9392 0.1588 124.39);
-  --color-accent-subtle: oklch(0.9392 0.1588 124.39);
-  --color-success-fg: oklch(0.828 0.189 84.429);
-  --color-attention-fg: oklch(0.769 0.188 70.08);
-  --color-attention-muted: oklch(0.769 0.188 70.08);
-  --color-attention-subtle: oklch(0.769 0.188 70.08);
-  --color-danger-fg: oklch(0.577 0.245 27.325);
-  --color-danger-muted: oklch(0.577 0.245 27.325);
-  --color-danger-subtle: oklch(0.577 0.245 27.325);
-  --color-primer-shadow-inset: 0 0 transparent;
-  --color-scale-gray-7: oklch(0.97 0 0);
-  --color-scale-blue-8: oklch(0.9392 0.1588 124.39);
-
-  /* Extensions for reactions */
-  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
-  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
-}
-
-.dark {
-  /* Dark theme syntax highlighting adjustments */
+  /* Dark theme colors (primary theme) from global.css */
+  
+  /* Syntax highlighting colors */
   --color-prettylights-syntax-comment: oklch(0.708 0 0);
   --color-prettylights-syntax-constant: oklch(0.488 0.243 264.376);
   --color-prettylights-syntax-entity: oklch(0.645 0.246 16.439);
@@ -128,10 +38,12 @@
   --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.708 0 0);
   --color-prettylights-syntax-constant-other-reference-link: oklch(0.627 0.265 303.9);
 
-  /* Button colors for dark theme */
+  /* Button colors using dark theme */
   --color-btn-text: oklch(0.985 0 0);
   --color-btn-bg: oklch(0.269 0 0);
   --color-btn-border: oklch(1 0 0 / 10%);
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: oklch(0.269 0 0);
   --color-btn-hover-border: oklch(1 0 0 / 10%);
   --color-btn-active-bg: oklch(0.269 0 0);
@@ -140,14 +52,17 @@
   --color-btn-primary-text: oklch(0.985 0 0);
   --color-btn-primary-bg: oklch(0.9392 0.1588 124.39);
   --color-btn-primary-border: oklch(1 0 0 / 10%);
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: oklch(0.9392 0.1588 124.39);
   --color-btn-primary-hover-border: oklch(1 0 0 / 10%);
   --color-btn-primary-selected-bg: oklch(0.9392 0.1588 124.39);
+  --color-btn-primary-selected-shadow: 0 0 transparent;
   --color-btn-primary-disabled-text: oklch(0.708 0 0);
   --color-btn-primary-disabled-bg: oklch(0.269 0 0);
   --color-btn-primary-disabled-border: oklch(1 0 0 / 10%);
 
-  /* Interface colors for dark theme */
+  /* Interface colors using dark theme */
   --color-action-list-item-default-hover-bg: oklch(0.269 0 0);
   --color-segmented-control-bg: oklch(0.269 0 0);
   --color-segmented-control-button-bg: oklch(0.145 0 0);
@@ -173,13 +88,105 @@
   --color-danger-fg: oklch(0.704 0.191 22.216);
   --color-danger-muted: oklch(0.704 0.191 22.216);
   --color-danger-subtle: oklch(0.704 0.191 22.216);
+  --color-primer-shadow-inset: 0 0 transparent;
   --color-scale-gray-7: oklch(0.269 0 0);
+  --color-scale-blue-8: oklch(0.9392 0.1588 124.39);
+
+  /* Extensions for reactions */
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+}
+
+/* Light theme override (when giscus detects light theme) */
+[data-theme="light"] {
+  /* Light theme syntax highlighting */
+  --color-prettylights-syntax-comment: oklch(0.556 0 0);
+  --color-prettylights-syntax-constant: oklch(0.646 0.222 41.116);
+  --color-prettylights-syntax-entity: oklch(0.769 0.188 70.08);
+  --color-prettylights-syntax-storage-modifier-import: oklch(0.145 0 0);
+  --color-prettylights-syntax-entity-tag: oklch(0.828 0.189 84.429);
+  --color-prettylights-syntax-keyword: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-string: oklch(0.6 0.118 184.704);
+  --color-prettylights-syntax-variable: oklch(0.646 0.222 41.116);
+  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-invalid-illegal-text: oklch(0.145 0 0);
+  --color-prettylights-syntax-invalid-illegal-bg: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-carriage-return-text: oklch(0.145 0 0);
+  --color-prettylights-syntax-carriage-return-bg: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-string-regexp: oklch(0.828 0.189 84.429);
+  --color-prettylights-syntax-markup-list: oklch(0.769 0.188 70.08);
+  --color-prettylights-syntax-markup-heading: oklch(0.9392 0.1588 124.39);
+  --color-prettylights-syntax-markup-italic: oklch(0.556 0 0);
+  --color-prettylights-syntax-markup-bold: oklch(0.145 0 0);
+  --color-prettylights-syntax-markup-deleted-text: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-markup-deleted-bg: oklch(0.577 0.245 27.325 / 0.1);
+  --color-prettylights-syntax-markup-inserted-text: oklch(0.828 0.189 84.429);
+  --color-prettylights-syntax-markup-inserted-bg: oklch(0.828 0.189 84.429 / 0.1);
+  --color-prettylights-syntax-markup-changed-text: oklch(0.769 0.188 70.08);
+  --color-prettylights-syntax-markup-changed-bg: oklch(0.769 0.188 70.08 / 0.1);
+  --color-prettylights-syntax-markup-ignored-text: oklch(0.556 0 0);
+  --color-prettylights-syntax-markup-ignored-bg: oklch(0.9392 0.1588 124.39);
+  --color-prettylights-syntax-meta-diff-range: oklch(0.769 0.188 70.08);
+  --color-prettylights-syntax-brackethighlighter-angle: oklch(0.556 0 0);
+  --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.556 0 0);
+  --color-prettylights-syntax-constant-other-reference-link: oklch(0.6 0.118 184.704);
+
+  /* Light theme button colors */
+  --color-btn-text: oklch(0.145 0 0);
+  --color-btn-bg: oklch(0.97 0 0);
+  --color-btn-border: oklch(0.922 0 0);
+  --color-btn-hover-bg: oklch(0.97 0 0);
+  --color-btn-hover-border: oklch(0.922 0 0);
+  --color-btn-active-bg: oklch(0.97 0 0);
+  --color-btn-active-border: oklch(0.922 0 0);
+  --color-btn-selected-bg: oklch(0.97 0 0);
+  --color-btn-primary-text: oklch(0.985 0 0);
+  --color-btn-primary-bg: oklch(0.9392 0.1588 124.39);
+  --color-btn-primary-border: oklch(0.922 0 0);
+  --color-btn-primary-hover-bg: oklch(0.9392 0.1588 124.39);
+  --color-btn-primary-hover-border: oklch(0.922 0 0);
+  --color-btn-primary-selected-bg: oklch(0.9392 0.1588 124.39);
+  --color-btn-primary-disabled-text: oklch(0.556 0 0);
+  --color-btn-primary-disabled-bg: oklch(0.97 0 0);
+  --color-btn-primary-disabled-border: oklch(0.922 0 0);
+
+  /* Light theme interface colors */
+  --color-action-list-item-default-hover-bg: oklch(0.97 0 0);
+  --color-segmented-control-bg: oklch(0.97 0 0);
+  --color-segmented-control-button-bg: oklch(1 0 0);
+  --color-segmented-control-button-selected-border: oklch(0.922 0 0);
+  --color-fg-default: oklch(0.145 0 0);
+  --color-fg-muted: oklch(0.556 0 0);
+  --color-fg-subtle: oklch(0.556 0 0);
+  --color-canvas-default: oklch(1 0 0);
+  --color-canvas-overlay: oklch(1 0 0);
+  --color-canvas-inset: oklch(0.97 0 0);
+  --color-canvas-subtle: oklch(0.97 0 0);
+  --color-border-default: oklch(0.922 0 0);
+  --color-border-muted: oklch(0.922 0 0);
+  --color-neutral-muted: oklch(0.556 0 0);
+  --color-accent-fg: oklch(0.9392 0.1588 124.39);
+  --color-accent-emphasis: oklch(0.9392 0.1588 124.39);
+  --color-accent-muted: oklch(0.9392 0.1588 124.39);
+  --color-accent-subtle: oklch(0.9392 0.1588 124.39);
+  --color-success-fg: oklch(0.828 0.189 84.429);
+  --color-attention-fg: oklch(0.769 0.188 70.08);
+  --color-attention-muted: oklch(0.769 0.188 70.08);
+  --color-attention-subtle: oklch(0.769 0.188 70.08);
+  --color-danger-fg: oklch(0.577 0.245 27.325);
+  --color-danger-muted: oklch(0.577 0.245 27.325);
+  --color-danger-subtle: oklch(0.577 0.245 27.325);
+  --color-scale-gray-7: oklch(0.97 0 0);
   --color-scale-blue-8: oklch(0.9392 0.1588 124.39);
 }
 
-/* Loading image for dark theme */
+/* Loading image for theme compatibility */
 main .pagination-loader-container {
   background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg);
+}
+
+[data-theme="light"] main .pagination-loader-container {
+  background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg);
 }
 
 /* Custom giscus layout and behavior */
@@ -208,12 +215,13 @@ main .pagination-loader-container {
   order: 3;
 }
 
+/* Background color theming */
 .gsc-homepage-bg {
-  background-color: oklch(1 0 0);
+  background-color: oklch(0.145 0 0);
 }
 
-.dark .gsc-homepage-bg {
-  background-color: oklch(0.145 0 0);
+[data-theme="light"] .gsc-homepage-bg {
+  background-color: oklch(1 0 0);
 }
 
 main .gsc-loading-image {

@@ -1,0 +1,187 @@
+---
+import { getGiscusAttributes } from "@/lib/giscus";
+
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id = "giscus-comments", class: className = "" } = Astro.props;
+
+// Get the current page URL for giscus mapping
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Get giscus configuration
+const giscusAttrs = getGiscusAttributes();
+---
+
+<div id={id} class={`giscus-container ${className}`} data-giscus-loaded="false">
+  <div class="giscus-loading" id="giscus-loading">
+    <div class="text-muted-foreground flex items-center justify-center py-8">
+      <div class="flex items-center gap-3">
+        <div
+          class="border-primary h-5 w-5 animate-spin rounded-full border-2 border-t-transparent">
+        </div>
+        <span class="text-sm">Loading comments...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ canonicalURL: canonicalURL.href, giscusAttrs }}>
+  // Load giscus comments when the component is in view
+  function loadGiscusComments() {
+    const container = document.getElementById("giscus-comments");
+    const loading = document.getElementById("giscus-loading");
+
+    if (!container || container.dataset.giscusLoaded === "true") return;
+
+    // Create the giscus script element
+    const script = document.createElement("script");
+
+    // Apply all giscus attributes from configuration
+    Object.entries(giscusAttrs).forEach(([key, value]) => {
+      if (key === "src") {
+        script.src = value;
+      } else if (key === "async") {
+        script.async = value;
+      } else {
+        script.setAttribute(key, String(value));
+      }
+    });
+
+    // Hide loading indicator once giscus starts loading
+    script.onload = () => {
+      if (loading) {
+        loading.style.display = "none";
+      }
+    };
+
+    // Mark as loaded to prevent duplicate loading
+    container.dataset.giscusLoaded = "true";
+
+    // Append the script to the container
+    container.appendChild(script);
+  }
+
+  // Intersection Observer for lazy loading
+  function initializeGiscus() {
+    const container = document.getElementById("giscus-comments");
+    if (!container) return;
+
+    // If IntersectionObserver is not supported, load immediately
+    if (!("IntersectionObserver" in window)) {
+      loadGiscusComments();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadGiscusComments();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: "100px", // Start loading 100px before the element comes into view
+        threshold: 0.1,
+      },
+    );
+
+    observer.observe(container);
+  }
+
+  // Initialize when the DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeGiscus);
+  } else {
+    initializeGiscus();
+  }
+
+  // Handle giscus messages for analytics and error handling
+  function handleGiscusMessage(event) {
+    if (event.origin !== "https://giscus.app") return;
+    if (!(typeof event.data === "object" && event.data.giscus)) return;
+
+    const giscusData = event.data.giscus;
+
+    // Handle discussion metadata for analytics
+    if (
+      "discussion" in giscusData &&
+      typeof window !== "undefined" &&
+      window.posthog
+    ) {
+      const metadataMessage = giscusData;
+      window.posthog.capture("blog_comments_loaded", {
+        discussion_id: metadataMessage.discussion?.id,
+        discussion_title: metadataMessage.discussion?.title,
+        comment_count: metadataMessage.discussion?.totalCommentCount || 0,
+        reaction_count: metadataMessage.discussion?.totalReactionCount || 0,
+        page_url: canonicalURL,
+        post_pathname: new URL(canonicalURL).pathname,
+      });
+    }
+
+    // Handle errors
+    if ("error" in giscusData) {
+      console.error("Giscus error:", giscusData.error);
+      const loading = document.getElementById("giscus-loading");
+      if (loading) {
+        loading.innerHTML = `
+          <div class="flex items-center justify-center py-8 text-destructive">
+            <div class="text-center">
+              <div class="text-sm font-medium">Unable to load comments</div>
+              <div class="text-xs text-muted-foreground mt-1">${giscusData.error}</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Listen for giscus messages
+  window.addEventListener("message", handleGiscusMessage);
+
+  // Clean up listener when page unloads
+  window.addEventListener("beforeunload", () => {
+    window.removeEventListener("message", handleGiscusMessage);
+  });
+</script>
+
+<style>
+  .giscus-container {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .giscus-loading {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .giscus-container[data-giscus-loaded="true"] .giscus-loading {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Ensure giscus iframe integrates well */
+  .giscus-container :global(.giscus-frame) {
+    width: 100%;
+    border: none;
+    color-scheme: light;
+  }
+
+  /* Dark mode support */
+  .dark .giscus-container :global(.giscus-frame) {
+    color-scheme: dark;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .giscus-container {
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>

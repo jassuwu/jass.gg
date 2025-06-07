@@ -7,6 +7,7 @@ import Footer from "./Footer.astro";
 import PostHog from "./posthog.astro";
 import BlurBottom from "./blur-bottom.astro";
 import BlurBottomBlogBanner from "./blur-bottom-blog-banner.astro";
+import Giscus from "./Giscus.astro";
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   PostHog,
   BlurBottom,
   BlurBottomBlogBanner,
+  Giscus,
 };

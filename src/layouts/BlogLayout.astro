@@ -1,6 +1,6 @@
 ---
 import ASSETS from "@/assets";
-import { Badge, BlurBottomBlogBanner } from "@/components";
+import { Badge, BlurBottomBlogBanner, Giscus } from "@/components";
 import { Layout } from "@/layouts";
 import type { CollectionEntry } from "astro:content";
 import type { ImageMetadata } from "astro";
@@ -215,6 +215,12 @@ const socialImageUrl = getBannerImagePath(bannerImage);
       data-ph-post-content="true">
       <slot />
     </article>
+
+    <!-- Comments section -->
+    <section class="border-border mt-16 border-t pt-8">
+      <h2 class="text-foreground mb-6 text-2xl font-bold">discuss</h2>
+      <Giscus />
+    </section>
   </main>
 </Layout>
 
