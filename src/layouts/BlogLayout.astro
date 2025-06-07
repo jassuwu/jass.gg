@@ -33,12 +33,34 @@ const getBannerImagePath = (bannerImage: string | undefined) => {
   if (bannerImage.startsWith("/") || bannerImage.startsWith("http")) {
     return bannerImage;
   }
-  // Otherwise, construct path to public/blog folder
+  // For now, use a direct path that will work with Astro's asset processing
+  // This will be processed by Astro's build system
   return `/src/assets/blog/${bannerImage}`;
 };
+
+// Generate a more descriptive page title for blog posts
+const pageTitle = `${title} | jass.gg`;
+
+// Use the post description or generate one from content
+const postDescription =
+  post.data.description ||
+  `Read "${title}" on jass.gg - ${post.body?.substring(0, 150).replace(/[#*_]/g, "").trim()}...` ||
+  `Blog post: ${title}`;
+
+// Get the banner image URL for social sharing
+const socialImageUrl = getBannerImagePath(bannerImage);
 ---
 
-<Layout>
+<Layout
+  title={pageTitle}
+  description={postDescription}
+  image={socialImageUrl || undefined}
+  imageAlt={bannerImageAlt || title}
+  type="article"
+  publishedTime={createdAt.toISOString()}
+  modifiedTime={updatedAt?.toISOString()}
+  tags={tags}
+  author="Jass">
   <main class="container-narrow py-8 md:py-12">
     <!-- Back to blog link -->
     <nav class="mb-8">
