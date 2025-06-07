@@ -2,6 +2,7 @@
 import { Badge, BlurBottomBlogBanner } from "@/components";
 import { Layout } from "@/layouts";
 import { getCollection, type CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
 
 // Get all blog posts and sort by date (newest first)
 const allPosts = (await getCollection("blog")).sort(
@@ -24,14 +25,30 @@ const getReadingTime = (content: string) => {
   return readingTime;
 };
 
+// Import all blog images using glob for proper asset processing
+const blogImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/blog/*",
+  { eager: true },
+);
+
 const getBannerImagePath = (bannerImage: string | undefined) => {
   if (!bannerImage) return null;
   // If it's already a full path (starts with / or http), use as-is
   if (bannerImage.startsWith("/") || bannerImage.startsWith("http")) {
     return bannerImage;
   }
-  // Otherwise, construct path to public/blog folder
-  return `/src/assets/blog/${bannerImage}`;
+
+  // Look for the image in the imported blog images
+  const imagePath = `/src/assets/blog/${bannerImage}`;
+  const imageModule = blogImages[imagePath];
+
+  if (imageModule) {
+    return imageModule.default.src;
+  }
+
+  // Fallback to the original path if not found
+  console.warn(`Banner image not found: ${bannerImage}`);
+  return null;
 };
 ---
 

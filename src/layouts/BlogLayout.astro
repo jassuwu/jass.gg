@@ -3,6 +3,7 @@ import ASSETS from "@/assets";
 import { Badge, BlurBottomBlogBanner } from "@/components";
 import { Layout } from "@/layouts";
 import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -27,15 +28,30 @@ const getReadingTime = (content: string) => {
   return readingTime;
 };
 
+// Import all blog images using glob for proper asset processing
+const blogImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/blog/*",
+  { eager: true },
+);
+
 const getBannerImagePath = (bannerImage: string | undefined) => {
   if (!bannerImage) return null;
   // If it's already a full path (starts with / or http), use as-is
   if (bannerImage.startsWith("/") || bannerImage.startsWith("http")) {
     return bannerImage;
   }
-  // For now, use a direct path that will work with Astro's asset processing
-  // This will be processed by Astro's build system
-  return `/src/assets/blog/${bannerImage}`;
+
+  // Look for the image in the imported blog images
+  const imagePath = `/src/assets/blog/${bannerImage}`;
+  const imageModule = blogImages[imagePath];
+
+  if (imageModule) {
+    return imageModule.default.src;
+  }
+
+  // Fallback to the original path if not found
+  console.warn(`Banner image not found: ${bannerImage}`);
+  return null;
 };
 
 // Generate a more descriptive page title for blog posts
