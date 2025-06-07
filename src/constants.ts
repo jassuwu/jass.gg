@@ -17,6 +17,6 @@ export const URLS = {
 export const USERNAMES = {
   TWITTER: "jassdotgg",
   GITHUB: "jassuwu",
-  DISCORD: "jassuwu",
+  DISCORD: "jassdotgg",
   LINKEDIN: "kprnv",
 };
