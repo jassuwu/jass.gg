@@ -3,7 +3,7 @@ title: "hello world"
 description: "is this thing on?"
 tags: ["intro", "meta"]
 bannerImage: "hello-world.gif"
-bannerImageAlt: "shoya waving hello"
+bannerImageAlt: "pikachu waving hello"
 createdAt: 2025-06-07
 updatedAt: 2025-06-07
 ---
