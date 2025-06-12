@@ -3,7 +3,7 @@ title: "choosing git merge AND git rebase"
 description: "i won't choose for you, but i'll enable you to choose for yourself. and that's the point."
 tags: ["tech", "git", "i put effort into this"]
 bannerImage: "git-merge-and-git-rebase.webp"
-bannerImageAlt: "git gud"
+bannerImageAlt: "sakurajima mai holding a book with the title"
 createdAt: 2025-06-11
 updatedAt: 2025-06-11
 ---
