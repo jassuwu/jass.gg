@@ -24,7 +24,7 @@ also me: "actually, what does that even mean?"
 
 i have no idea what i'm doing.
 
-turns out the `merge` vs `rebase` debate isn't about commands—it's about philosophy. there are two schools of thought:
+turns out the `merge` vs `rebase` debate isn't about commands. it's about philosophy. there are two schools of thought:
 
 1.  **that 100%, exact, legit, no filters, no edits type beat:** git log should be a perfect transcript of everything that happened. every merge, every sync, every "oops fixed typo" commit. chaotic but honest. this is `git merge` territory.
 
@@ -55,7 +55,7 @@ your `git log` looks like spaghetti code had a baby with a bowl of ramen:
 
 you run `git bisect`. it points to: **"Merge branch 'develop' into feat/user-profile"**.
 
-you open it. it's hundreds of lines mixing mani's caching with your half-finished profile code. the bug isn't in her code or your code—it's in the *combination*. and this merge commit is the only place it exists.
+you open it. it's hundreds of lines mixing mani's caching with your half-finished profile code. the bug isn't in her code or your code, it's in the *combination*. and this merge commit is the only place it exists.
 
 `git blame` just points to the merge commit. you're fucked. weekend = gone. client = lost. sanity = obliterated.
 
@@ -72,14 +72,14 @@ your `git log` is as clean as my search history:
 
 boss freaking out. you run `git bisect`.
 
-it checks "fix login button" → pass.
-it checks "enable caching system" → **FAIL.**
+it checks "fix login button" → **PASS**.
+it checks "enable caching system" → **FAIL**.
 
 boom. laser-focused on mani's exact 30-line commit. you walk over, point out the issue, fix it together in 5 minutes. you're home by 4:15 PM and living your work-life balanced (wtf is that) life.
 
 ### plot twist: they're not enemies
 
-seeing that, i was ready to declare "rebase supremacy" and call it a day. but hold up—merge commits aren't the villain. they're just misunderstood.
+seeing that, i was ready to declare "rebase supremacy" and call it a day. but hol-up. merge commits aren't the villain. they're just misunderstood.
 
 merge commits are for when you *want* to preserve that "two lines of work came together" moment. like when you're merging `dev` into `main` for a release:
 
