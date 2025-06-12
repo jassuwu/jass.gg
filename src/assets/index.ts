@@ -13,6 +13,8 @@ import MOVE_LEFT from "./icons/move-left.svg";
 import MOVE_LEFT_MUTED from "./icons/move-left-muted.svg";
 import HAMBURGER_MENU from "./icons/hamburger-menu.svg";
 
+import WANT_LINEAR_HISTORY from "./blog/git-merge-and-git-rebase/want-linear-history.png";
+
 const ASSETS = {
   AVATAR,
   ICONS: {
@@ -26,6 +28,11 @@ const ASSETS = {
     MOVE_LEFT,
     MOVE_LEFT_MUTED,
     HAMBURGER_MENU,
+  },
+  BLOG: {
+    GIT_MERGE_AND_GIT_REBASE: {
+      WANT_LINEAR_HISTORY,
+    },
   },
 };
 
