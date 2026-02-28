@@ -5,7 +5,7 @@
 
 :root {
   /* Dark theme colors (primary theme) from global.css */
-  
+
   /* Syntax highlighting colors */
   --color-prettylights-syntax-comment: oklch(0.708 0 0);
   --color-prettylights-syntax-constant: oklch(0.488 0.243 264.376);
@@ -15,7 +15,9 @@
   --color-prettylights-syntax-keyword: oklch(0.704 0.191 22.216);
   --color-prettylights-syntax-string: oklch(0.627 0.265 303.9);
   --color-prettylights-syntax-variable: oklch(0.769 0.188 70.08);
-  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(0.704 0.191 22.216);
+  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(
+    0.704 0.191 22.216
+  );
   --color-prettylights-syntax-invalid-illegal-text: oklch(0.985 0 0);
   --color-prettylights-syntax-invalid-illegal-bg: oklch(0.704 0.191 22.216);
   --color-prettylights-syntax-carriage-return-text: oklch(0.985 0 0);
@@ -26,9 +28,13 @@
   --color-prettylights-syntax-markup-italic: oklch(0.708 0 0);
   --color-prettylights-syntax-markup-bold: oklch(0.985 0 0);
   --color-prettylights-syntax-markup-deleted-text: oklch(0.704 0.191 22.216);
-  --color-prettylights-syntax-markup-deleted-bg: oklch(0.704 0.191 22.216 / 0.1);
+  --color-prettylights-syntax-markup-deleted-bg: oklch(
+    0.704 0.191 22.216 / 0.1
+  );
   --color-prettylights-syntax-markup-inserted-text: oklch(0.696 0.17 162.48);
-  --color-prettylights-syntax-markup-inserted-bg: oklch(0.696 0.17 162.48 / 0.1);
+  --color-prettylights-syntax-markup-inserted-bg: oklch(
+    0.696 0.17 162.48 / 0.1
+  );
   --color-prettylights-syntax-markup-changed-text: oklch(0.769 0.188 70.08);
   --color-prettylights-syntax-markup-changed-bg: oklch(0.769 0.188 70.08 / 0.1);
   --color-prettylights-syntax-markup-ignored-text: oklch(0.708 0 0);
@@ -36,7 +42,9 @@
   --color-prettylights-syntax-meta-diff-range: oklch(0.645 0.246 16.439);
   --color-prettylights-syntax-brackethighlighter-angle: oklch(0.708 0 0);
   --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.708 0 0);
-  --color-prettylights-syntax-constant-other-reference-link: oklch(0.627 0.265 303.9);
+  --color-prettylights-syntax-constant-other-reference-link: oklch(
+    0.627 0.265 303.9
+  );
 
   /* Button colors using dark theme */
   --color-btn-text: oklch(0.985 0 0);
@@ -108,7 +116,9 @@
   --color-prettylights-syntax-keyword: oklch(0.577 0.245 27.325);
   --color-prettylights-syntax-string: oklch(0.6 0.118 184.704);
   --color-prettylights-syntax-variable: oklch(0.646 0.222 41.116);
-  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(0.577 0.245 27.325);
+  --color-prettylights-syntax-brackethighlighter-unmatched: oklch(
+    0.577 0.245 27.325
+  );
   --color-prettylights-syntax-invalid-illegal-text: oklch(0.145 0 0);
   --color-prettylights-syntax-invalid-illegal-bg: oklch(0.577 0.245 27.325);
   --color-prettylights-syntax-carriage-return-text: oklch(0.145 0 0);
@@ -119,9 +129,13 @@
   --color-prettylights-syntax-markup-italic: oklch(0.556 0 0);
   --color-prettylights-syntax-markup-bold: oklch(0.145 0 0);
   --color-prettylights-syntax-markup-deleted-text: oklch(0.577 0.245 27.325);
-  --color-prettylights-syntax-markup-deleted-bg: oklch(0.577 0.245 27.325 / 0.1);
+  --color-prettylights-syntax-markup-deleted-bg: oklch(
+    0.577 0.245 27.325 / 0.1
+  );
   --color-prettylights-syntax-markup-inserted-text: oklch(0.828 0.189 84.429);
-  --color-prettylights-syntax-markup-inserted-bg: oklch(0.828 0.189 84.429 / 0.1);
+  --color-prettylights-syntax-markup-inserted-bg: oklch(
+    0.828 0.189 84.429 / 0.1
+  );
   --color-prettylights-syntax-markup-changed-text: oklch(0.769 0.188 70.08);
   --color-prettylights-syntax-markup-changed-bg: oklch(0.769 0.188 70.08 / 0.1);
   --color-prettylights-syntax-markup-ignored-text: oklch(0.556 0 0);
@@ -129,7 +143,9 @@
   --color-prettylights-syntax-meta-diff-range: oklch(0.769 0.188 70.08);
   --color-prettylights-syntax-brackethighlighter-angle: oklch(0.556 0 0);
   --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.556 0 0);
-  --color-prettylights-syntax-constant-other-reference-link: oklch(0.6 0.118 184.704);
+  --color-prettylights-syntax-constant-other-reference-link: oklch(
+    0.6 0.118 184.704
+  );
 
   /* Light theme button colors */
   --color-btn-text: oklch(0.145 0 0);

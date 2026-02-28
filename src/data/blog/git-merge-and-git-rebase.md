@@ -10,9 +10,9 @@ updatedAt: 2025-06-11
 
 # gitting gud
 
-i've always been team rebase because that's what my first team taught me. but recently someone on a PR just casually used merge instead, and i was like "wait, that's illegal." turns out they've *always* used merge.
+i've always been team rebase because that's what my first team taught me. but recently someone on a PR just casually used merge instead, and i was like "wait, that's illegal." turns out they've _always_ used merge.
 
-now we're in this mexican standoff where neither of us can convince the other because we don't actually understand *why* we prefer our way. classic.
+now we're in this mexican standoff where neither of us can convince the other because we don't actually understand _why_ we prefer our way. classic.
 
 so i said fuck it, let's dig this hole. spent some time making <a href="https://gist.github.com/jassuwu/b10a633fb60d4b5015cb0b33c2ca0e9e" target="_blank">one of those flowcharts that asks you questions and tells you what you want</a>.
 
@@ -34,7 +34,7 @@ i thought i was team rebase, but i'd never felt the pain of choosing wrong, so i
 
 ### the bug hunt from hell: a tale of two timelines
 
-friday, 4 PM. boss comes running over like the building's on fire. critical bug crashed the user profile page, big client threatening to cancel. you need to find the cause *now*.
+friday, 4 PM. boss comes running over like the building's on fire. critical bug crashed the user profile page, big client threatening to cancel. you need to find the cause _now_.
 
 you and mani both pushed code this week. you built the profile page, mani built caching. bug's somewhere in between.
 
@@ -55,7 +55,7 @@ your `git log` looks like spaghetti code had a baby with a bowl of ramen:
 
 you run `git bisect`. it points to: **"Merge branch 'develop' into feat/user-profile"**.
 
-you open it. it's hundreds of lines mixing mani's caching with your half-finished profile code. the bug isn't in her code or your code, it's in the *combination*. and this merge commit is the only place it exists.
+you open it. it's hundreds of lines mixing mani's caching with your half-finished profile code. the bug isn't in her code or your code, it's in the _combination_. and this merge commit is the only place it exists.
 
 `git blame` just points to the merge commit. you're fucked. weekend = gone. client = lost. sanity = obliterated.
 
@@ -81,7 +81,7 @@ boom. laser-focused on mani's exact 30-line commit. you walk over, point out the
 
 seeing that, i was ready to declare "rebase supremacy" and call it a day. but hol-up. merge commits aren't the villain. they're just misunderstood.
 
-merge commits are for when you *want* to preserve that "two lines of work came together" moment. like when you're merging `dev` into `main` for a release:
+merge commits are for when you _want_ to preserve that "two lines of work came together" moment. like when you're merging `dev` into `main` for a release:
 
 ```bash
 git merge --no-ff dev
