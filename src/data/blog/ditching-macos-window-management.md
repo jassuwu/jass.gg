@@ -75,6 +75,4 @@ still not convinced? let the creator convince you in 91 seconds:
 
 install it, pull a basic config from their github, or use my [dotfiles](https://github.com/jassuwu/dotfiles/blob/mac/.config/aerospace/aerospace.toml) and give it 24 hours to build the muscle memory. if you don't feel twice as fast by tomorrow, you can go back to your messy floating windows. but you won't.
 
-tiling window management is love. tiling window management is life. i just wanted to share that everything else is objectively wrong and i will die on that hill.
-
-tyvm. fight me. byeeeeeeeeeeeeee.
+tiling window management is love. tiling window management is life. i just wanted to share that everything else is objectively wrong and i will die on that hill. tyvm. fight me.
