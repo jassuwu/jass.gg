@@ -5,25 +5,58 @@ import { URLS } from "@/constants";
 
 const PROJECTS = [
   {
+    name: "mojify",
+    description:
+      "turn media into text. videos, images, youtube links — rendered as colored character art live in your terminal (with audio), or exported to mp4/gif/whatever. brew install jassuwu/tap/mojify.",
+    tags: ["golang", "cli", "homebrew"],
+    github: "https://github.com/jassuwu/mojify",
+    link: "https://mojify.jass.gg",
+  },
+  {
+    name: "incomerank",
+    description:
+      "how rich are u really. guess your global income rank, then ride a log-scale elevator to the truth. world bank data for 165 countries, computed fully client-side — your income never leaves the browser.",
+    tags: ["astro", "typescript", "data-viz"],
+    github: "https://github.com/jassuwu/incomerank",
+    link: "https://incomerank.jass.gg",
+  },
+  {
+    name: "quilt",
+    description:
+      "every github account you have, stitched into one green grid. merges contribution graphs client-side, and serves an embeddable svg for your readme. nothing stored, no login.",
+    tags: ["astro", "typescript", "svg"],
+    github: "https://github.com/jassuwu/quilt",
+    link: "https://quilt.jass.gg",
+  },
+  {
+    name: "savemefrom",
+    description:
+      "drop a link, and let vergil handle it. judgement cut on any webpage — chroma-keyed greenscreen video over a screenshot, all with one svg filter. no webgl needed.",
+    tags: ["react", "vite", "meme"],
+    github: "https://github.com/jassuwu/savemefrom",
+    link: "https://savemefrom.jass.gg",
+  },
+  {
+    name: "liquid-glass-cursor",
+    description:
+      "replace your cursor with a liquid glass prism that actually refracts the page behind it. zero deps, ~340 lines, all the physics in one svg displacement map. on npm.",
+    tags: ["typescript", "npm", "svg-filters"],
+    github: "https://github.com/jassuwu/liquid-glass-cursor",
+    link: "https://liquid-glass-cursor.jass.gg",
+  },
+  {
+    name: "subway-cursors",
+    description:
+      "subway surfers in your editor sidebar that plays only while the ai agent is thinking. pauses the frame your tokens stop. peak attention-span engineering.",
+    tags: ["typescript", "cursor-extension", "meme"],
+    github: "https://github.com/jassuwu/subway-cursors",
+  },
+  {
     name: "psgoogle",
     description:
       "a fast search engine for my college's website psgtech.edu. rewrote the previous slow backend to make it actually viable. overkilled it.",
     tags: ["golang", "next.js"],
     github: "https://github.com/jassuwu/psgoogle",
-  },
-  {
-    name: "kaching",
-    description:
-      "a prototype payment gateway for receiving payments with cryptocurrency. kinda like 'Stripe for web3'. yes, now stripe has it in-house.",
-    tags: ["web3", "next.js"],
-    github: "https://github.com/jassuwu/kaching",
-  },
-  {
-    name: "askupi",
-    description:
-      "upload ur txn history pdf, let gemini process it, and talk to it. ask questions, and tips to not go broke. first-try vibecoding.",
-    tags: ["ai", "next.js", "vibe-coded"],
-    github: "https://github.com/jassuwu/askupi",
   },
 ];
 ---
@@ -35,7 +68,18 @@ const PROJECTS = [
       PROJECTS.map((project) => (
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-2">
-            <h3 class="text-base font-bold md:text-lg">{project.name}</h3>
+            {project.link ? (
+              <a
+                href={project.link}
+                target="_blank"
+                class="hover:text-primary transition-colors">
+                <h3 class="text-base font-bold hover:underline md:text-lg">
+                  {project.name}
+                </h3>
+              </a>
+            ) : (
+              <h3 class="text-base font-bold md:text-lg">{project.name}</h3>
+            )}
             <a
               href={project.github}
               target="_blank"

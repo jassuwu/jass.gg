@@ -60,8 +60,9 @@ const pageTitle = `${title} | jass.gg`;
 // Use the post description or generate one from content
 const postDescription =
   post.data.description ||
-  `Read "${title}" on jass.gg - ${post.body?.substring(0, 150).replace(/[#*_]/g, "").trim()}...` ||
-  `Blog post: ${title}`;
+  (post.body
+    ? `Read "${title}" on jass.gg - ${post.body.substring(0, 150).replace(/[#*_]/g, "").trim()}...`
+    : `Blog post: ${title}`);
 
 // Get the banner image URL for social sharing
 const socialImageUrl = getBannerImagePath(bannerImage);
