@@ -28,7 +28,8 @@ const giscusAttrs = getGiscusAttributes();
   </div>
 </div>
 
-<script define:vars={{ canonicalURL: canonicalURL.href, giscusAttrs }}>
+<script is:inline define:vars={{ canonicalURL: canonicalURL.href, giscusAttrs }}
+>
   // Load giscus comments when the component is in view
   function loadGiscusComments() {
     const container = document.getElementById("giscus-comments");

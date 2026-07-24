@@ -226,6 +226,7 @@ const socialImageUrl = getBannerImagePath(bannerImage);
 </Layout>
 
 <script
+  is:inline
   define:vars={{
     postTitle: title,
     postId: post.id,
@@ -241,7 +242,6 @@ const socialImageUrl = getBannerImagePath(bannerImage);
     let hasReachedEnd = false;
     let readingStartTime = null;
     let activeReadingTime = 0;
-    let isVisible = true;
 
     // Track initial blog post view
     window.posthog.capture("blog_post_viewed", {
@@ -323,13 +323,11 @@ const socialImageUrl = getBannerImagePath(bannerImage);
     // Track page visibility changes to measure active reading time
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        isVisible = false;
         if (readingStartTime) {
           activeReadingTime += Date.now() - readingStartTime;
           readingStartTime = null;
         }
       } else {
-        isVisible = true;
         if (hasStartedReading) {
           readingStartTime = Date.now();
         }
