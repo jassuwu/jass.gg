@@ -68,8 +68,13 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 
 ## Not yet specified
 
-- **Substance signals — the sharpest open problem.** jass, in ticket 07: *"at some point we have to have some kind of stats, otherwise it will all look like throwaway projects, and i never built anything substanceful."* Showing every entry proves **quantity** and actively undermines **depth** — 100 one-line entries read as a scroll of weekend hacks. `things`/`toys` says which is which, but nothing inside `things` says any of them are substantial. Seed: one `proof` field per entry in the machine font — `10★`, `brew install`, `on npm`, `10k+ users`. Real evidence already exists and goes unused (mojify has 10 stars and a homebrew tap; liquid-glass-cursor is on npm). Can't be judged until the real page exists (ticket 04's method), so it graduates after ticket 08.
-
+- **Substance signals — the sharpest open problem.** jass, in ticket 07: *"at some point we have to have some kind of stats, otherwise it will all look like throwaway projects, and i never built anything substanceful."* Showing every entry proves **quantity** and actively undermines **depth** — 100 one-line entries read as a scroll of weekend hacks. `things`/`toys` says which is which, but nothing inside `things` says any of them are substantial.
+  - **What counts as proof:** users and GitHub stars. *Not* `brew install` or `on npm` — those are availability, not evidence; anyone can publish.
+  - **Thresholded.** A proof only renders above some floor; below it, nothing. A field that can print `1★` is worse than no field.
+  - **The blocking fact: there are 11 stars across all 11 repos.** mojify has 10, savemefrom has 1, nine have zero. At any sensible threshold exactly *one* entry ever shows a number — which reads as a spotlight on mojify, not a system, and the silence everywhere else stays legible. Stars cannot carry this today.
+  - **Users needs instrumentation first** — analytics on each project site, then months of accumulation before there's anything to print. Long lead time, and the instrumentation is out of scope for this map (see below).
+  - **The no-data alternative, from jass's own research** (`docs/portfolio-inspiration.md`, Julia Johnson): make the *entry itself* carry the substance — problem, jass's part, the hard bit, the shipped result. Depth in the writing rather than a metric beside it. Costs nothing but words, works today, and doesn't wait on a number that may never arrive. Tension: it's longer per entry, which fights rung-2 plainness on a page that shows everything.
+  - Graduates after ticket 08, per ticket 04's method — it can't be judged until the real page exists.
 - **How writing is presented.** Post layout, prose styles, and what a `/blog/<slug>` page looks like under the new system — waits on the index being settled.
 - **Whether giscus and PostHog actually survive contact with the no-JS spine.** Both are JS; the constraint says content works without them. Revisit once the page architecture is real.
 - **Where the "last touched" stamp goes**, and what it's derived from — build time, or the last content commit. Settled as a concept in ticket 04; its placement waits on ticket 08.
@@ -77,6 +82,8 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 - **How the résumé PDF is surfaced** under a text-first index.
 
 ## Out of scope
+
+- **Instrumenting the project sites with analytics.** Substance signals want real user numbers, which means adding PostHog or similar to each of the 11 project repos. That's work in other repositories with its own destination — it doesn't belong to a map whose end is a signed-off jass.gg homepage. Revisit as a fresh effort if the proof-field idea survives ticket 08.
 
 - **Admin login / master password / any write path from the browser.** Floated and dropped — it re-solves a friction problem that was never the cause, and it needs a backend, which would bend every other decision toward "we need a server." Belongs to a different effort with a different destination.
 - **The résumé auto-publish pipeline** (resume.tex → CI → release → deploy hook) and the BRAG.md curation system. Real work, planned June 2026, but its destination is keeping the résumé current — not this site's design.
