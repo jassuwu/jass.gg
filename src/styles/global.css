@@ -1,22 +1,5 @@
 @import "tailwindcss";
 
-/* Tokens only, and each one defined exactly once.
-
-   light-dark() carries both themes in a single declaration, so there is no
-   second definition site to drift out of sync — and it needs no .dark class,
-   so dark mode survives with JavaScript disabled. `color-scheme` below is what
-   arms it, and it also gives form controls and scrollbars the right theme for
-   free.
-
-   Deliberately absent, and not to be added back by default:
-   - fonts   — settled by the typography ticket (03)
-   - card / popover / sidebar / chart / accent / input / ring
-             — shadcn scaffolding for components that don't exist here. */
-
-:root {
-  color-scheme: light dark;
-}
-
 /* Astro's font API names each variable after the typeface; these name them
    after the role. Swapping a typeface is then a one-line change here, and no
    markup mentions a font by name. `inline` is what makes Tailwind emit the
@@ -27,6 +10,16 @@
   --font-margin: var(--font-excalifont);
 }
 
+/* The three roles (ticket 03):
+
+   paper    — Baskervville. Body, prose, headings. The default.
+   machine  — IoskeleyMono. Dates, periods, repo names, tags: anything factual.
+   margin   — Excalifont. Asides, annotations, the meme reveals — and the `jass`
+              wordmark. A name in a hand font is a signature, not a gimmick;
+              anywhere else it reads as one, so nothing else gets it.
+
+   None of these is mandatory on a given page. Use what the content calls for. */
+
 @theme {
   --color-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
   --color-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
@@ -34,13 +27,56 @@
   --color-muted-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
   --color-border: light-dark(oklch(0.922 0 0), oklch(1 0 0 / 10%));
 
-  /* The one accent. Reserved — if this appears on more than a few elements,
-     something has gone wrong. It is the same lime in both themes: it fails
-     contrast on white, so it is not a link colour in light mode (ticket 03). */
+  /* The one accent. It is 1.16:1 on white and 17.12:1 on near-black, so it is
+     never a text colour — it marks text instead (see the link rule below).
+     That constraint is why it stays reserved. */
   --color-primary: oklch(0.9392 0.1588 124.39);
+
+  /* Five steps, settled against real copy in ticket 03's prototype. */
+  --text-micro: 0.6875rem; /* machine labels, uppercase tags */
+  --text-micro--line-height: 1.4;
+  --text-meta: 0.8125rem; /* machine data — dates, repo names */
+  --text-meta--line-height: 1.5;
+  --text-small: 1rem; /* secondary prose */
+  --text-small--line-height: 1.6;
+  --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
+  --text-body--line-height: 1.7;
+  --text-title: 2rem;
+  --text-title--line-height: 1.15;
 }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+:root {
+  color-scheme: light dark;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-paper);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  /* Lime marks the link; it never colours it. Keeps contrast out of the
+     equation in both themes and keeps the accent scarce.
+     Ticket 07 decides link *behaviour* — internal vs external, hover — on
+     top of this. */
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary);
+    text-decoration-thickness: 0.16em;
+    text-underline-offset: 0.16em;
+  }
+}
+
+/* For the rare case that wants more than a mark. Foreground stays fixed dark
+   because lime is light in both themes. */
+@utility lime-highlight {
+  background-color: var(--color-primary);
+  color: oklch(0.145 0 0);
+  padding: 0.05em 0.3em;
+  border-radius: 0.2em;
+  text-decoration: none;
 }

@@ -18,10 +18,19 @@ export default defineConfig({
   fonts: [
     {
       // The paper. Body and prose.
+      //
+      // Baskervville ships ONE weight. Google's CSS API will happily answer a
+      // request for 700, but it hands back the 400 file — verified by md5, the
+      // two are byte-identical. Declaring a 700 face is therefore worse than
+      // not declaring one: `font-bold` renders as regular AND the browser
+      // stops synthesising bold, because a matching face exists.
+      //
+      // So the paper role has no bold. Emphasis is italic (a real, separate
+      // face) or it moves to the machine role. See ticket 03's answer.
       name: "Baskervville",
       cssVariable: "--font-baskervville",
       provider: fontProviders.google(),
-      weights: [400, 700],
+      weights: [400],
       styles: ["normal", "italic"],
       subsets: ["latin"],
       fallbacks: ["Georgia", "Times New Roman", "serif"],
