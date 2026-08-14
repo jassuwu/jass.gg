@@ -55,9 +55,15 @@ toward the background and destroys the light-mode contrast this whole family
 exists to protect.
 
 **Reserved** means what it says: if a second thing takes the accent, the accent
-has stopped being an accent. Today it is exactly four things: the wordmark, the
-writing line, link hover, and the selection highlight. Three of those four are
-things the reader has to ask for.
+has stopped being an accent. Today it is the wordmark, the writing line, link
+hover, and the selection highlight. Two of those four appear only when the
+reader asks for them.
+
+**Each page gets one full-strength accent, and it goes to the most human thing
+on it.** On `/` that is the name. On `/404` it is the joke, not the error code,
+which is chrome. `accent-quiet` is for an aside that would otherwise compete
+with something louder, which is why the same aside is quiet on `/` and full
+strength on `/404`.
 
 ## Light and dark
 
