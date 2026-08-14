@@ -130,26 +130,21 @@ to say "fullstack web/app dev") is a second, staler voice nobody maintains. */
       <h2 class={HEADING}>writing</h2>
       <ul class={LIST}>
         {
-          /* Now an aside rather than a status, so the hand role is earned. The
-        old line ("nothing published yet.") was a fact wearing an aside's
-        costume, which is why it read oddly next to the 404's joke.
+          /* The section's entire content is one command, and the heading above
+        it supplies the sentence. Nothing explains the joke, which is the only
+        reason it is one.
 
-        `push -f` is a real command, so it takes the machine role and a <code>
-        tag. Three fonts in one sentence sounds like too many until you read
-        it: the hand is jass talking, the machine is the thing he typed, and
-        the accent is the only word you can click.
-
-        The accent sits on `twitter` alone, and that is the point. This is the
-        only link on the site inside a sentence, where the usual separators
-        (position, foreground against muted) have nothing to work with. So the
-        accent marks it. accent-quiet rather than accent, because the wordmark
-        holds this page's one full-strength accent.
-
-        COPY IS A DRAFT AND NOT JASS'S VOICE. */
+        The accent sits on `twitter` alone. It is the only link on the site
+        inside a run of text, where the usual separators have nothing to work
+        with, so colour has to mark it. Making the branch name the clickable
+        part is also the only honest place for it. accent-quiet, not accent,
+        because the wordmark holds this page's one full-strength accent. */
         }
-        <li class="font-hand text-muted-foreground">
-          soon. till then i <code class="font-machine">push -f</code> to{" "}
-          <a class="text-accent-quiet" href={URLS.TWITTER}>twitter</a>.
+        <li>
+          <code class="font-machine">
+            git push -f origin{" "}
+            <a class="text-accent-quiet" href={URLS.TWITTER}>twitter</a>
+          </code>
         </li>
       </ul>
     </section>
