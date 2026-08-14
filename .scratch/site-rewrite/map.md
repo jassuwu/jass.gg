@@ -21,6 +21,8 @@ AI slop is **plain without considered**, and it costs instant respect. The targe
 
 Corollary, in jass's words: *not a lot of small things — a specific small number of small things, each turned up to 100.*
 
+**But that number is never set in advance** (ticket 04). Build the page plain, look at it, and add only where it's actually dead. Allocating a count and then shopping for things to fill it produces one good detail and one filler detail.
+
 ### Reference
 
 `github.com/jassuwu/jassuwu` (profile README) is the visual and structural reference. Bold name — em dash — one lowercase line. No cards, no thumbnails, no tag pills, no dates. One live self-made artifact (the quilt SVG) doing the work that decoration would otherwise do.
@@ -54,6 +56,7 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
   - **Lime never colours text** — 1.16:1 on white. It marks text: links get a lime underline and keep `color: inherit`. `lime-highlight` is the rarer surface treatment.
   - **The paper role has no bold.** Baskervville ships one weight; Google's API serves the 400 file for a 700 request. Emphasis is italic, or it moves to the machine role. Hierarchy comes from size and space, not weight — a constraint ticket 08 designs within.
   - **Zero third-party font requests**; 168 KB self-hosted, all SIL OFL 1.1 with the grant embedded in the binaries.
+- [Set the detail budget](issues/04-the-detail-budget.md) — **there is no budget, and setting one up front was the wrong method.** The count is an output of looking at a real page, not an input to designing one. Ticket 08 builds the page *plain, with no micro-interactions at all*, it gets judged in that state, and only then does anything get added — where it's dead, and nowhere else. Ticket 05 folded into 08 and deleted, because the marginalia reveal can't be judged apart from the page it lives on. Also settled: the **progressive blur is out** (decoration, not function — the one named invariant that fails the thesis), the live signal is a build-time **"last touched" stamp** rather than a clock, and links stay as the lime underline with no hover choreography.
 - **giscus and PostHog stay.** Both must degrade cleanly under the no-JS constraint.
 - **Build mechanics** — in place on `jassuwu/jass.gg`, new branch, near-total deletion, fresh scaffold. Content collections survive as a model, reshaped around `things` / `toys`.
 - **Appetite** — a few evenings over roughly two weeks.
@@ -65,7 +68,7 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 
 - **How writing is presented.** Post layout, prose styles, and what a `/blog/<slug>` page looks like under the new system — waits on the index being settled.
 - **Whether giscus and PostHog actually survive contact with the no-JS spine.** Both are JS; the constraint says content works without them. Revisit once the page architecture is real.
-- **The "live" element.** jass floated representing something like a local clock creatively as a component. Whether anything live exists at all depends on the detail budget (ticket 04).
+- **Where the "last touched" stamp goes**, and what it's derived from — build time, or the last content commit. Settled as a concept in ticket 04; its placement waits on ticket 08.
 - **Whether a dark/light toggle is wanted at all.** The scaffold settled the *default*: `color-scheme: light dark` + `light-dark()` tokens, which follows the OS with zero JS. Still open is whether jass wants a manual override on top of that, which is the part that costs either JS or a CSS-only hack (ticket 07).
 - **Identity assets** — favicon, OG image, and whether jass's photo appears on the site at all (`photo.webp` and a square `avatar.webp` exist untracked on main).
 - **How the résumé PDF is surfaced** under a text-first index.

@@ -18,7 +18,7 @@ Arguments for **vanilla CSS**:
 - The site is one page plus two routes. Tailwind's payoff is consistency across a large surface with many hands; there is one page and one author.
 - Four dependencies disappear (`tailwindcss`, `@tailwindcss/vite`, plus `clsx` / `tailwind-merge` / `cva` / `tw-animate-css`, which exist only to manage Tailwind classes).
 - The typography system from ticket 03 — a serif body at a hand-tuned size, mono for data, a marginalia font — is a *typographic* design, not a utility-scale design. Tuning Baskervville's size, weight and line-height per context is more natural in CSS than in arbitrary-value brackets.
-- The marginalia reveal (ticket 05) is CSS-only by requirement and likely needs `:has()`, sibling selectors and custom properties — utility classes fight this.
+- The marginalia reveal (now ticket 08, stage two) is CSS-only by requirement and likely needs `:has()`, sibling selectors and custom properties — utility classes fight this.
 - It matches the thesis: a hand-written stylesheet *is* considered. Utility soup in the markup is the visual signature of the generated-portfolio look jass is subtracting.
 
 Arguments for **Tailwind**:
@@ -44,7 +44,7 @@ The thing that makes this a real answer rather than a fudge: Tailwind 4 is CSS-f
 
 **Reach for a scoped `<style>` block in the `.astro` file when the thing is not utility-shaped:**
 
-1. **Selectors Tailwind can't express cleanly** — `:has()`, sibling and descendant combinations, `::before`/`::after` content choreography. The marginalia reveal (ticket 05) is almost certainly here.
+1. **Selectors Tailwind can't express cleanly** — `:has()`, sibling and descendant combinations, `::before`/`::after` content choreography. The marginalia reveal (now ticket 08, stage two) is almost certainly here.
 2. **Multi-step animation** — anything past a single transition. Keyframes belong in CSS.
 3. **Long-form prose.** Setting a whole document — Baskervville at a hand-tuned size, line-height, and heading rhythm — is typographic design, not utility composition. The existing `.prose` block is the right shape; keep that pattern.
 4. **Anything where the utility string is longer than the CSS would be.** If a `class` attribute needs a line break to stay readable, it has stopped paying for itself.
