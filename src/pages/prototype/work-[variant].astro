@@ -1,0 +1,250 @@
+---
+/**
+ * THROWAWAY PROTOTYPE — delete this whole directory once a variant wins.
+ *
+ * Question: how should the work section be represented? The stage-one shape
+ * (company+role left, period right) and the left-axis timeline were both
+ * rejected. Four structurally different answers, each rendered inside the real
+ * homepage so it is judged against real density rather than in a vacuum.
+ *
+ * Four routes rather than ?variant= — Astro strips search params in static
+ * output, and a JS switcher would violate the site's no-JS constraint. Plain
+ * links between real URLs cost nothing and are shareable.
+ *
+ * The connective copy in variants A and B is authored and is NOT jass's voice.
+ * It is there to make the shape legible; the words are his to replace.
+ */
+import { getCollection } from "astro:content";
+
+import { URLS } from "@/constants";
+import { LAST_TOUCHED, formatStamp } from "@/last-touched";
+import Layout from "@/layouts/Layout.astro";
+import { WORK } from "@/data/work";
+
+export function getStaticPaths() {
+  return [
+    { params: { variant: "a" } },
+    { params: { variant: "b" } },
+    { params: { variant: "c" } },
+    { params: { variant: "d" } },
+  ];
+}
+
+const VARIANTS = [
+  { key: "a", name: "prose" },
+  { key: "b", name: "the arc" },
+  { key: "c", name: "inline run" },
+  { key: "d", name: "grouped by company" },
+];
+
+const { variant } = Astro.params;
+const index = VARIANTS.findIndex((v) => v.key === variant);
+const current = VARIANTS[index]!;
+const prev = VARIANTS[(index - 1 + VARIANTS.length) % VARIANTS.length]!;
+const next = VARIANTS[(index + 1) % VARIANTS.length]!;
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const SECTIONS = [
+  { id: "things", entries: projects.filter((p) => p.data.kind === "thing") },
+  { id: "toys", entries: projects.filter((p) => p.data.kind === "toy") },
+];
+const destination = (p: (typeof projects)[number]) =>
+  p.data.link ?? p.data.github;
+
+const SOCIALS = [
+  { label: "résumé", href: URLS.RESUME },
+  { label: "twitter", href: URLS.TWITTER },
+  { label: "github", href: URLS.GITHUB },
+  { label: "discord", href: URLS.DISCORD },
+  { label: "linkedin", href: URLS.LINKEDIN },
+  { label: "email", href: URLS.EMAIL },
+];
+
+const HEADING = "font-machine text-micro text-muted-foreground";
+const SECTION = "mt-14";
+const LIST = "mt-3 space-y-2 text-body";
+
+// D groups by employer instead of by time, so the two cypher stints collapse
+// into one heading and the return becomes structural rather than narrated.
+const CYPHER = WORK.filter((j) => j.company === "cypher");
+const ELSEWHERE = WORK.filter((j) => j.company !== "cypher");
+---
+
+<Layout title={`work: ${current.name} | prototype`}>
+  <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
+    <header>
+      <h1 class="font-hand text-display text-accent">jass</h1>
+      <div class="mt-8 space-y-4 text-body">
+        <p>
+          fullstack web/app dev. i love building seamless experiences &amp;
+          strongly advocate for UDD (user-driven development) over anything
+          else.
+        </p>
+        <p>
+          im into bleeding edge tech. i know not to chase the shiny thing tho. i
+          also think low-level systems &amp; dev tools are cool. workin' on
+          myself to work on 'em. when im not coding, im probably getting lost in
+          a good game world or the real one.
+        </p>
+      </div>
+      <ul
+        class="mt-8 flex flex-wrap gap-x-4 gap-y-2 font-machine text-meta text-muted-foreground">
+        {
+          SOCIALS.map((s) => (
+            <li>
+              <a href={s.href}>{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </header>
+
+    {
+      SECTIONS.map((section) => (
+        <section class={SECTION}>
+          <h2 class={HEADING}>{section.id}</h2>
+          <ul class={LIST}>
+            {section.entries.map((entry) => (
+              <li>
+                <a href={destination(entry)}>{entry.data.name}</a>
+                <span class="ml-2 text-muted-foreground">
+                  {entry.data.description}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <section class={SECTION}>
+      <h2 class={HEADING}>writing</h2>
+      <ul class={LIST}>
+        <li class="font-hand text-accent-quiet">nothing published yet.</li>
+      </ul>
+    </section>
+
+    <section class={SECTION}>
+      <h2 class={HEADING}>work</h2>
+
+      {
+        /* A — prose. No list at all. The section becomes a sentence, which is
+      what the rest of the page is made of. The return reads because you
+      literally say "cypher" twice. */
+      }
+      {
+        variant === "a" && (
+          <p class="mt-3 text-body">
+            at <a href="https://cypherhq.io">cypher</a> since{" "}
+            <span class="font-machine text-meta">oct 2025</span>. before that a
+            stealth defi protocol for the better part of two years, and before
+            that <a href="https://cypherhq.io">cypher</a> again — as the
+            frontend intern.
+          </p>
+        )
+      }
+
+      {
+        /* B — the arc. One span, one aside. The detour is demoted to a hand-font
+      margin note, so the shape of the career is the headline and the middle
+      job is the footnote. */
+      }
+      {
+        variant === "b" && (
+          <div class="mt-3 text-body">
+            <p>
+              <a href="https://cypherhq.io">cypher</a>
+              <span class="text-muted-foreground">
+                , frontend intern → software developer
+              </span>
+              <span class="ml-2 font-machine text-meta text-muted-foreground">
+                may 2023 — now
+              </span>
+            </p>
+            <p class="mt-1 font-hand text-muted-foreground">
+              left in the middle for a stealth defi protocol, jan 2024 — sep
+              2025
+            </p>
+          </div>
+        )
+      }
+
+      {
+        /* C — inline run. Same information as the rejected version, but with the
+      gap removed: nothing is right-aligned, so there is no valley down the
+      middle of the section. Ragged right, like every other list on the page. */
+      }
+      {
+        variant === "c" && (
+          <ul class={LIST}>
+            {WORK.map((job) => (
+              <li>
+                {job.homepage ? (
+                  <a href={job.homepage}>{job.company}</a>
+                ) : (
+                  job.company
+                )}
+                <span class="ml-2 text-muted-foreground">{job.role}</span>
+                <span class="ml-2 font-machine text-meta text-muted-foreground">
+                  {job.period}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        /* D — grouped by company rather than by time. cypher is named once and
+      holds two roles, so "he left and came back" is structural instead of
+      something the reader has to notice. */
+      }
+      {
+        variant === "d" && (
+          <div class="mt-3 space-y-3 text-body">
+            <div>
+              <a href="https://cypherhq.io">cypher</a>
+              <ul class="mt-0.5">
+                {CYPHER.map((job) => (
+                  <li class="text-muted-foreground">
+                    {job.role}
+                    <span class="ml-2 font-machine text-meta">
+                      {job.period}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {ELSEWHERE.map((job) => (
+              <div>
+                {job.company}
+                <ul class="mt-0.5">
+                  <li class="text-muted-foreground">
+                    {job.role}
+                    <span class="ml-2 font-machine text-meta">
+                      {job.period}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </section>
+
+    <footer class="mt-20 font-machine text-micro text-muted-foreground">
+      <span>last touched {formatStamp(LAST_TOUCHED.date)}</span>
+    </footer>
+  </main>
+
+  {/* Deliberately ugly, so it can never be mistaken for the design. */}
+  <nav
+    class="fixed inset-x-0 bottom-4 mx-auto flex w-fit items-center gap-4 rounded-full bg-fuchsia-600 px-5 py-2 font-machine text-meta text-white shadow-lg">
+    <a href={`/prototype/work-${prev.key}`}>←</a>
+    <span>{current.key} — {current.name}</span>
+    <a href={`/prototype/work-${next.key}`}>→</a>
+  </nav>
+</Layout>
