@@ -10,6 +10,10 @@ const config = {
   singleQuote: false,
   jsxSingleQuote: false,
   plugins: ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+  // Tailwind 4 is CSS-first: the class sorter can't resolve @theme tokens
+  // without being pointed at the stylesheet that defines them. Omit this and
+  // sorting silently no-ops.
+  tailwindStylesheet: "./src/styles/global.css",
   overrides: [
     {
       files: "*.astro",

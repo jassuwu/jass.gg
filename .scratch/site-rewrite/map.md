@@ -55,6 +55,7 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 - **Build mechanics** — in place on `jassuwu/jass.gg`, new branch, near-total deletion, fresh scaffold. Content collections survive as a model, reshaped around `things` / `toys`.
 - **Appetite** — a few evenings over roughly two weeks.
 - [t3code marketing site: stack and tooling diff](issues/01-t3code-tooling-diff.md) — it's Astro 7 with a 6-line config, a one-line tsconfig, **no Tailwind in the marketing tier** (though `apps/web` uses Tailwind + shadcn), and two tiny progressive-enhancement scripts with real static fallbacks. Take the shape; leave the whole root toolchain (vite-plus, pnpm catalogs, oxlint+plugin, tsgo, Blacksmith CI). Bun stays; TypeScript stays on 6.0.3, not 7. Verified scaffold commands in [`research/t3code-tooling.md`](research/t3code-tooling.md) §6.
+- [Scaffold the new project](issues/02-scaffold-the-project.md) — standing on `t3code/rewrite-website-design`. Astro 7.2.2, Tailwind 4.3.3, TS 6.0.3 (not 7), ESLint over oxlint, Bun 1.3.14. No shadcn, none of the four Tailwind satellites, no `vercel.ts`, no shadcn token bloat. Dark mode via `color-scheme` + `light-dark()` — one definition site per token, zero JS. **`dist/` ships zero `.js` and zero `<script>` tags.** `src/data/`, `src/assets/` and `public/resume.pdf` preserved for ticket 06.
 - [CSS strategy: Tailwind or vanilla CSS?](issues/09-css-strategy.md) — **Tailwind by default, plain CSS by exception.** Tokens live in `@theme` as custom properties so both worlds share them. Escape to a scoped `<style>` block for `:has()`/sibling selectors, keyframes, long-form prose, and anywhere the utility string is longer than the CSS. No `@apply`-built semantic classes; one owner per property.
 
 ## Not yet specified
@@ -62,7 +63,7 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 - **How writing is presented.** Post layout, prose styles, and what a `/blog/<slug>` page looks like under the new system — waits on the index being settled.
 - **Whether giscus and PostHog actually survive contact with the no-JS spine.** Both are JS; the constraint says content works without them. Revisit once the page architecture is real.
 - **The "live" element.** jass floated representing something like a local clock creatively as a component. Whether anything live exists at all depends on the detail budget (ticket 04).
-- **Dark/light toggle without JS.** Currently a `.dark` class, which implies a script. `prefers-color-scheme` only? A CSS-only toggle? Unresolved.
+- **Whether a dark/light toggle is wanted at all.** The scaffold settled the *default*: `color-scheme: light dark` + `light-dark()` tokens, which follows the OS with zero JS. Still open is whether jass wants a manual override on top of that, which is the part that costs either JS or a CSS-only hack (ticket 07).
 - **Identity assets** — favicon, OG image, and whether jass's photo appears on the site at all (`photo.webp` and a square `avatar.webp` exist untracked on main).
 - **How the résumé PDF is surfaced** under a text-first index.
 - **Redirects and legacy URL handling** — sharpens once ticket 07 fixes the routes.

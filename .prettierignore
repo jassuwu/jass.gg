@@ -1,0 +1,7 @@
+dist
+.astro
+bun.lock
+
+# planning docs — prose, hand-formatted. reformatting churns the map and
+# mangles the research tables.
+.scratch

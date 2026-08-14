@@ -1,17 +1,21 @@
 ---
-import { Layout } from "@/layouts";
-import { Hero, WorkExperiences, Projects } from "@/components";
+import "@/styles/global.css";
 ---
 
-<Layout
-  title="jass.gg"
-  description="terminally online developer"
-  image="/opengraph.jpg"
-  imageAlt="preview of jass.gg"
-  type="website">
-  <main class="container-narrow h-full">
-    <Hero />
-    <WorkExperiences />
-    <Projects />
-  </main>
-</Layout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.webp" type="image/webp" />
+    <title>jass.gg</title>
+  </head>
+  <body>
+    <main class="mx-auto w-full max-w-2xl px-6 py-16">
+      <h1 class="text-2xl font-bold">jass</h1>
+      <p class="mt-2 text-sm text-muted-foreground">
+        scaffold only — the real homepage is ticket 08.
+      </p>
+    </main>
+  </body>
+</html>
