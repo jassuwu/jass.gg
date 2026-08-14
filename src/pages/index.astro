@@ -78,12 +78,21 @@ const LIST = "mt-3 space-y-2 text-body";
         </p>
       </div>
 
+      {
+        /* These links are 13px tall. Fine to read, mean to hit with a thumb.
+      `inline-block` plus vertical padding grows the tap target to ~29px
+      without moving a pixel of text, and the negative margin takes the added
+      height back out of the layout. Nobody sees this one. That is the point
+      of it. */
+      }
       <ul
-        class="mt-8 flex flex-wrap gap-x-4 gap-y-2 font-machine text-meta text-muted-foreground">
+        class="-my-1 mt-7 flex flex-wrap gap-x-4 font-machine text-meta text-muted-foreground">
         {
           SOCIALS.map((social) => (
             <li>
-              <a href={social.href}>{social.label}</a>
+              <a class="inline-block py-1" href={social.href}>
+                {social.label}
+              </a>
             </li>
           ))
         }
@@ -131,7 +140,7 @@ const LIST = "mt-3 space-y-2 text-body";
     <footer class="mt-20 font-machine text-micro text-muted-foreground">
       {
         LAST_TOUCHED.commitUrl ? (
-          <a href={LAST_TOUCHED.commitUrl}>
+          <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
             last touched {formatStamp(LAST_TOUCHED.date)}
           </a>
         ) : (
