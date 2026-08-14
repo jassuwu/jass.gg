@@ -17,6 +17,16 @@
   color-scheme: light dark;
 }
 
+/* Astro's font API names each variable after the typeface; these name them
+   after the role. Swapping a typeface is then a one-line change here, and no
+   markup mentions a font by name. `inline` is what makes Tailwind emit the
+   var() reference rather than resolving it at build time. */
+@theme inline {
+  --font-paper: var(--font-baskervville);
+  --font-machine: var(--font-ioskeley);
+  --font-margin: var(--font-excalifont);
+}
+
 @theme {
   --color-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
   --color-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
