@@ -24,7 +24,24 @@ const ogImage = new URL("/og.png", Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.webp" type="image/webp" />
+    {
+      /* The tab mark: a lime tile with the wordmark's own `j`, which is
+    `on-accent` on `accent-mark` — the token pair that exists for exactly this
+    and that nothing else on the site had ever used. It replaces jass's
+    illustrated avatar, which was a white square in dark browser chrome and a
+    brown smudge at 16px.
+
+    A favicon is judged at 16px and nowhere else, and the accent is the one
+    colour allowed to be a fill. A fill is the only thing that survives being
+    sixteen pixels wide, so the tile does the recognising and the letter is a
+    bonus at larger sizes.
+
+    SVG first for every current browser; the 32px PNG is the fallback for the
+    ones that predate SVG favicons. No apple-touch-icon — nothing asks this site
+    for one. */
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="32x32" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
