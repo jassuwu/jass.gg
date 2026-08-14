@@ -1,6 +1,6 @@
 ---
 name: "andrew-dictate"
-description: "escape the keyboard. the top g of local speech-to-text for macOS — free and fully private"
+description: "my take on a simpler, free wisprflow. andrew runs local, andrew is built different"
 kind: "thing"
 github: "https://github.com/jassuwu/andrew-dictate"
 link: "https://dictate.jass.gg"
