@@ -55,9 +55,13 @@ toward the background and destroys the light-mode contrast this whole family
 exists to protect.
 
 **Reserved** means what it says: if a second thing takes the accent, the accent
-has stopped being an accent. Today it is the wordmark, the writing line, link
-hover, and the selection highlight. Two of those four appear only when the
+has stopped being an accent. Today it is the wordmark, a link inside prose,
+link hover, and the selection highlight. Two of those four appear only when the
 reader asks for them.
+
+A link sitting _inside a sentence_ takes `accent-quiet`. It is the one case
+where position and weight have nothing to separate a link from its neighbours,
+so the colour has to. Links in a list or a row never need this.
 
 **Each page gets one full-strength accent, and it goes to the most human thing
 on it.** On `/` that is the name. On `/404` it is the joke, not the error code,

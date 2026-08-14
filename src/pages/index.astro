@@ -130,11 +130,22 @@ to say "fullstack web/app dev") is a second, staler voice nobody maintains. */
       <h2 class={HEADING}>writing</h2>
       <ul class={LIST}>
         {
-          /* The hand role and the accent, together, exactly once. An empty
-        section is the only place on the page where an aside is the content,
-        which is what Excalifont was reserved for. */
+          /* Now an aside rather than a status, so the hand role is earned. The
+        old line ("nothing published yet.") was a fact wearing an aside's
+        costume, which is why it read oddly next to the 404's joke.
+
+        The accent sits on `twitter` alone, and that is the point. This is the
+        only link on the site inside a sentence, where the usual separators
+        (position, foreground against muted) have nothing to work with. So the
+        accent marks it. accent-quiet rather than accent, because the wordmark
+        holds this page's one full-strength accent.
+
+        COPY IS A DRAFT AND NOT JASS'S VOICE. */
         }
-        <li class="font-hand text-accent-quiet">nothing published yet.</li>
+        <li class="font-hand text-muted-foreground">
+          soon, with care. till then i force-push to{" "}
+          <a class="text-accent-quiet" href={URLS.TWITTER}>twitter</a>.
+        </li>
       </ul>
     </section>
 
