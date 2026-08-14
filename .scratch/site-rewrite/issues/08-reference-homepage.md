@@ -3,7 +3,8 @@
 Type: prototype
 Status: open
 Blocked by: 02, 03, 04, 06, 07
-Absorbs: 05 (the marginalia reveal — see "Stage two" below)
+Absorbs: 05 (the marginalia reveal, now handed on to ticket 10)
+Stage two: [ticket 10](10-the-little-things.md)
 
 ## Question
 
@@ -30,25 +31,52 @@ How to run it:
 - Show it in a browser, not as a diff. It's judged on how it looks and feels, not on how it reads as code.
 - Judge every iteration against the thesis: plain _because_ considered. If a change makes it look more designed, it's the wrong change. If a change makes it look careless, it's also the wrong change.
 
-## Stage one — build it plain
+## Stage one — built, and iterated to a stop
 
-No micro-interactions. None. Real content, real type, real routes, and nothing that responds to the reader beyond a link.
+Built plain with no micro-interactions, judged in that state, then reshaped over
+one long session of jass reacting to it in a browser. It survived. The page
+reads as tended without any details bolted on, which was the test.
 
-Then look at it with jass. This state is the honest test of the thesis: **if the page only works once details are added, it was never plain-because-considered — it was plain-and-thin with decoration bolted on.** A page that already reads as tended at this stage is the thing worth adding to.
+**The page is four things in one order: the intro, things, toys, writing.**
 
-## Stage two — add only where it's dead
+What stage one settled, most of it by subtraction:
 
-From ticket 04: the number of details is an _output_ of looking at a real page, not an allocation made in advance. So find the specific places stage one feels dead, and add only there.
+- **The work section is gone entirely**, reversing ticket 06. Six shapes were
+  tried and rejected. Of the 71 sites in `docs/portfolio-inspiration.md`, not
+  one puts employment history on its index. jass: *"where i work" and "years of
+  experience" shouldn't be the thing defining me.* `src/data/work.ts` deleted;
+  the four rejected shapes live on the `prototype/work-section` branch.
+- **Links carry no decoration at rest.** Ticket 03's thick lime underline and a
+  thinner neutral replacement were both rejected on sight. Position and colour
+  separate links; lime arrives on hover and focus. Accepted and recorded cost:
+  fails WCAG 1.4.1 for anyone who can't hover.
+- **A link inside prose takes `accent-quiet`** — the one case where position has
+  nothing to work with.
+- **Each page gets one full-strength accent**, on the most human thing on it.
+  The wordmark on `/`, the joke on `/404`.
+- **Socials render as text**; all ten SVGs and the assets barrel are deleted.
+  The résumé is one word in that row.
+- **Entry names link to the built thing**, not the repo. Two entries with no
+  site point at the repo.
+- **The stamp is the footer**, derived from the last content commit rather than
+  build time, and linked to that commit. A date that hands you the diff.
+- **Tap targets**: the socials row and the stamp are `inline-block` with padding
+  to reach ~28px. Entry names stay inline at 23px.
+- **The 404 is rebuilt around who arrives there.** Big number in the machine
+  role, jass's line, and only the three channels you can actually reply on.
+- **All copy is jass's.** The intro, the 404, the writing line, the
+  andrew-dictate description. The profile README was updated to match.
+- **Vocabulary settled in `CONTEXT.md`.** It is *accent*, never primary or
+  secondary. Four type steps; `small` and `title` were deleted when nothing
+  referenced them.
 
-The leading candidate is jass's own strongest idea, absorbed from ticket 05 — **the marginalia reveal**: the site looks like static HTML, but hovering one specific word or phrase brings a meme to life, contextual to the sentence around it. The reference feel is a video editor cutting to a meme on the beat. Before it goes in, settle:
+## Stage two — moved to ticket 10
 
-1. **CSS-only feasibility.** Hover, focus and `:has()` carry a lot. Where's the wall? What does it degrade to with JS off — which is the default state, not the edge case?
-2. **Touch and keyboard.** Hover doesn't exist on a phone, and most readers arrive on one. Is this a desktop-only reward — defensible, since it _is_ a reward, not content — or does it need a tap/focus path?
-3. **Is the marked word marked?** Marking it is discoverable but reads as "look at my feature". Not marking it means almost nobody finds it. This is the plain-vs-considered tension in miniature; decide it deliberately.
-4. **Does it live in Excalifont?** The hand role (ticket 03) was designed for exactly this.
-5. **How many?** One is a secret. Five is a mechanic. Ten is a theme site.
-6. **Cost per instance.** If each is a hand-authored bespoke moment, how long is one, and does that survive a two-week appetite?
+The details that take the page from fine to *"what a great eye for detail"*.
+Ticket 04's method still governs: add where it's dead, nowhere else.
 
-Already settled and not up for re-litigation here: the progressive blur is out, the live signal is a build-time "last touched" stamp rather than a clock, and links stay as the lime underline with no hover choreography.
+Split out because stage one is now stable enough to judge details against, which
+is the exact condition ticket 04 said was missing when it folded 05 into here.
+See **[ticket 10](10-the-little-things.md)**.
 
-Done when jass says _that's it_. The answer records what shipped, plus anything cut during iteration and why — the cuts are what the follow-on build effort needs to know.
+Done when jass says *that's it*.
