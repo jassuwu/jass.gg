@@ -133,12 +133,37 @@
     text-decoration: none;
   }
 
-  a:hover,
-  a:focus-visible {
+  a:hover {
     text-decoration: underline;
     text-decoration-color: var(--color-accent-mark);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
+  }
+
+  /* Focus used to share the rule above, which looked deliberate and wasn't:
+     nothing here set `outline`, so a keyboard user got the lime underline AND
+     the browser's default ring stacked on top of it. Two indicators for one
+     state, one of them the last piece of unstyled chrome on the site.
+
+     So focus gets its own mark and it is a ring, not the underline. Hover and
+     focus are different questions — hover asks "what is this thing under my
+     cursor", focus asks "where am I" — and an answer to the second one has to
+     survive being the only answer. Because links carry nothing at rest, the
+     keyboard is the one way to find them without a pointer, and this ring is
+     the whole of that affordance. It is doing more work here than a focus ring
+     usually does.
+
+     Lime, at the invariant value, because a ring is a mark and marks are the
+     one job accent-mark is allowed to hold in either theme. Square, following
+     ::selection, since nothing on this site is rounded. The offset keeps it
+     off the letterforms; on the socials row, where the links are padded to be
+     thumb-sized, it lands on the tap target and quietly shows how big it is.
+
+     Author colours are overridden in forced-colors mode, so this becomes the
+     system focus colour there on its own. Nothing to add for that. */
+  a:focus-visible {
+    outline: 2px solid var(--color-accent-mark);
+    outline-offset: 3px;
   }
 
   /* Selection inverts to the accent. This is the third and last place lime
@@ -159,3 +184,56 @@
    Ticket 08 tried it on the wordmark and jass rejected it on sight, and there
    was no second candidate, so the utility is deleted rather than left sitting
    here unused. Lime as text now goes through --color-accent instead. */
+
+/* PRINT. Someone will hit Cmd+P on a page that sits one link away from a
+   résumé, and paper is the one medium where this site's central decision stops
+   working: links carry no decoration at rest and nothing can be hovered, so
+   every link on the sheet is just a word. Printing the href after the text is
+   the only way the page survives leaving the screen.
+
+   Unlayered and last on purpose. Everything above is inside `@layer base`, so
+   these win without a single `!important`.
+
+   One line handles the palette. `light-dark()` resolves against `color-scheme`,
+   so forcing it to light here converts every themed token at once and a reader
+   printing at night doesn't get a black page or, worse, white text on nothing.
+   The two unthemed colours need no thought: both belong to marks — hover,
+   focus, selection — and none of those exist on paper. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  /* `mailto:` is in here rather than stripped down to the address, because the
+     scheme is one word everybody can read past and the alternative is hardcoding
+     jass's address into a stylesheet. Leaving it out would print the word
+     "email" with no email next to it, which is the one omission on paper that
+     actually costs something. */
+  a[href^="http"]::after,
+  a[href^="mailto:"]::after {
+    content: " (" attr(href) ")";
+  }
+
+  /* Site-relative hrefs get the host put back, because "(/resume.pdf)" on a
+     sheet of paper is not something anyone can type into anything. */
+  a[href^="/"]::after {
+    content: " (jass.gg" attr(href) ")";
+  }
+
+  /* An href is a fact, so it prints in the machine role. `@apply` rather than
+     `var(--font-machine)`: the role aliases are declared `@theme inline` and so
+     never reach the browser as variables, and naming `--font-ioskeley` here
+     would be the one place in the CSS that says a typeface out loud. */
+  a::after {
+    @apply font-machine;
+    font-size: 0.8em;
+    color: var(--color-muted-foreground);
+    overflow-wrap: anywhere;
+  }
+
+  /* Sections are 5 or 6 entries. They fit, so let them fall whole rather than
+     splitting a heading off from the one thing under it. */
+  section {
+    break-inside: avoid;
+  }
+}

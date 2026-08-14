@@ -1,7 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 
-import { URLS } from "@/constants";
+import { SOCIALS, URLS } from "@/constants";
+import { INTRO, TAGLINE } from "@/intro";
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
 
@@ -23,18 +24,15 @@ const SECTIONS = [
 const destination = (p: (typeof projects)[number]) =>
   p.data.link ?? p.data.github;
 
-const SOCIALS = [
-  { label: "résumé", href: URLS.RESUME },
-  { label: "twitter", href: URLS.TWITTER },
-  { label: "github", href: URLS.GITHUB },
-  { label: "discord", href: URLS.DISCORD },
-  { label: "linkedin", href: URLS.LINKEDIN },
-  { label: "email", href: URLS.EMAIL },
-];
-
 // Tiny machine headings — the one part of stage one jass kept without notes.
 const HEADING = "font-machine text-micro text-muted-foreground";
-const SECTION = "mt-14";
+// The scroll margin is the page's own top padding, repeated. Every section
+// here is an anchor target (`#things`, `#toys`, `#writing`), and without it a
+// jump welds the heading to the top edge of the viewport. Matching `py-16
+// sm:py-24` means an anchored section lands with exactly the air above it that
+// the top of the page has — so arriving at `/#toys` looks like arriving at a
+// page, not like a scroll that overshot.
+const SECTION = "mt-14 scroll-mt-16 sm:scroll-mt-24";
 const LIST = "mt-3 space-y-2 text-body";
 
 // The page is four things in this order: the intro, things, toys, writing.
@@ -49,24 +47,11 @@ const LIST = "mt-3 space-y-2 text-body";
 // jass's reason, which is the better one: where he works and how long he has
 // worked shouldn't be what defines him. What he built should.
 //
-// The intro is jass's, written by him, reproduced verbatim. One spelling was
-// corrected ("everyday" to "every day") and nothing else. Do not "improve" it
-// and do not restore any earlier version.
-//
-// It is doing four jobs at once and it is worth not breaking any of them: its
-// first two nouns are the two sections below it, the agents line is the only
-// sentence on the site that says how jass thinks, "every day" is the only
-// claim of currency, and the last sentence is the only invitation.
+// The intro is jass's, verbatim, and it lives in `src/intro.ts` — three things
+// quote it now, so it has one home. Read the comment there before touching it.
 ---
 
-{
-  /* The description is the intro's first sentence. It is what search results
-and link previews show, so a phrase that appears nowhere on the page (it used
-to say "fullstack web/app dev") is a second, staler voice nobody maintains. */
-}
-<Layout
-  title="jass.gg"
-  description="i build a lot of toys, occasionally useful things.">
+<Layout title="jass.gg" description={TAGLINE}>
   <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
     <header>
       {
@@ -76,13 +61,7 @@ to say "fullstack web/app dev") is a second, staler voice nobody maintains. */
       }
       <h1 class="font-hand text-display text-accent">jass</h1>
 
-      <p class="mt-8 text-body">
-        i build a lot of toys, occasionally useful things. im on twitter
-        releasing &amp; watching what's releasing every day. im excited about
-        &amp; scared of my agents, more the former. i also love video games, but
-        i don't get to play them much these days. gimme an excuse and join me
-        for a sesh?
-      </p>
+      <p class="mt-8 text-body">{INTRO}</p>
 
       {
         /* These links are 13px tall. Fine to read, mean to hit with a thumb.

@@ -89,39 +89,72 @@ rather than the right one. It is stale — wrong aspect ratio, and it shows
 cannot ship as is. But re-shooting it is a thing only jass can do, and it is
 worth asking whether he wants to.
 
-### 2. A real focus-visible state
+### 2. A real focus-visible state — done
 
-Killing resting underlines opened a hole we accepted deliberately: at rest a
-link is visually identical to ordinary text. Keyboard users currently get the
-browser's default focus ring, which is the last piece of unstyled chrome on the
-site.
+The defect was worse than "the ring is unstyled". Nothing in the CSS set
+`outline` at all, so a keyboard user got the lime hover underline **and** the
+browser's default ring stacked on top of it — two indicators for one state, one
+of them chrome. It looked deliberate in the source and wasn't.
 
-Making focus a designed accent state is both the honest counterweight to that
-decision and a detail that says someone thought about people who don't use a
-mouse. `a:focus-visible` already inherits the hover underline; it deserves
-better than to be an afterthought of the hover rule.
+Focus now has its own mark and it is a ring, not the underline: hover and focus
+are different questions ("what is this under my cursor" versus "where am I"),
+and the answer to the second has to survive being the only answer. Because
+links carry nothing at rest, the keyboard is the one way to find them without a
+pointer, so this ring is the entire affordance — it does more work here than a
+focus ring usually does. Lime at the invariant value, square like `::selection`,
+offset clear of the letterforms; on the padded socials row it lands on the tap
+target and shows how big it is. Forced-colors mode overrides author colours on
+its own, so nothing extra was needed for it.
 
-### 3. `/llms.txt`
+### 3. `/llms.txt` — done
 
-From jass's own research directory (`docs/portfolio-inspiration.md`, Jeremy
-Howard). The intro now says he shepherds agents and is scared of them. A site
-that then serves a clean machine-readable version of itself _to agents_ is the
-joke landing twice.
+`src/pages/llms.txt.ts`, generated from the same collection the page renders,
+so it cannot describe a site that doesn't exist. Every word in it is jass's, in
+the page's own order — including the writing section, which is the one command
+and no explanation, because explaining it there would have been the only
+sentence on the file written for a machine.
 
-One Astro route generated from the existing content collections. No human ever
-sees it. Cheap, and about as on-theme as a detail can get.
+One link per entry, the built thing, matching the page's rule. Adding `github`
+as a second link would help an agent hunting for source and is a one-line
+change; it just hasn't been asked for.
 
-### 4. `scroll-margin-top` on the section anchors
+**It forced one refactor worth knowing about.** The intro paragraph was inline
+JSX in `index.astro` and three things now quote it — the page, the meta
+description, and this file. It moved to `src/intro.ts`, with the comments that
+explain it. `TAGLINE` is derived by taking the first sentence rather than
+restating it, so the description cannot drift from the paragraph it is a
+sentence of; the old site's "fullstack web/app dev" is exactly what that
+prevents. `SOCIALS` moved to `constants.ts` for the same reason. **Rendered
+output is unchanged** — verified against the built HTML.
 
-`#things`, `#toys` and `#writing` currently jump with the heading welded to the
-top edge of the viewport. Nobody notices scroll margin. Everybody notices its
-absence without knowing what they noticed.
+### 4. `scroll-margin-top` on the section anchors — done
 
-### 5. A print stylesheet
+`scroll-mt-16 sm:scroll-mt-24` on the shared `SECTION` class, which is the
+page's own `py-16 sm:py-24` repeated. An anchored section now lands with exactly
+the air above it that the top of the page has, so `/#toys` looks like arriving
+at a page rather than a scroll that overshot.
 
-Someone will hit Cmd+P on a page that sits next to a résumé. Expanding link
-`href`s after the link text on print is the classic move, and it's genuinely
-needed here because the links carry no decoration to hint they exist.
+### 5. A print stylesheet — done
+
+Unlayered and last in `global.css`, so it beats everything in `@layer base`
+without an `!important`.
+
+The palette is one line: `light-dark()` resolves against `color-scheme`, so
+forcing it to light for print converts every themed token at once — no reader
+gets a black page or white text on nothing. The two unthemed colours needed no
+thought, since both belong to marks (hover, focus, selection) and none of those
+exist on paper.
+
+`href`s print after the link text, which matters more here than on a normal
+site: nothing can be hovered on paper and links carry no decoration, so without
+it every link on the sheet is just a word. Site-relative hrefs get the host put
+back, because "(/resume.pdf)" is not something anyone can type into anything.
+`mailto:` prints its scheme rather than being stripped — the alternative was
+hardcoding jass's address into a stylesheet, and dropping it would print the
+word "email" with no email beside it.
+
+**Nobody has held a printed page.** The rules are right by inspection and the
+compiled CSS was checked, but print preview was not opened.
 
 ### 6. The marginalia meme reveal — deliberately last
 
