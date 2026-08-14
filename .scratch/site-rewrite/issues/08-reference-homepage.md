@@ -16,7 +16,9 @@ Constraints, all previously settled:
 - Rung-2 plain: no cards, no badges, no thumbnails, no hero.
 - The typography system from ticket 03, at the exact values it settled on.
 - The content inventory from ticket 06, in the taxonomy it settled on.
-- The routes and link behaviour from ticket 07.
+- The routes and link behaviour from ticket 07: **one page**, no nav, sections get linkable `id`s, **every entry shown — no pagination, no filtering, no "show more"**. The volume is the argument. `Layout.astro` and `/404` already exist.
+- The content from ticket 06: 5 things, 6 toys, work history in `src/data/work.ts` (rendered "cleverly, in less space, in tone" — the shape is `cypher → stealth → cypher`), all six socials, and the résumé PDF.
+- Ten SVG icons still sit in `src/assets/icons/`. If socials render as text, **all ten go** — decide here, and delete rather than leaving four orphans.
 - **No micro-interactions at all in the first pass** — see the two stages below.
 - Works fully with JavaScript disabled. Light and dark both.
 - Neutral + lime, lime reserved.

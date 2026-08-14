@@ -52,7 +52,7 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 - **Invariants that survive the rewrite** — neutral + lime palette (`oklch(0.9392 0.1588 124.39)` as the single reserved accent, zinc ramp, light and dark); the tone of the intro paragraph; and the craft-in-the-corners ethos (a unique 404, that class of detail). *Nothing else is load-bearing* — every component, page and layout is fair game. (The progressive blur was named here originally and has since been ruled out by ticket 04 — it was decoration, not craft.)
 - **Plainness rung: text-first (rung 2)** — cards, badges and thumbnails go; projects become a text list. The seven Remotion thumbnails were initially demoted to on-demand reveals and have since been **deleted outright** (ticket 06) — nothing rendered them.
 - **The tell is content density plus a live artifact, not a placed interaction** — the page is immediately full of real shipped work. A signature interaction *positioned to be found* reads as trying, and trying is what's being subtracted. Drive-by visitors who never interact are an accepted loss.
-- **Shape: single page**, plus `/blog/<slug>`, plus the palette page (renamed or dropped), plus `/404`. Existing blog URLs are not broken for aesthetics.
+- [Page architecture: routes, anchors, and growth](issues/07-page-architecture.md) — **two routes: `/` and `/404`.** `/blog/<slug>` appears only when a written post exists; no blog index until then. **The palette page is deleted outright** ("literally useless"). **No redirects** — every dead URL 404s, including `/projects`, `/palette` and three indexed blog posts, which makes the 404 load-bearing as well as an invariant. No nav (scroll is the interface, sections get linkable `id`s). No internal/external link distinction. No dark/light toggle. **Show every entry, forever — no pagination, no filtering.** The volume is the argument.
 - [Validate the three-font typography system](issues/03-typography-system.md) — **the system holds.** Baskervville = the paper, IoskeleyMono = the machine, Excalifont = the hand (marginalia **and the `jass` wordmark** — a name in a hand font is a signature, not a gimmick). None mandatory on a page; use what the content calls for. Body settled at **18px/1.7**; five-step scale in `@theme`.
   - **Lime never colours text** — 1.16:1 on white. It marks text: links get a lime underline and keep `color: inherit`. `lime-highlight` is the rarer surface treatment.
   - **The paper role has no bold.** Baskervville ships one weight; Google's API serves the 400 file for a 700 request. Emphasis is italic, or it moves to the machine role. Hierarchy comes from size and space, not weight — a constraint ticket 08 designs within.
@@ -68,14 +68,13 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 
 ## Not yet specified
 
+- **Substance signals — the sharpest open problem.** jass, in ticket 07: *"at some point we have to have some kind of stats, otherwise it will all look like throwaway projects, and i never built anything substanceful."* Showing every entry proves **quantity** and actively undermines **depth** — 100 one-line entries read as a scroll of weekend hacks. `things`/`toys` says which is which, but nothing inside `things` says any of them are substantial. Seed: one `proof` field per entry in the machine font — `10★`, `brew install`, `on npm`, `10k+ users`. Real evidence already exists and goes unused (mojify has 10 stars and a homebrew tap; liquid-glass-cursor is on npm). Can't be judged until the real page exists (ticket 04's method), so it graduates after ticket 08.
+
 - **How writing is presented.** Post layout, prose styles, and what a `/blog/<slug>` page looks like under the new system — waits on the index being settled.
 - **Whether giscus and PostHog actually survive contact with the no-JS spine.** Both are JS; the constraint says content works without them. Revisit once the page architecture is real.
 - **Where the "last touched" stamp goes**, and what it's derived from — build time, or the last content commit. Settled as a concept in ticket 04; its placement waits on ticket 08.
-- **Whether a dark/light toggle is wanted at all.** The scaffold settled the *default*: `color-scheme: light dark` + `light-dark()` tokens, which follows the OS with zero JS. Still open is whether jass wants a manual override on top of that, which is the part that costs either JS or a CSS-only hack (ticket 07).
 - **Identity assets** — favicon, OG image, and whether jass's photo appears on the site at all (`avatar.webp` is committed; a full-frame `photo.webp` exists untracked on main). Also whether socials render as icons or as text — if text, all ten SVGs in `src/assets/icons/` go (ticket 06 left them for 08 to decide).
 - **How the résumé PDF is surfaced** under a text-first index.
-- **Redirects and legacy URL handling** — sharpens once ticket 07 fixes the routes.
-- **What the palette page is called**, if it survives ticket 07.
 
 ## Out of scope
 
