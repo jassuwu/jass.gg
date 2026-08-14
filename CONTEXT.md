@@ -25,11 +25,11 @@ token still called `primary` is shadcn residue and is a bug.
 
 ### Neutrals
 
-| Term                 | Means                                                              |
-| -------------------- | ------------------------------------------------------------------ |
-| **background**       | The page.                                                          |
-| **foreground**       | Text that carries meaning. The default.                            |
-| **muted-foreground** | Text that supports it: descriptions, headings, periods, the stamp. |
+| Term                 | Means                                                             |
+| -------------------- | ----------------------------------------------------------------- |
+| **background**       | The page.                                                         |
+| **foreground**       | Text that carries meaning. The default.                           |
+| **muted-foreground** | Text that supports it: descriptions, section headings, the stamp. |
 
 Three, because a page with no cards, no panels and no borders needs a page
 colour, a text colour and a quieter text colour. A `muted` _surface_ and a
@@ -75,7 +75,7 @@ typeface is a one-line change and no markup ever names a font.
 | Role        | Typeface     | Means                                                                                                                           |
 | ----------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | **paper**   | Baskervville | Prose, body, headings. The default. **Has no bold** — the family ships one weight, so emphasis is italic or moves to _machine_. |
-| **machine** | IoskeleyMono | Anything factual: section labels, periods, the stamp. The only role with a real bold.                                           |
+| **machine** | IoskeleyMono | Anything factual: section labels, the socials row, the stamp. The only role with a real bold.                                   |
 | **hand**    | Excalifont   | The wordmark, and asides. A name in a hand font is a signature; anywhere else it reads as a gimmick.                            |
 
 None is mandatory on a page. Use what the content calls for.

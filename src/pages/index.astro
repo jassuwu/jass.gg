@@ -4,7 +4,6 @@ import { getCollection } from "astro:content";
 import { URLS } from "@/constants";
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
-import { WORK } from "@/data/work";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -38,6 +37,18 @@ const HEADING = "font-machine text-micro text-muted-foreground";
 const SECTION = "mt-14";
 const LIST = "mt-3 space-y-2 text-body";
 
+// The page is four things in this order: the intro, things, toys, writing.
+//
+// There is no work section, and that is a decision rather than an omission.
+// Of 71 sites in the research directory, not one puts employment history on
+// its index — Anthony Fu, Robby Leonardi, Philippe Dubost and the rest all
+// move it to a separate résumé artifact. It kept losing here because it was a
+// CV block sitting in a project index, and no styling fixes that. The résumé
+// PDF is linked in the socials row and carries it.
+//
+// jass's reason, which is the better one: where he works and how long he has
+// worked shouldn't be what defines him. What he built should.
+//
 // The copy below is jass's, ported verbatim from the old site. He is revising
 // it himself in a later pass; this ticket is structure only. Do not "improve"
 // it here.
@@ -109,29 +120,6 @@ const LIST = "mt-3 space-y-2 text-body";
         which is what Excalifont was reserved for. */
         }
         <li class="font-hand text-accent-quiet">nothing published yet.</li>
-      </ul>
-    </section>
-
-    <section id="work" class={SECTION}>
-      <h2 class={HEADING}>work</h2>
-      <ul class={LIST}>
-        {
-          WORK.map((job) => (
-            <li class="flex flex-col gap-x-6 sm:flex-row sm:items-baseline sm:justify-between">
-              <span>
-                {job.homepage ? (
-                  <a href={job.homepage}>{job.company}</a>
-                ) : (
-                  job.company
-                )}
-                <span class="text-muted-foreground">, {job.role}</span>
-              </span>
-              <span class="font-machine text-meta whitespace-nowrap text-muted-foreground">
-                {job.period}
-              </span>
-            </li>
-          ))
-        }
       </ul>
     </section>
 

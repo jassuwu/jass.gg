@@ -19,8 +19,8 @@
    paper    — Baskervville. Body, prose, headings. The default.
               No bold: the family ships one weight (see astro.config.mjs).
               Emphasis is italic, or it moves to the machine role.
-   machine  — IoskeleyMono. Dates, periods, repo names, tags: anything factual.
-              The only role with a real bold.
+   machine  — IoskeleyMono. Section labels, the socials row, the stamp:
+              anything factual. The only role with a real bold.
    hand     — Excalifont. Asides, annotations, the meme reveals — and the `jass`
               wordmark. A name in a hand font is a signature, not a gimmick;
               anywhere else it reads as one, so nothing else gets it.
@@ -84,7 +84,7 @@
      (`small` was a sixth and nothing ever used it.) */
   --text-micro: 0.6875rem; /* machine labels — the section headings */
   --text-micro--line-height: 1.4;
-  --text-meta: 0.8125rem; /* machine data — periods, the stamp */
+  --text-meta: 0.8125rem; /* machine data — the socials row */
   --text-meta--line-height: 1.5;
   --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
   --text-body--line-height: 1.7;
