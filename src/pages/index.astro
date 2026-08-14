@@ -49,12 +49,20 @@ const LIST = "mt-3 space-y-2 text-body";
 // jass's reason, which is the better one: where he works and how long he has
 // worked shouldn't be what defines him. What he built should.
 //
-// The copy below is jass's, ported verbatim from the old site. He is revising
-// it himself in a later pass; this ticket is structure only. Do not "improve"
-// it here.
+// The intro is jass's, written by him, reproduced verbatim. Two spellings were
+// corrected and nothing else. Do not "improve" it, do not lengthen it, and do
+// not restore the old two-paragraph version: the brevity is the point, and the
+// two nouns in it ("toys", "useful things") are the two sections below.
 ---
 
-<Layout title="jass.gg" description="fullstack web/app dev">
+{
+  /* The description is the intro's first sentence. It is what search results
+and link previews show, so a phrase that appears nowhere on the page (it used
+to say "fullstack web/app dev") is a second, staler voice nobody maintains. */
+}
+<Layout
+  title="jass.gg"
+  description="i shepherd my agents into building toys, occasionally useful things.">
   <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
     <header>
       {
@@ -64,19 +72,10 @@ const LIST = "mt-3 space-y-2 text-body";
       }
       <h1 class="font-hand text-display text-accent">jass</h1>
 
-      <div class="mt-8 space-y-4 text-body">
-        <p>
-          fullstack web/app dev. i love building seamless experiences &amp;
-          strongly advocate for UDD (user-driven development) over anything
-          else.
-        </p>
-        <p>
-          im into bleeding edge tech. i know not to chase the shiny thing tho. i
-          also think low-level systems &amp; dev tools are cool. workin' on
-          myself to work on 'em. when im not coding, im probably getting lost in
-          a good game world or the real one.
-        </p>
-      </div>
+      <p class="mt-8 text-body">
+        i shepherd my agents into building toys, occasionally useful things. i
+        like video games, let's chat over a gaming sesh?
+      </p>
 
       {
         /* These links are 13px tall. Fine to read, mean to hit with a thumb.
