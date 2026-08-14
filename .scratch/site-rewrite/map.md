@@ -50,7 +50,10 @@ Corollary, in jass's words: *not a lot of small things — a specific small numb
 - **Plainness rung: text-first (rung 2)** — cards, badges and thumbnails go; projects become a text list; images appear only on demand. Accepted cost: the seven Remotion thumbnails built in June get demoted to reveals.
 - **The tell is content density plus a live artifact, not a placed interaction** — the page is immediately full of real shipped work. A signature interaction *positioned to be found* reads as trying, and trying is what's being subtracted. Drive-by visitors who never interact are an accepted loss.
 - **Shape: single page**, plus `/blog/<slug>`, plus the palette page (renamed or dropped), plus `/404`. Existing blog URLs are not broken for aesthetics.
-- **Typography system** — Baskervville = the paper (body, prose); IoskeleyMono = the machine (dates, periods, repo names, anything factual); Excalifont = the margin (annotation, memes, asides — never a headline). Subject to validation in ticket 03.
+- [Validate the three-font typography system](issues/03-typography-system.md) — **the system holds.** Baskervville = the paper, IoskeleyMono = the machine, Excalifont = the hand (marginalia **and the `jass` wordmark** — a name in a hand font is a signature, not a gimmick). None mandatory on a page; use what the content calls for. Body settled at **18px/1.7**; five-step scale in `@theme`.
+  - **Lime never colours text** — 1.16:1 on white. It marks text: links get a lime underline and keep `color: inherit`. `lime-highlight` is the rarer surface treatment.
+  - **The paper role has no bold.** Baskervville ships one weight; Google's API serves the 400 file for a 700 request. Emphasis is italic, or it moves to the machine role. Hierarchy comes from size and space, not weight — a constraint ticket 08 designs within.
+  - **Zero third-party font requests**; 168 KB self-hosted, all SIL OFL 1.1 with the grant embedded in the binaries.
 - **giscus and PostHog stay.** Both must degrade cleanly under the no-JS constraint.
 - **Build mechanics** — in place on `jassuwu/jass.gg`, new branch, near-total deletion, fresh scaffold. Content collections survive as a model, reshaped around `things` / `toys`.
 - **Appetite** — a few evenings over roughly two weeks.
