@@ -1,7 +1,7 @@
 # Page architecture: routes, anchors, and growth
 
 Type: grilling
-Status: open
+Status: claimed
 
 ## Question
 

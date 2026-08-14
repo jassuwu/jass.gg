@@ -1,33 +1,12 @@
 ---
-import Font from "astro/components/Font.astro";
-import "@/styles/global.css";
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.webp" type="image/webp" />
-    <title>jass.gg</title>
-    {
-      /* Preload only what renders above the fold. Bare `preload` preloads every
-    variant, which shipped 133 KB of preload links for faces nothing used —
-    and left Excalifont, which sets the wordmark, unpreloaded. */
-    }
-    <Font
-      cssVariable="--font-baskervville"
-      preload={[{ weight: 400, style: "normal" }]}
-    />
-    <Font cssVariable="--font-ioskeley" preload={[{ weight: 400 }]} />
-    <Font cssVariable="--font-excalifont" preload />
-  </head>
-  <body>
-    <main class="mx-auto w-full max-w-2xl px-6 py-16">
-      <h1 class="font-hand text-title">jass</h1>
-      <p class="mt-2 font-machine text-meta text-muted-foreground">
-        scaffold only — the real homepage is ticket 08.
-      </p>
-    </main>
-  </body>
-</html>
+<Layout title="jass.gg" description="terminally online developer">
+  <main class="mx-auto w-full max-w-2xl px-6 py-16">
+    <h1 class="font-hand text-title">jass</h1>
+    <p class="mt-2 font-machine text-meta text-muted-foreground">
+      scaffold only — the real homepage is ticket 08.
+    </p>
+  </main>
+</Layout>

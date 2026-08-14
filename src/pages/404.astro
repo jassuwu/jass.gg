@@ -1,0 +1,22 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+// Ticket 07 gave this page a real job: there are no redirects, so every dead
+// URL lands here — including /projects, /palette, and the three deleted blog
+// posts, all of which were live and indexed.
+//
+// Deliberately plain for now. A unique 404 is one of the named invariants, but
+// per ticket 04 personality gets added after the page is judged bare, not
+// before. This is the honest starting point, not the finished thing.
+---
+
+<Layout title="404 | jass.gg">
+  <main class="mx-auto w-full max-w-2xl px-6 py-16">
+    <p class="font-machine text-micro text-muted-foreground">404</p>
+    <h1 class="mt-2 font-hand text-title">nothing here</h1>
+    <p class="mt-4 text-body">
+      this page either never existed or doesn't anymore. <a href="/">go home</a
+      >.
+    </p>
+  </main>
+</Layout>

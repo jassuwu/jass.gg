@@ -1,0 +1,37 @@
+---
+import Font from "astro/components/Font.astro";
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.webp" type="image/webp" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+
+    {
+      /* Preload only what renders above the fold. Bare `preload` preloads every
+    variant, including faces nothing uses. Excalifont sets the wordmark — the
+    largest text on the page — so it is preloaded whole. */
+    }
+    <Font
+      cssVariable="--font-baskervville"
+      preload={[{ weight: 400, style: "normal" }]}
+    />
+    <Font cssVariable="--font-ioskeley" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-excalifont" preload />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
