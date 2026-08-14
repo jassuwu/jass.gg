@@ -1,22 +1,35 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 
-// Ticket 07 gave this page a real job: there are no redirects, so every dead
-// URL lands here — including /projects, /palette, and the three deleted blog
-// posts, all of which were live and indexed.
+// Ticket 07 gave this page a real job. There are no redirects, so every dead
+// URL lands here: /projects, /palette, and two blog posts that were live and
+// indexed by Google. People will keep arriving here from search for years.
 //
-// Deliberately plain for now. A unique 404 is one of the named invariants, but
-// per ticket 04 personality gets added after the page is judged bare, not
-// before. This is the honest starting point, not the finished thing.
+// So it is built around who actually arrives. The first line works for anyone.
+// The aside only pays off for the person who came from a deleted post, which is
+// the largest group and the one with the most reason to feel cheated. Telling
+// them the truth about why the post is gone is the most on-brand thing this
+// site can say: the whole rewrite exists because the old posts were slop.
+//
+// The wordmark is the way home. Clicking a name to get to the index needs no
+// explaining, and it makes this feel like a page of the site rather than an
+// error screen bolted to the side of it.
+//
+// COPY IS AUTHORED AND IS NOT JASS'S VOICE. Placeholder, same as the intro was.
 ---
 
-<Layout title="404 | jass.gg">
-  <main class="mx-auto w-full max-w-2xl px-6 py-16">
-    <p class="font-machine text-micro text-muted-foreground">404</p>
+<Layout title="404 | jass.gg" description="nothing here">
+  <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
+    <a href="/" class="inline-block font-hand text-display text-accent">jass</a>
+
+    <p class="mt-10 font-machine text-micro text-muted-foreground">404</p>
     <h1 class="mt-2 font-hand text-title">nothing here</h1>
-    <p class="mt-4 text-body">
-      this page either never existed or doesn't anymore. <a href="/">go home</a
-      >.
+
+    <p class="mt-5 text-body">whatever lived at this url doesn't anymore.</p>
+
+    <p class="mt-4 font-hand text-accent-quiet">
+      came from a blog post? those are gone. an ai wrote them and it showed. the
+      replacements are mine to write.
     </p>
   </main>
 </Layout>
