@@ -6,26 +6,24 @@ import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
 import { WORK } from "@/data/work";
 
-// Stage one of ticket 08: the page, plain. No micro-interactions, nothing that
-// responds to the reader beyond a link. If it only comes alive once details are
-// added, it was never plain-because-considered — so this state is the test.
-
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
-const things = projects.filter((p) => p.data.kind === "thing");
-const toys = projects.filter((p) => p.data.kind === "toy");
 
 // Every entry, forever — no pagination, no filtering (ticket 07). The volume is
 // the argument.
 const SECTIONS = [
-  { id: "things", label: "things", entries: things },
-  { id: "toys", label: "toys", entries: toys },
+  { id: "things", entries: projects.filter((p) => p.data.kind === "thing") },
+  { id: "toys", entries: projects.filter((p) => p.data.kind === "toy") },
 ];
 
-// The résumé is just another link here. A text-first index has no better place
-// to put it, and giving it a button would make it the loudest thing on a page
-// whose audience is peers, not recruiters.
+// One link per entry, and it goes to the built thing. The repo used to sit
+// beside it as a second link; jass cut it — "let the site choose whether it
+// wants to show the person to github". Two entries have no site, so those
+// point at the repo and the rule still reads as "the name links to the thing".
+const destination = (p: (typeof projects)[number]) =>
+  p.data.link ?? p.data.github;
+
 const SOCIALS = [
   { label: "résumé", href: URLS.RESUME },
   { label: "twitter", href: URLS.TWITTER },
@@ -35,31 +33,37 @@ const SOCIALS = [
   { label: "email", href: URLS.EMAIL },
 ];
 
-// Section headings are machine, not paper. Baskervville has no bold, so a paper
-// heading can only get bigger — and bigger headings on a one-page index read as
-// structure the page doesn't have. The role change does the work instead.
-const HEADING = "font-machine text-micro text-muted-foreground lowercase";
+// Section headings are machine and tiny. jass's favourite part of stage one,
+// so nothing here touches them.
+const HEADING = "font-machine text-micro text-muted-foreground";
+
+// things, toys and writing share one shape; work is a timeline; the header and
+// footer are their own. Four treatments, because jass reads the page as four
+// kinds of section rather than one list repeated.
+const SECTION = "mt-14";
+const LIST = "mt-3 space-y-2 text-body";
 ---
 
-<Layout title="jass.gg" description="terminally online developer">
+<Layout title="jass.gg" description="software developer at cypher, chennai">
   <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
     <header>
-      <h1 class="font-hand text-title leading-none">jass</h1>
-      <p class="mt-3 font-machine text-meta text-muted-foreground">
-        terminally online developer
+      <h1 class="font-hand text-display">
+        <span class="lime-highlight">jass</span>
+      </h1>
+      <p class="mt-4 font-machine text-meta text-muted-foreground">
+        software developer at <a href="https://cypherhq.io">cypher</a>, chennai
       </p>
 
       <div class="mt-8 space-y-4 text-body">
         <p>
-          fullstack web/app dev. i love building seamless experiences &amp;
-          strongly advocate for UDD (user-driven development) over anything
+          fullstack web/app dev. i build for the person using it, and not much
           else.
         </p>
         <p>
-          im into bleeding edge tech. i know not to chase the shiny thing tho. i
-          also think low-level systems &amp; dev tools are cool. workin' on
-          myself to work on 'em. when im not coding, im probably getting lost in
-          a good game world or the real one.
+          im into bleeding edge tech, but i know not to chase the shiny thing.
+          low-level systems and dev tools are cool — workin' on myself to work
+          on 'em. when im not coding, im probably getting lost in a good game
+          world or the real one.
         </p>
       </div>
 
@@ -77,26 +81,18 @@ const HEADING = "font-machine text-micro text-muted-foreground lowercase";
 
     {
       SECTIONS.map((section) => (
-        <section id={section.id} class="mt-16">
-          <h2 class={HEADING}>{section.label}</h2>
-          <ul class="mt-4 space-y-3 text-body">
+        <section id={section.id} class={SECTION}>
+          <h2 class={HEADING}>{section.id}</h2>
+          <ul class={LIST}>
             {section.entries.map((entry) => (
+              // No separator between name and line: the colour change does
+              // that work. A dash here collided with the dashes inside the
+              // descriptions themselves.
               <li>
-                <a href={entry.data.github} class="font-machine">
-                  {entry.data.name}
-                </a>
-                <span class="text-muted-foreground"> — </span>
-                {entry.data.description}
-                {entry.data.link && (
-                  <>
-                    {" "}
-                    <a
-                      href={entry.data.link}
-                      class="font-machine text-meta text-muted-foreground">
-                      live
-                    </a>
-                  </>
-                )}
+                <a href={destination(entry)}>{entry.data.name}</a>
+                <span class="ml-2 text-muted-foreground">
+                  {entry.data.description}
+                </span>
               </li>
             ))}
           </ul>
@@ -104,16 +100,27 @@ const HEADING = "font-machine text-micro text-muted-foreground lowercase";
       ))
     }
 
+    <section id="writing" class={SECTION}>
+      <h2 class={HEADING}>writing</h2>
+      <ul class={LIST}>
+        <li class="text-muted-foreground">nothing published yet.</li>
+      </ul>
+    </section>
+
     {
-      /* Three rows, and the shape reads without being pointed at: the same
-    company opens and closes it. A bulleted CV would bury that. */
+      /* A timeline, not a table. The periods form a left axis, so reading down
+    the column is reading backwards through time — and the repeat at top and
+    bottom is the whole story: he left cypher and came back. */
     }
-    <section id="work" class="mt-16">
+    <section id="work" class={SECTION}>
       <h2 class={HEADING}>work</h2>
-      <ul class="mt-4 space-y-3 text-body">
+      <ul class="mt-3 space-y-2 text-body">
         {
           WORK.map((job) => (
-            <li class="flex flex-col gap-x-6 sm:flex-row sm:items-baseline sm:justify-between">
+            <li class="flex items-baseline gap-x-4 sm:gap-x-6">
+              <span class="w-[8.5rem] shrink-0 font-machine text-meta text-muted-foreground">
+                {job.period}
+              </span>
               <span>
                 {job.homepage ? (
                   <a href={job.homepage}>{job.company}</a>
@@ -122,16 +129,13 @@ const HEADING = "font-machine text-micro text-muted-foreground lowercase";
                 )}
                 <span class="text-muted-foreground">, {job.role}</span>
               </span>
-              <span class="font-machine text-meta whitespace-nowrap text-muted-foreground">
-                {job.period}
-              </span>
             </li>
           ))
         }
       </ul>
     </section>
 
-    <footer class="mt-24 font-machine text-micro text-muted-foreground">
+    <footer class="mt-20 font-machine text-micro text-muted-foreground">
       last touched {formatStamp(LAST_TOUCHED)}
     </footer>
   </main>
