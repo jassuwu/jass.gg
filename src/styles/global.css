@@ -53,6 +53,16 @@
     oklch(0.9392 0.1588 124.39)
   );
 
+  /* A quieter accent, for accent-coloured text that must not compete with the
+     wordmark. Muted by *chroma*, not by opacity — an opacity modifier would
+     blend toward the background and gut the light-mode contrast that
+     --color-accent-text was invented to protect. Lightness holds, saturation
+     drops, so it reads dimmer while staying legible in both themes. */
+  --color-accent-muted: light-dark(
+    oklch(0.5 0.07 124.39),
+    oklch(0.78 0.09 124.39)
+  );
+
   /* Five steps, settled against real copy in ticket 03's prototype. */
   --text-micro: 0.6875rem; /* machine labels, uppercase tags */
   --text-micro--line-height: 1.4;
