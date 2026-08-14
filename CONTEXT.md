@@ -83,8 +83,10 @@ typeface is a one-line change and no markup ever names a font.
 
 None is mandatory on a page. Use what the content calls for.
 
-Five size steps: **micro**, **meta**, **body**, **title**, **display**.
-`display` is the wordmark and nothing else.
+Four size steps: **micro**, **meta**, **body**, **display**.
+
+`display` is the single oversized element on a page, and every page gets at most
+one. On `/` that is the wordmark. On `/404` it is the number.
 
 ## Content
 

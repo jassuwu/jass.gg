@@ -87,17 +87,16 @@
                      it stands, in both. */
   --color-on-accent: oklch(0.145 0 0);
 
-  /* TYPE. Five steps, settled against real copy in ticket 03's prototype.
-     (`small` was a sixth and nothing ever used it.) */
+  /* TYPE. Four steps. Ticket 03 settled six; `small` and `title` both went the
+     same way, deleted the moment nothing referenced them. A heading step comes
+     back when there is a written post that needs one, and not before. */
   --text-micro: 0.6875rem; /* machine labels — the section headings */
   --text-micro--line-height: 1.4;
   --text-meta: 0.8125rem; /* machine data — the socials row */
   --text-meta--line-height: 1.5;
   --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
   --text-body--line-height: 1.7;
-  --text-title: 2rem; /* the 404 headline */
-  --text-title--line-height: 1.15;
-  --text-display: 3.25rem; /* the wordmark, and nothing else */
+  --text-display: 3.25rem; /* one per page: the wordmark on /, 404 on /404 */
   --text-display--line-height: 1;
 }
 

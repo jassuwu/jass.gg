@@ -1,35 +1,54 @@
 ---
+import { URLS } from "@/constants";
 import Layout from "@/layouts/Layout.astro";
 
 // Ticket 07 gave this page a real job. There are no redirects, so every dead
-// URL lands here: /projects, /palette, and two blog posts that were live and
-// indexed by Google. People will keep arriving here from search for years.
+// URL lands here and will keep landing here for years.
 //
-// So it is built around who actually arrives. The first line works for anyone.
-// The aside only pays off for the person who came from a deleted post, which is
-// the largest group and the one with the most reason to feel cheated. Telling
-// them the truth about why the post is gone is the most on-brand thing this
-// site can say: the whole rewrite exists because the old posts were slop.
+// An earlier pass had it explaining that the old blog posts were deleted for
+// being AI-written. jass killed that: nobody arriving at a broken link wants
+// the site's backstory, and leading with an apology for old work is a bad first
+// impression. The page has one job now, which is to get the reader talking to
+// him instead of leaving.
 //
-// The wordmark is the way home. Clicking a name to get to the index needs no
-// explaining, and it makes this feel like a page of the site rather than an
-// error screen bolted to the side of it.
+// The number is the biggest thing on the page and it is in the machine role,
+// because 404 is a fact and machine is the role for facts. A monospace status
+// code at display size is also just what an HTTP error looks like.
 //
-// COPY IS AUTHORED AND IS NOT JASS'S VOICE. Placeholder, same as the intro was.
+// Only the three channels you can actually send a message to are here. The
+// résumé and linkedin are on the homepage and neither of them is a reply.
+//
+// COPY IS JASS'S, VERBATIM.
+const TALK = [
+  { label: "twitter", href: URLS.TWITTER },
+  { label: "discord", href: URLS.DISCORD },
+  { label: "email", href: URLS.EMAIL },
+];
 ---
 
-<Layout title="404 | jass.gg" description="nothing here">
+<Layout title="404 | jass.gg" description="lost?">
   <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
-    <a href="/" class="inline-block font-hand text-display text-accent">jass</a>
+    <p class="font-machine text-display">404</p>
 
-    <p class="mt-10 font-machine text-micro text-muted-foreground">404</p>
-    <h1 class="mt-2 font-hand text-title">nothing here</h1>
-
-    <p class="mt-5 text-body">whatever lived at this url doesn't anymore.</p>
-
-    <p class="mt-4 font-hand text-accent-quiet">
-      came from a blog post? those are gone. an ai wrote them and it showed. the
-      replacements are mine to write.
+    <p class="mt-8 text-body">
+      lost? looking for something specific? just talk to me.
     </p>
+    <p class="mt-2 font-hand text-accent-quiet">(pls no one talks to me 😔)</p>
+
+    <ul
+      class="-my-1 mt-7 flex flex-wrap gap-x-4 font-machine text-meta text-muted-foreground">
+      {
+        TALK.map((channel) => (
+          <li>
+            <a class="inline-block py-1" href={channel.href}>
+              {channel.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="inline-block py-1" href="/">home</a>
+      </li>
+    </ul>
   </main>
 </Layout>
