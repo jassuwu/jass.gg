@@ -2,23 +2,33 @@
 
 /* Astro's font API names each variable after the typeface; these name them
    after the role. Swapping a typeface is then a one-line change here, and no
-   markup mentions a font by name. `inline` is what makes Tailwind emit the
-   var() reference rather than resolving it at build time. */
+   markup mentions a font by name.
+
+   `inline` resolves the alias at build time — `font-machine` compiles to
+   `font-family: var(--font-ioskeley)` and no `--font-*` role variable is
+   emitted to :root. That's what we want: Astro owns the actual font stack, so
+   there's no reason to ship a second indirection to the browser. */
 @theme inline {
   --font-paper: var(--font-baskervville);
   --font-machine: var(--font-ioskeley);
-  --font-margin: var(--font-excalifont);
+  --font-hand: var(--font-excalifont);
 }
 
 /* The three roles (ticket 03):
 
    paper    — Baskervville. Body, prose, headings. The default.
+              No bold: the family ships one weight (see astro.config.mjs).
+              Emphasis is italic, or it moves to the machine role.
    machine  — IoskeleyMono. Dates, periods, repo names, tags: anything factual.
-   margin   — Excalifont. Asides, annotations, the meme reveals — and the `jass`
+              The only role with a real bold.
+   hand     — Excalifont. Asides, annotations, the meme reveals — and the `jass`
               wordmark. A name in a hand font is a signature, not a gimmick;
               anywhere else it reads as one, so nothing else gets it.
 
-   None of these is mandatory on a given page. Use what the content calls for. */
+   None of these is mandatory on a given page. Use what the content calls for.
+
+   The utility is `font-hand`, not `font-margin` — the latter reads like a
+   box-model utility at a glance. */
 
 @theme {
   --color-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
@@ -31,6 +41,10 @@
      never a text colour — it marks text instead (see the link rule below).
      That constraint is why it stays reserved. */
   --color-primary: oklch(0.9392 0.1588 124.39);
+
+  /* Text sitting on lime. Fixed rather than light-dark(), because lime is
+     light in both themes — so this must not follow the theme. */
+  --color-on-primary: oklch(0.145 0 0);
 
   /* Five steps, settled against real copy in ticket 03's prototype. */
   --text-micro: 0.6875rem; /* machine labels, uppercase tags */
@@ -71,11 +85,13 @@
   }
 }
 
-/* For the rare case that wants more than a mark. Foreground stays fixed dark
-   because lime is light in both themes. */
+/* The second, rarer lime treatment: a surface rather than a mark. Approved in
+   ticket 03 for emphasis that an underline can't carry. Nothing uses it yet —
+   it tree-shakes to nothing until something does — and if more than one or two
+   things ever do, the accent has stopped being reserved. */
 @utility lime-highlight {
   background-color: var(--color-primary);
-  color: oklch(0.145 0 0);
+  color: var(--color-on-primary);
   padding: 0.05em 0.3em;
   border-radius: 0.2em;
   text-decoration: none;
