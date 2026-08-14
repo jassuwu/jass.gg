@@ -33,37 +33,32 @@ const SOCIALS = [
   { label: "email", href: URLS.EMAIL },
 ];
 
-// Section headings are machine and tiny. jass's favourite part of stage one,
-// so nothing here touches them.
+// Tiny machine headings — the one part of stage one jass kept without notes.
 const HEADING = "font-machine text-micro text-muted-foreground";
-
-// things, toys and writing share one shape; work is a timeline; the header and
-// footer are their own. Four treatments, because jass reads the page as four
-// kinds of section rather than one list repeated.
 const SECTION = "mt-14";
 const LIST = "mt-3 space-y-2 text-body";
+
+// The copy below is jass's, ported verbatim from the old site. He is revising
+// it himself in a later pass; this ticket is structure only. Do not "improve"
+// it here.
 ---
 
-<Layout title="jass.gg" description="software developer at cypher, chennai">
+<Layout title="jass.gg" description="fullstack web/app dev">
   <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
     <header>
-      <h1 class="font-hand text-display">
-        <span class="lime-highlight">jass</span>
-      </h1>
-      <p class="mt-4 font-machine text-meta text-muted-foreground">
-        software developer at <a href="https://cypherhq.io">cypher</a>, chennai
-      </p>
+      <h1 class="font-hand text-display">jass</h1>
 
       <div class="mt-8 space-y-4 text-body">
         <p>
-          fullstack web/app dev. i build for the person using it, and not much
+          fullstack web/app dev. i love building seamless experiences &amp;
+          strongly advocate for UDD (user-driven development) over anything
           else.
         </p>
         <p>
-          im into bleeding edge tech, but i know not to chase the shiny thing.
-          low-level systems and dev tools are cool — workin' on myself to work
-          on 'em. when im not coding, im probably getting lost in a good game
-          world or the real one.
+          im into bleeding edge tech. i know not to chase the shiny thing tho. i
+          also think low-level systems &amp; dev tools are cool. workin' on
+          myself to work on 'em. when im not coding, im probably getting lost in
+          a good game world or the real one.
         </p>
       </div>
 
@@ -85,9 +80,9 @@ const LIST = "mt-3 space-y-2 text-body";
           <h2 class={HEADING}>{section.id}</h2>
           <ul class={LIST}>
             {section.entries.map((entry) => (
-              // No separator between name and line: the colour change does
-              // that work. A dash here collided with the dashes inside the
-              // descriptions themselves.
+              // No separator between name and line: foreground against muted
+              // does that work. A dash here collided with the dashes inside
+              // the descriptions themselves.
               <li>
                 <a href={destination(entry)}>{entry.data.name}</a>
                 <span class="ml-2 text-muted-foreground">
@@ -103,24 +98,21 @@ const LIST = "mt-3 space-y-2 text-body";
     <section id="writing" class={SECTION}>
       <h2 class={HEADING}>writing</h2>
       <ul class={LIST}>
-        <li class="text-muted-foreground">nothing published yet.</li>
+        {
+          /* The hand role and the accent, together, exactly once. An empty
+        section is the only place on the page where an aside is the content,
+        which is what Excalifont was reserved for. */
+        }
+        <li class="font-hand text-accent-text">nothing published yet.</li>
       </ul>
     </section>
 
-    {
-      /* A timeline, not a table. The periods form a left axis, so reading down
-    the column is reading backwards through time — and the repeat at top and
-    bottom is the whole story: he left cypher and came back. */
-    }
     <section id="work" class={SECTION}>
       <h2 class={HEADING}>work</h2>
-      <ul class="mt-3 space-y-2 text-body">
+      <ul class={LIST}>
         {
           WORK.map((job) => (
-            <li class="flex items-baseline gap-x-4 sm:gap-x-6">
-              <span class="w-[8.5rem] shrink-0 font-machine text-meta text-muted-foreground">
-                {job.period}
-              </span>
+            <li class="flex flex-col gap-x-6 sm:flex-row sm:items-baseline sm:justify-between">
               <span>
                 {job.homepage ? (
                   <a href={job.homepage}>{job.company}</a>
@@ -129,14 +121,30 @@ const LIST = "mt-3 space-y-2 text-body";
                 )}
                 <span class="text-muted-foreground">, {job.role}</span>
               </span>
+              <span class="font-machine text-meta whitespace-nowrap text-muted-foreground">
+                {job.period}
+              </span>
             </li>
           ))
         }
       </ul>
     </section>
 
+    {
+      /* The stamp links to the commit it is claiming. A date on its own is an
+    assertion; a date that hands you the diff is evidence — and it is the only
+    thing on the page that is true because of how the page was built. */
+    }
     <footer class="mt-20 font-machine text-micro text-muted-foreground">
-      last touched {formatStamp(LAST_TOUCHED)}
+      {
+        LAST_TOUCHED.commitUrl ? (
+          <a href={LAST_TOUCHED.commitUrl}>
+            last touched {formatStamp(LAST_TOUCHED.date)}
+          </a>
+        ) : (
+          <span>last touched {formatStamp(LAST_TOUCHED.date)}</span>
+        )
+      }
     </footer>
   </main>
 </Layout>

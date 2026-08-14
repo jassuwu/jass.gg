@@ -37,14 +37,21 @@
   --color-muted-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
   --color-border: light-dark(oklch(0.922 0 0), oklch(1 0 0 / 10%));
 
-  /* The one accent. It is 1.16:1 on white and 17.12:1 on near-black, so it is
-     never a text colour — it marks text instead (see the link rule below).
-     That constraint is why it stays reserved. */
+  /* The one accent, unchanged: the invariant that survives the rewrite. It is
+     1.16:1 on white and 17.12:1 on near-black, so it can mark and it can fill,
+     but it cannot be a text colour in light mode. Used here for link hover and
+     nothing else. */
   --color-primary: oklch(0.9392 0.1588 124.39);
 
-  /* Text sitting on lime. Fixed rather than light-dark(), because lime is
-     light in both themes — so this must not follow the theme. */
-  --color-on-primary: oklch(0.145 0 0);
+  /* The same accent, made readable as *text*. Light mode drops it to L=0.5
+     (4.6:1 on white); dark mode keeps the real lime. Same hue and chroma
+     family, so it still reads as the accent rather than a second colour.
+     This exists because lime-as-text was asked for and the invariant value
+     physically cannot do it on white. */
+  --color-accent-text: light-dark(
+    oklch(0.5 0.14 124.39),
+    oklch(0.9392 0.1588 124.39)
+  );
 
   /* Five steps, settled against real copy in ticket 03's prototype. */
   --text-micro: 0.6875rem; /* machine labels, uppercase tags */
@@ -74,40 +81,36 @@
     line-height: var(--text-body--line-height);
   }
 
-  /* Ticket 03 put a thick lime underline on every link. Ticket 08 killed it:
-     on a page that is almost entirely links, marking all of them shouts, and
-     in light mode the lime bar was 1.16:1 on white — loud and unreadable at
-     once. jass's verdict on seeing it: "ugly as fuck".
+  /* Links carry no decoration at rest. Ticket 03 gave them a thick lime
+     underline; ticket 08 first thinned it to a neutral hairline, and jass
+     rejected that too. On a page where nearly every noun is a link, any
+     resting mark tiles the whole page with rules.
 
-     So the resting state is a hairline in the text's own colour — enough to
-     say "link", quiet enough to disappear into the paragraph. Lime arrives
-     only on hover and focus, which finally gives the accent a job it can do
-     at any contrast, since it lands on a line and not on text. */
+     What separates a link from its surroundings instead is position and
+     colour: entry names sit at full foreground against a muted description,
+     the socials row is nothing but links. Lime then arrives on hover and
+     focus, which is the one job the accent can hold at any contrast — it
+     lands on a line, never on text.
+
+     The cost, stated plainly: at rest a link is not visually distinguishable
+     from ordinary text, which fails WCAG 1.4.1 for anyone who does not hover.
+     Accepted deliberately here, on a personal site whose structure makes the
+     links obvious. It would not be acceptable in prose. */
   a {
     color: inherit;
-    text-decoration: underline;
-    text-decoration-color: currentColor;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    text-decoration: none;
   }
 
   a:hover,
   a:focus-visible {
+    text-decoration: underline;
     text-decoration-color: var(--color-primary);
     text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
 }
 
-/* The second, rarer lime treatment: a surface rather than a mark. Exactly one
-   thing uses it — the wordmark — and that is the point. Lime cannot colour
-   text (1.16:1 on white), but it can sit *behind* text, because --color-on-
-   primary is fixed dark and lime is light in both themes. A highlighter
-   stroke over a hand-written name. If a second thing ever takes it, the
-   accent has stopped being reserved. */
-@utility lime-highlight {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  padding: 0.05em 0.3em;
-  border-radius: 0.2em;
-  text-decoration: none;
-}
+/* Ticket 03 also approved lime-as-a-surface — a highlighter block behind text.
+   Ticket 08 tried it on the wordmark and jass rejected it on sight, and there
+   was no second candidate, so the utility is deleted rather than left sitting
+   here unused. Lime as text now goes through --color-accent-text instead. */

@@ -7,22 +7,37 @@
  * this exists to avoid. If git isn't available (it always is on Vercel, but
  * still), it degrades to build time rather than failing the build.
  *
+ * It also carries the commit URL, so the stamp can link to the thing it is
+ * claiming. A date on its own is an assertion; a date that hands you the diff
+ * is evidence.
+ *
  * Runs once, at build, in Astro's frontmatter. Nothing ships to the browser.
  */
 import { execSync } from "node:child_process";
 
 const TRACKED = ["src/data", "src/pages", "src/layouts", "src/styles"];
 
-function lastContentCommit(): Date {
+const REPO = "https://github.com/jassuwu/jass.gg";
+
+export interface LastTouched {
+  date: Date;
+  /** Absent when git isn't available, which is the only case with no commit. */
+  commitUrl?: string;
+}
+
+function lastContentCommit(): LastTouched {
   try {
-    const iso = execSync(`git log -1 --format=%cI -- ${TRACKED.join(" ")}`, {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    const date = new Date(iso);
-    return Number.isNaN(date.getTime()) ? new Date() : date;
+    const [iso, sha] = execSync(
+      `git log -1 --format=%cI%n%H -- ${TRACKED.join(" ")}`,
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
+    )
+      .trim()
+      .split("\n");
+    const date = new Date(iso ?? "");
+    if (Number.isNaN(date.getTime()) || !sha) return { date: new Date() };
+    return { date, commitUrl: `${REPO}/commit/${sha}` };
   } catch {
-    return new Date();
+    return { date: new Date() };
   }
 }
 
