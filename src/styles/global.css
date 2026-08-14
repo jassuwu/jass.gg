@@ -80,6 +80,13 @@
                       keeps the palette's one fixed point fixed. */
   --color-accent-mark: oklch(0.9392 0.1588 124.39);
 
+  /* on-accent     — text sitting *on* accent-mark. Unthemed for the same
+                     reason accent-mark is: lime is light in both modes, so
+                     this must not follow the theme. Flipping it would put
+                     near-white on lime in dark mode at 1.16:1. 17.12:1 as
+                     it stands, in both. */
+  --color-on-accent: oklch(0.145 0 0);
+
   /* TYPE. Five steps, settled against real copy in ticket 03's prototype.
      (`small` was a sixth and nothing ever used it.) */
   --text-micro: 0.6875rem; /* machine labels — the section headings */
@@ -133,6 +140,19 @@
     text-decoration-color: var(--color-accent-mark);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
+  }
+
+  /* Selection inverts to the accent. This is the third and last place lime
+     appears, and the most defensible one: the reader asked for it by dragging,
+     and it is a fill — which is the only thing accent-mark is allowed to do.
+     Left alone, selection is browser-blue, the one colour on the page that
+     belongs to no palette at all.
+
+     Both values are unthemed on purpose, so a selection looks identical in
+     light and dark. */
+  ::selection {
+    background-color: var(--color-accent-mark);
+    color: var(--color-on-accent);
   }
 }
 

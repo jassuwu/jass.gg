@@ -42,11 +42,12 @@ strengths. It comes in three because of a physical fact, not a preference: at
 its invariant value the lime is **1.16:1 on white**. It can sit on a line at
 that value. It can never be text in light mode.
 
-| Term             | Means                                                                                                                             |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **accent**       | The accent as text. The default one to reach for. In dark mode this _is_ the invariant value; light mode is where it compromises. |
-| **accent-quiet** | The accent as text, desaturated, so it can appear without competing with the wordmark. Quieter, not fainter.                      |
-| **accent-mark**  | The invariant itself. Marks and fills only — underlines, rules, backgrounds. **Never text**, in either mode.                      |
+| Term             | Means                                                                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **accent**       | The accent as text. The default one to reach for. In dark mode this _is_ the invariant value; light mode is where it compromises.     |
+| **accent-quiet** | The accent as text, desaturated, so it can appear without competing with the wordmark. Quieter, not fainter.                          |
+| **accent-mark**  | The invariant itself. Marks and fills only — underlines, rules, backgrounds, the selection highlight. **Never text**, in either mode. |
+| **on-accent**    | Text sitting _on_ `accent-mark`. Unthemed, for the same reason: lime is light in both modes, so this must not follow the theme.       |
 
 **Muted means desaturated, not translucent.** `accent-quiet` drops chroma and
 holds lightness. Reaching for an opacity modifier instead blends the colour
@@ -54,8 +55,9 @@ toward the background and destroys the light-mode contrast this whole family
 exists to protect.
 
 **Reserved** means what it says: if a second thing takes the accent, the accent
-has stopped being an accent. Today it is the wordmark, the writing line, and
-link hover.
+has stopped being an accent. Today it is exactly four things: the wordmark, the
+writing line, link hover, and the selection highlight. Three of those four are
+things the reader has to ask for.
 
 ## Light and dark
 
@@ -64,8 +66,9 @@ and **no `.dark` class** — the browser picks via `color-scheme: light dark`,
 and nothing about the theme is JavaScript's business.
 
 Every themed colour is expressed as a single `light-dark()` at its one
-declaration site, so a token has exactly one place it is defined. Exactly one
-colour is unthemed — `accent-mark` — because a mark does not need to flip.
+declaration site, so a token has exactly one place it is defined. Two colours
+are unthemed — `accent-mark` and `on-accent` — because a mark does not need to
+flip, and text on a mark must not.
 
 ## Type
 
