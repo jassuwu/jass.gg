@@ -17,7 +17,7 @@
  * nowhere on the page, maintained by nobody.
  */
 export const INTRO =
-  "i build a lot of toys, occasionally useful things. im on twitter releasing & watching what's releasing every day. im excited about & scared of my agents, more the former. i also love video games, but i don't get to play them much these days. gimme an excuse and join me for a sesh?";
+  "i build a lot of toys, occasionally useful things. im on twitter releasing & watching what's releasing every day. im excited about & scared of my agents, mostly the former. i also love video games, but i don't get to play them as much now. gimme an excuse and join me for a sesh?";
 
 /**
  * What search results and link previews show. It is the intro's first sentence,
