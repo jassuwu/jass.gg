@@ -1,7 +1,7 @@
 # Curate the content
 
 Type: grilling
-Status: open
+Status: claimed
 
 ## Question
 
