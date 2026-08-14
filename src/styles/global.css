@@ -30,49 +30,65 @@
    The utility is `font-hand`, not `font-margin` — the latter reads like a
    box-model utility at a glance. */
 
+/* COLOUR. Two families and nothing else: a neutral ramp, and one accent.
+   There is no "primary" and no "secondary" — those names imply a pair, and
+   there isn't one. See CONTEXT.md.
+
+   Every themed token is a single light-dark() at its one declaration site.
+   No .dark class, no duplicated block, no toggle: the browser resolves it
+   from `color-scheme` below. Exactly one colour is *not* themed, and the
+   comment on it says why. */
 @theme {
+  /* The neutrals. Three, because a page with no cards, no panels and no
+     borders needs a page colour, a text colour, and a quieter text colour.
+     `muted` (a surface) and `border` were shadcn leftovers that nothing ever
+     used, and are gone. */
   --color-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
   --color-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
-  --color-muted: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
   --color-muted-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
-  --color-border: light-dark(oklch(0.922 0 0), oklch(1 0 0 / 10%));
 
-  /* The one accent, unchanged: the invariant that survives the rewrite. It is
-     1.16:1 on white and 17.12:1 on near-black, so it can mark and it can fill,
-     but it cannot be a text colour in light mode. Used here for link hover and
-     nothing else. */
-  --color-primary: oklch(0.9392 0.1588 124.39);
+  /* THE ACCENT — one colour, hue 124.39, in three strengths.
 
-  /* The same accent, made readable as *text*. Light mode drops it to L=0.5
-     (4.6:1 on white); dark mode keeps the real lime. Same hue and chroma
-     family, so it still reads as the accent rather than a second colour.
-     This exists because lime-as-text was asked for and the invariant value
-     physically cannot do it on white. */
-  --color-accent-text: light-dark(
+     It comes in three because of a physical fact, not a preference: the
+     invariant lime is 1.16:1 on white. It can sit on a line or fill a shape
+     at that value, but it can never be text in light mode. So the token you
+     reach for by default is the one that is safe as text, and the raw
+     invariant is the specialised one.
+
+     accent        — accent as text. The default. In dark mode this *is* the
+                     invariant value; light mode is where it compromises. */
+  --color-accent: light-dark(
     oklch(0.5 0.14 124.39),
     oklch(0.9392 0.1588 124.39)
   );
 
-  /* A quieter accent, for accent-coloured text that must not compete with the
-     wordmark. Muted by *chroma*, not by opacity — an opacity modifier would
-     blend toward the background and gut the light-mode contrast that
-     --color-accent-text was invented to protect. Lightness holds, saturation
-     drops, so it reads dimmer while staying legible in both themes. */
-  --color-accent-muted: light-dark(
+  /* accent-quiet   — accent as text, desaturated so it can sit on the page
+                      without competing with the wordmark. Muted by chroma,
+                      never by opacity: an opacity modifier blends toward the
+                      background and destroys exactly the light-mode contrast
+                      this family exists to protect. Measured 5.89:1 light /
+                      10.15:1 dark — quieter, not fainter. */
+  --color-accent-quiet: light-dark(
     oklch(0.5 0.07 124.39),
     oklch(0.78 0.09 124.39)
   );
 
-  /* Five steps, settled against real copy in ticket 03's prototype. */
-  --text-micro: 0.6875rem; /* machine labels, uppercase tags */
+  /* accent-mark    — the invariant itself, the one value carried over from
+                      the old site. Marks and fills only: underlines, rules,
+                      backgrounds. Never text, in either theme. Unthemed on
+                      purpose — a mark doesn't need to flip, and pinning it
+                      keeps the palette's one fixed point fixed. */
+  --color-accent-mark: oklch(0.9392 0.1588 124.39);
+
+  /* TYPE. Five steps, settled against real copy in ticket 03's prototype.
+     (`small` was a sixth and nothing ever used it.) */
+  --text-micro: 0.6875rem; /* machine labels — the section headings */
   --text-micro--line-height: 1.4;
-  --text-meta: 0.8125rem; /* machine data — dates, repo names */
+  --text-meta: 0.8125rem; /* machine data — periods, the stamp */
   --text-meta--line-height: 1.5;
-  --text-small: 1rem; /* secondary prose */
-  --text-small--line-height: 1.6;
   --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
   --text-body--line-height: 1.7;
-  --text-title: 2rem;
+  --text-title: 2rem; /* the 404 headline */
   --text-title--line-height: 1.15;
   --text-display: 3.25rem; /* the wordmark, and nothing else */
   --text-display--line-height: 1;
@@ -114,7 +130,7 @@
   a:hover,
   a:focus-visible {
     text-decoration: underline;
-    text-decoration-color: var(--color-primary);
+    text-decoration-color: var(--color-accent-mark);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
   }
@@ -123,4 +139,4 @@
 /* Ticket 03 also approved lime-as-a-surface — a highlighter block behind text.
    Ticket 08 tried it on the wordmark and jass rejected it on sight, and there
    was no second candidate, so the utility is deleted rather than left sitting
-   here unused. Lime as text now goes through --color-accent-text instead. */
+   here unused. Lime as text now goes through --color-accent instead. */
