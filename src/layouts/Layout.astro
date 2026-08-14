@@ -1,5 +1,7 @@
 ---
 import Font from "astro/components/Font.astro";
+
+import { USERNAMES } from "@/constants";
 import "@/styles/global.css";
 
 interface Props {
@@ -8,6 +10,13 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+// Absolute, because a link preview is fetched by a crawler that has no page to
+// resolve a relative URL against. `Astro.site` is set in astro.config.mjs, so
+// these throw at build time if it is ever removed — which is the right failure,
+// loudly at build rather than silently in a Discord embed.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
 ---
 
 <!doctype html>
@@ -18,6 +27,34 @@ const { title, description } = Astro.props;
     <link rel="icon" href="/favicon.webp" type="image/webp" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+
+    {
+      /* The card. Most people meet this site as a link pasted into Discord or
+    Twitter, so the preview is the first impression far more often than the page
+    is — and until now there were no `og:` tags at all, which meant the preview
+    was whatever the crawler scraped by accident.
+
+    Title and description are the page's own, not a second set written for
+    crawlers; a preview that says something the page doesn't is the same stale
+    second voice the meta description used to be.
+
+    The image repeats neither of them. Both platforms render title and
+    description as text beside the card, so the card carries only what text
+    can't: the wordmark. Width and height are declared so Discord lays the embed
+    out from the markup instead of blocking on the image. */
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="jass.gg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content={`@${USERNAMES.TWITTER}`} />
 
     {
       /* Preload only what renders above the fold. Bare `preload` preloads every
