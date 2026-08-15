@@ -110,10 +110,12 @@ const TALK = [
        the links must not jump. */
     v.width = 480;
     v.height = 270;
-    /* 200px on desktop; at 390px the viewport takes over and it scales
-       with the page instead of crowding the column. mt-14 is the site's
-       section gap — the distance of a thing left in the corner. */
-    v.className = "mt-14 w-[min(200px,45vw)]";
+    /* 340px on desktop (jass: "can takeover a larger space"); at 390px the
+       viewport takes over and it scales with the page instead of crowding
+       the column. mt-14 is the site's section gap — the distance of a
+       thing left in the corner, just a bigger thing now. One clip per page
+       view, looping itself seamlessly — never switching mid-visit. */
+    v.className = "mt-14 w-[min(340px,70vw)]";
     /* It informs nobody of anything. A screen reader announcing "video" on
        an error page is noise with no payoff. */
     v.setAttribute("aria-hidden", "true");
