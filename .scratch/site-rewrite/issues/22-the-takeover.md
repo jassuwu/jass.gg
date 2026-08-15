@@ -1,7 +1,7 @@
 # The takeover
 
 Type: prototype (HITL)
-Status: open — direction set by jass aug 15; liquid glass is instance one
+Status: built (aug 15) — instance one is live: three copies of the package's own cursor polygon hidden at sub-JND contrast in the row's halo, legible only through the lens's saturation; found arrows fill accent-mark, all three pin the row's underline. Wordless, so the copy rule is satisfied by silence. Awaiting jass's play test.
 
 ## The direction, jass's words
 

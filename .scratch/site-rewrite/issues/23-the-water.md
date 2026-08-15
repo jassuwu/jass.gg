@@ -1,7 +1,7 @@
 # The water
 
 Type: prototype (HITL)
-Status: open — jass's idea, his words: "i really love this"
+Status: built (aug 15) — jass's follow-up directive honored: physics VENDORED, not invented. Hoffman's spring-column heightfield from the Tuts+ repo, BSD-2-Clause, attribution in the sim file. 4.5s fuse, tears via Range off the live emoji, asymptotic rise capped at min(420px, 45vh), foreground-derived tint, frame-budget guard sheds sim before frame rate. 1.9KB gzipped, zero assets. Awaiting jass's laugh.
 
 ## The idea, verbatim in spirit
 
