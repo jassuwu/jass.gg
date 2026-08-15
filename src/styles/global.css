@@ -1,564 +1,306 @@
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 @import "tailwindcss";
-@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* Astro's font API names each variable after the typeface; these name them
+   after the role. Swapping a typeface is then a one-line change here, and no
+   markup mentions a font by name.
 
+   `inline` resolves the alias at build time — `font-machine` compiles to
+   `font-family: var(--font-ioskeley)` and no `--font-*` role variable is
+   emitted to :root. That's what we want: Astro owns the actual font stack, so
+   there's no reason to ship a second indirection to the browser. */
 @theme inline {
-  --font-sans: var(--font-atkinson-hyperlegible-next);
-  --font-atkinson-hyperlegible-next: var(--font-atkinson-hyperlegible-next);
-  --font-comic-neue: var(--font-comic-neue);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* Two families, and the order is the whole trick. The first one contains a
+     single glyph — Baskervville's ITALIC ampersand, subset to 676 bytes — so
+     every `&` on the site gets the `et` ligature drawn by hand, and every other
+     character in the language falls through to Baskervville proper because the
+     first face has nothing to offer it.
+
+     No markup, no `<em>`, no per-instance decision: it applies to any `&`
+     anyone ever writes, including ones in copy that doesn't exist yet. The cost
+     is one 676-byte request that only fires on a page containing an ampersand.
+
+     The hazard, stated so nobody trips on it: swap the paper typeface and this
+     face does NOT follow. It is Baskervville's ampersand specifically, and it
+     would sit in the new face looking wrong. Regenerate it (see
+     `.scratch/site-rewrite/tools/`) or drop it. */
+  --font-paper: var(--font-ampersand), var(--font-baskervville);
+  --font-machine: var(--font-ioskeley);
+  --font-hand: var(--font-excalifont);
+}
+
+/* The three roles (ticket 03):
+
+   paper    — Baskervville. Body, prose, headings. The default.
+              No bold: the family ships one weight (see astro.config.mjs).
+              Emphasis is italic, or it moves to the machine role.
+   machine  — IoskeleyMono. Section labels, the socials row, the stamp:
+              anything factual. The only role with a real bold.
+   hand     — Excalifont. Asides, annotations, the meme reveals — and the `jass`
+              wordmark. A name in a hand font is a signature, not a gimmick;
+              anywhere else it reads as one, so nothing else gets it.
+
+   None of these is mandatory on a given page. Use what the content calls for.
+
+   The utility is `font-hand`, not `font-margin` — the latter reads like a
+   box-model utility at a glance. */
+
+/* COLOUR. Two families and nothing else: a neutral ramp, and one accent.
+   There is no "primary" and no "secondary" — those names imply a pair, and
+   there isn't one. See CONTEXT.md.
+
+   Every themed token is a single light-dark() at its one declaration site.
+   No .dark class, no duplicated block, no toggle: the browser resolves it
+   from `color-scheme` below. Exactly one colour is *not* themed, and the
+   comment on it says why. */
+@theme {
+  /* The neutrals. Three, because a page with no cards, no panels and no
+     borders needs a page colour, a text colour, and a quieter text colour.
+     `muted` (a surface) and `border` were shadcn leftovers that nothing ever
+     used, and are gone. */
+  --color-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
+  --color-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --color-muted-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+
+  /* THE ACCENT — one colour, hue 124.39, in three strengths.
+
+     It comes in three because of a physical fact, not a preference: the
+     invariant lime is 1.16:1 on white. It can sit on a line or fill a shape
+     at that value, but it can never be text in light mode. So the token you
+     reach for by default is the one that is safe as text, and the raw
+     invariant is the specialised one.
+
+     accent        — accent as text. The default. In dark mode this *is* the
+                     invariant value; light mode is where it compromises. */
+  --color-accent: light-dark(
+    oklch(0.5 0.14 124.39),
+    oklch(0.9392 0.1588 124.39)
+  );
+
+  /* accent-quiet   — accent as text, desaturated so it can sit on the page
+                      without competing with the wordmark. Muted by chroma,
+                      never by opacity: an opacity modifier blends toward the
+                      background and destroys exactly the light-mode contrast
+                      this family exists to protect. Measured 5.89:1 light /
+                      10.15:1 dark — quieter, not fainter. */
+  --color-accent-quiet: light-dark(
+    oklch(0.5 0.07 124.39),
+    oklch(0.78 0.09 124.39)
+  );
+
+  /* accent-mark    — the invariant itself, the one value carried over from
+                      the old site. Marks and fills only: underlines, rules,
+                      backgrounds. Never text, in either theme. Unthemed on
+                      purpose — a mark doesn't need to flip, and pinning it
+                      keeps the palette's one fixed point fixed. */
+  --color-accent-mark: oklch(0.9392 0.1588 124.39);
+
+  /* on-accent     — text sitting *on* accent-mark. Unthemed for the same
+                     reason accent-mark is: lime is light in both modes, so
+                     this must not follow the theme. Flipping it would put
+                     near-white on lime in dark mode at 1.16:1. 17.12:1 as
+                     it stands, in both. */
+  --color-on-accent: oklch(0.145 0 0);
+
+  /* TYPE. Four steps. Ticket 03 settled six; `small` and `title` both went the
+     same way, deleted the moment nothing referenced them. A heading step comes
+     back when there is a written post that needs one, and not before. */
+  --text-micro: 0.6875rem; /* machine labels — the section headings */
+  --text-micro--line-height: 1.4;
+  --text-meta: 0.8125rem; /* machine data — the socials row */
+  --text-meta--line-height: 1.5;
+  --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
+  --text-body--line-height: 1.7;
+  /* One per page: the wordmark on /, 404 on /404. Was 3.25rem and jass asked
+     for it quieter — a signature is not a headline, and at 52px against 18px
+     body the name was announcing rather than signing. 44px still reads as the
+     one oversized thing on the page without shouting.
+
+     Both pages move together on purpose. There is one display step, not a
+     per-page size; splitting it would turn a type scale into two type scales
+     for the sake of one glyph. */
+  --text-display: 2.75rem;
+  --text-display--line-height: 1;
 }
 
 :root {
-  --font-atkinson-hyperlegible-next: "Atkinson Hyperlegible Next", sans-serif;
-  --font-comic-neue: "Comic Neue", cursive;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.9392 0.1588 124.39);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.9392 0.1588 124.39);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  color-scheme: light dark;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-paper);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+
+    /* No orphans. The intro is five sentences in one paragraph and the browser
+       will happily leave "sesh?" alone on a line of its own at some widths —
+       which is the single most common way a page of plain text looks unset
+       rather than typeset. Costs one declaration and nobody will ever be able
+       to tell you what changed. */
+    text-wrap: pretty;
+  }
+
+  /* Links carry no decoration at rest. Ticket 03 gave them a thick lime
+     underline; ticket 08 first thinned it to a neutral hairline, and jass
+     rejected that too. On a page where nearly every noun is a link, any
+     resting mark tiles the whole page with rules.
+
+     What separates a link from its surroundings instead is position and
+     colour: entry names sit at full foreground against a muted description,
+     the socials row is nothing but links. Lime then arrives on hover and
+     focus, which is the one job the accent can hold at any contrast — it
+     lands on a line, never on text.
+
+     The cost, stated plainly: at rest a link is not visually distinguishable
+     from ordinary text, which fails WCAG 1.4.1 for anyone who does not hover.
+     Accepted deliberately here, on a personal site whose structure makes the
+     links obvious. It would not be acceptable in prose. */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* The underline DRAWS. It is not a decoration switched on — it is a gradient
+     with no width that grows to full width, which means it enters from the left
+     and, on leave, retracts back to the left it came from. Most implementations
+     fade it out or collapse it from the right; going back the way it came is
+     the difference between a line appearing and a line being drawn.
+
+     That matters here more than it would elsewhere. This is the site's only
+     link affordance — nothing marks a link at rest — so this stroke is the
+     entire interaction budget, and the wordmark above it is a hand font. A line
+     that draws reads as a pen. A line that blinks reads as CSS.
+
+     `text-decoration` cannot animate, which is why this is a background at all.
+     `background-origin: content-box` keeps the stroke tight under the text on
+     the socials row and the stamp, where the links carry vertical padding to be
+     thumb-sized — without it the line would hang 4px low on exactly those and
+     nowhere else. `box-decoration-break: clone` is defensive: no link on the
+     site wraps today, but one that did would otherwise get a single stroke
+     stretched across both fragments. */
+  a {
+    background-image: linear-gradient(
+      var(--color-accent-mark),
+      var(--color-accent-mark)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-origin: content-box;
+    background-size: 0 2px;
+    transition: background-size 140ms ease-out;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  a:hover {
+    background-size: 100% 2px;
+  }
+
+  /* Anyone who has asked for less motion gets the old behaviour exactly: the
+     underline still appears, it just stops travelling. The affordance is never
+     what gets removed. */
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
+  }
+
+  /* Focus used to share the rule above, which looked deliberate and wasn't:
+     nothing here set `outline`, so a keyboard user got the lime underline AND
+     the browser's default ring stacked on top of it. Two indicators for one
+     state, one of them the last piece of unstyled chrome on the site.
+
+     So focus gets its own mark and it is a ring, not the underline. Hover and
+     focus are different questions — hover asks "what is this thing under my
+     cursor", focus asks "where am I" — and an answer to the second one has to
+     survive being the only answer. Because links carry nothing at rest, the
+     keyboard is the one way to find them without a pointer, and this ring is
+     the whole of that affordance. It is doing more work here than a focus ring
+     usually does.
+
+     Lime, at the invariant value, because a ring is a mark and marks are the
+     one job accent-mark is allowed to hold in either theme. Square, following
+     ::selection, since nothing on this site is rounded. The offset keeps it
+     off the letterforms; on the socials row, where the links are padded to be
+     thumb-sized, it lands on the tap target and quietly shows how big it is.
+
+     Author colours are overridden in forced-colors mode, so this becomes the
+     system focus colour there on its own. Nothing to add for that. */
+  a:focus-visible {
+    outline: 2px solid var(--color-accent-mark);
+    outline-offset: 3px;
+  }
+
+  /* Selection inverts to the accent. This is the third and last place lime
+     appears, and the most defensible one: the reader asked for it by dragging,
+     and it is a fill — which is the only thing accent-mark is allowed to do.
+     Left alone, selection is browser-blue, the one colour on the page that
+     belongs to no palette at all.
+
+     Both values are unthemed on purpose, so a selection looks identical in
+     light and dark. */
+  ::selection {
+    background-color: var(--color-accent-mark);
+    color: var(--color-on-accent);
   }
 }
 
-@utility container-narrow {
-  @apply mx-auto w-full max-w-3xl px-6;
-}
+/* Ticket 03 also approved lime-as-a-surface — a highlighter block behind text.
+   Ticket 08 tried it on the wordmark and jass rejected it on sight, and there
+   was no second candidate, so the utility is deleted rather than left sitting
+   here unused. Lime as text now goes through --color-accent instead. */
 
-@utility no-scrollbar {
-  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
-}
+/* PRINT. Someone will hit Cmd+P on a page that sits one link away from a
+   résumé, and paper is the one medium where this site's central decision stops
+   working: links carry no decoration at rest and nothing can be hovered, so
+   every link on the sheet is just a word. Printing the href after the text is
+   the only way the page survives leaving the screen.
 
-/* Blur mask gradients - ultra compact implementation */
-.blur-mask-1 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12.5% 25%,
-    transparent 37.5%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12.5% 25%,
-    transparent 37.5%
-  );
-}
-.blur-mask-2 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 12.5%,
-    black 25% 37.5%,
-    transparent 50%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 12.5%,
-    black 25% 37.5%,
-    transparent 50%
-  );
-}
-.blur-mask-3 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 25%,
-    black 37.5% 50%,
-    transparent 62.5%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 25%,
-    black 37.5% 50%,
-    transparent 62.5%
-  );
-}
-.blur-mask-4 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 37.5%,
-    black 50% 62.5%,
-    transparent 75%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 37.5%,
-    black 50% 62.5%,
-    transparent 75%
-  );
-}
-.blur-mask-5 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 50%,
-    black 62.5% 75%,
-    transparent 87.5%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 50%,
-    black 62.5% 75%,
-    transparent 87.5%
-  );
-}
-.blur-mask-6 {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 62.5%,
-    black 75% 87.5%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 62.5%,
-    black 75% 87.5%,
-    transparent 100%
-  );
-}
-.blur-mask-7 {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 75%, black 87.5%);
-  mask-image: linear-gradient(to bottom, transparent 75%, black 87.5%);
-}
-.blur-mask-8 {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 87.5%, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 87.5%, black 100%);
-}
+   Unlayered and last on purpose. Everything above is inside `@layer base`, so
+   these win without a single `!important`.
 
-/* Top blur variants */
-.blur-mask-1.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 0%,
-    black 12.5% 25%,
-    transparent 37.5%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 0%,
-    black 12.5% 25%,
-    transparent 37.5%
-  );
-}
-.blur-mask-2.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 12.5%,
-    black 25% 37.5%,
-    transparent 50%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 12.5%,
-    black 25% 37.5%,
-    transparent 50%
-  );
-}
-.blur-mask-3.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 25%,
-    black 37.5% 50%,
-    transparent 62.5%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 25%,
-    black 37.5% 50%,
-    transparent 62.5%
-  );
-}
-.blur-mask-4.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 37.5%,
-    black 50% 62.5%,
-    transparent 75%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 37.5%,
-    black 50% 62.5%,
-    transparent 75%
-  );
-}
-.blur-mask-5.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 50%,
-    black 62.5% 75%,
-    transparent 87.5%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 50%,
-    black 62.5% 75%,
-    transparent 87.5%
-  );
-}
-.blur-mask-6.top {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 62.5%,
-    black 75% 87.5%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to top,
-    transparent 62.5%,
-    black 75% 87.5%,
-    transparent 100%
-  );
-}
-.blur-mask-7.top {
-  -webkit-mask-image: linear-gradient(to top, transparent 75%, black 87.5%);
-  mask-image: linear-gradient(to top, transparent 75%, black 87.5%);
-}
-.blur-mask-8.top {
-  -webkit-mask-image: linear-gradient(to top, transparent 87.5%, black 100%);
-  mask-image: linear-gradient(to top, transparent 87.5%, black 100%);
-}
+   One line handles the palette. `light-dark()` resolves against `color-scheme`,
+   so forcing it to light here converts every themed token at once and a reader
+   printing at night doesn't get a black page or, worse, white text on nothing.
+   The two unthemed colours need no thought: both belong to marks — hover,
+   focus, selection — and none of those exist on paper. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
 
-/* Beautiful prose styling with modern typography */
-.prose {
-  @apply text-foreground leading-relaxed;
-  max-width: 65ch;
-  line-height: 1.75;
-  font-feature-settings:
-    "kern" 1,
-    "liga" 1,
-    "calt" 1;
-}
+  /* `mailto:` is in here rather than stripped down to the address, because the
+     scheme is one word everybody can read past and the alternative is hardcoding
+     jass's address into a stylesheet. Leaving it out would print the word
+     "email" with no email next to it, which is the one omission on paper that
+     actually costs something. */
+  a[href^="http"]::after,
+  a[href^="mailto:"]::after {
+    content: " (" attr(href) ")";
+  }
 
-/* Headings with perfect hierarchy */
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  @apply text-foreground leading-tight font-bold tracking-tight;
-  font-feature-settings:
-    "kern" 1,
-    "liga" 1,
-    "calt" 1,
-    "case" 1;
-}
+  /* Site-relative hrefs get the host put back, because "(/resume.pdf)" on a
+     sheet of paper is not something anyone can type into anything. */
+  a[href^="/"]::after {
+    content: " (jass.gg" attr(href) ")";
+  }
 
-.prose h1 {
-  @apply mt-0 mb-8 text-4xl md:text-5xl;
-  line-height: 1.1;
-}
+  /* An href is a fact, so it prints in the machine role. `@apply` rather than
+     `var(--font-machine)`: the role aliases are declared `@theme inline` and so
+     never reach the browser as variables, and naming `--font-ioskeley` here
+     would be the one place in the CSS that says a typeface out loud. */
+  a::after {
+    @apply font-machine;
+    font-size: 0.8em;
+    color: var(--color-muted-foreground);
+    overflow-wrap: anywhere;
+  }
 
-.prose h2 {
-  @apply mt-16 mb-8 text-3xl first:mt-0 md:text-4xl;
-  line-height: 1.2;
-}
-
-.prose h3 {
-  @apply mt-12 mb-6 text-2xl md:text-3xl;
-  line-height: 1.3;
-}
-
-.prose h4 {
-  @apply mt-10 mb-4 text-xl md:text-2xl;
-  line-height: 1.4;
-}
-
-.prose h5 {
-  @apply mt-8 mb-3 text-lg md:text-xl;
-  line-height: 1.5;
-}
-
-.prose h6 {
-  @apply mt-6 mb-2 text-base font-semibold md:text-lg;
-  line-height: 1.6;
-}
-
-/* Paragraphs with optimal reading flow */
-.prose p {
-  @apply mb-6 leading-relaxed;
-  text-wrap: pretty;
-}
-
-.prose p:last-child {
-  @apply mb-0;
-}
-
-/* Beautiful links with subtle animations */
-.prose a {
-  @apply text-primary decoration-primary/30 font-medium underline-offset-4 transition-all duration-200;
-  text-decoration-thickness: 1px;
-}
-
-.prose a:hover {
-  @apply text-primary/80 decoration-primary/60;
-  text-decoration-thickness: 2px;
-}
-
-/* Enhanced code styling */
-.prose code:not(pre code) {
-  @apply bg-muted text-foreground rounded-md px-2 py-1 font-mono text-sm;
-  font-weight: 500;
-  border: 1px solid oklch(from var(--border) l c h / 0.5);
-}
-
-.prose pre {
-  @apply bg-muted border-border/50 my-8 overflow-x-auto rounded-xl border p-6;
-  font-variant-ligatures: none;
-}
-
-.prose pre code {
-  @apply bg-transparent p-0 text-sm leading-relaxed;
-  font-weight: 400;
-}
-
-/* Beautiful blockquotes */
-.prose blockquote {
-  @apply border-primary/30 bg-muted/50 my-8 rounded-r-lg border-l-4 py-4 pr-4 pl-6;
-  font-style: italic;
-}
-
-.prose blockquote p {
-  @apply text-muted-foreground mb-2 last:mb-0;
-  font-size: 1.1em;
-}
-
-.prose blockquote cite {
-  @apply text-muted-foreground/80 text-sm font-medium not-italic;
-}
-
-/* Enhanced lists */
-.prose ul,
-.prose ol {
-  @apply my-6 space-y-2;
-}
-
-.prose ul {
-  @apply pl-6;
-  list-style-type: none;
-}
-
-.prose ul li {
-  @apply relative;
-}
-
-.prose ul li::before {
-  content: "•";
-  @apply text-primary absolute -left-4 font-bold;
-  top: 0;
-}
-
-.prose ol {
-  @apply pl-6;
-  counter-reset: list-counter;
-}
-
-.prose ol li {
-  @apply relative;
-  counter-increment: list-counter;
-}
-
-.prose ol li::before {
-  content: counter(list-counter) ".";
-  @apply text-primary absolute -left-6 font-semibold tabular-nums;
-  top: 0;
-  width: 1.5rem;
-  text-align: right;
-}
-
-.prose li {
-  @apply text-foreground leading-relaxed;
-}
-
-.prose li p {
-  @apply mb-2;
-}
-
-/* Nested lists */
-.prose ul ul,
-.prose ol ol,
-.prose ul ol,
-.prose ol ul {
-  @apply mt-2 mb-2;
-}
-
-/* Strong and emphasis */
-.prose strong {
-  @apply text-foreground font-semibold;
-  font-weight: 650;
-}
-
-.prose em {
-  @apply italic;
-}
-
-/* Tables */
-.prose table {
-  @apply border-border my-8 w-full border-collapse overflow-hidden rounded-lg border;
-}
-
-.prose thead {
-  @apply bg-muted;
-}
-
-.prose th {
-  @apply border-border text-foreground border px-4 py-3 text-left font-semibold;
-}
-
-.prose td {
-  @apply border-border border px-4 py-3;
-}
-
-.prose tbody tr:nth-child(even) {
-  @apply bg-muted/50;
-}
-
-/* Images */
-.prose img {
-  @apply my-8 rounded-lg shadow-lg;
-}
-
-.prose figure {
-  @apply my-8;
-}
-
-.prose figcaption {
-  @apply text-muted-foreground mt-3 text-center text-sm italic;
-}
-
-/* Horizontal rules */
-.prose hr {
-  @apply via-border my-12 h-px border-0 bg-gradient-to-r from-transparent to-transparent;
-}
-
-/* Mark/highlight */
-.prose mark {
-  @apply bg-primary/20 text-foreground rounded px-1;
-}
-
-/* Small text */
-.prose small {
-  @apply text-muted-foreground text-sm;
-}
-
-/* Abbreviations */
-.prose abbr {
-  @apply cursor-help underline decoration-dotted;
-}
-
-/* Definition lists */
-.prose dl {
-  @apply my-6;
-}
-
-.prose dt {
-  @apply text-foreground mt-4 font-semibold first:mt-0;
-}
-
-.prose dd {
-  @apply text-muted-foreground ml-6;
+  /* Sections are 5 or 6 entries. They fit, so let them fall whole rather than
+     splitting a heading off from the one thing under it. */
+  section {
+    break-inside: avoid;
+  }
 }

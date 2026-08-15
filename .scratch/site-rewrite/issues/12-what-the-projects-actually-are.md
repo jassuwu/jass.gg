@@ -1,0 +1,62 @@
+# What the projects actually are
+
+Type: research (AFK)
+Status: closed — resolved aug 15; findings in
+[research/what-the-projects-actually-are.md](../research/what-the-projects-actually-are.md)
+Blocks: 15 (entries demo themselves), 17 (stats that tell the truth) — both
+now unblocked on this ticket's side
+
+## Resolution
+
+All eleven projects observed at the live site and repo level, every claim
+cited, all checks run 2026-08-15. Headlines: **ass is a real Three.js
+soft-body physics toy** (slap the specimen, it ripples, with procedural
+foley) — categorically not what any guess assumed; **quilt has a live
+embeddable SVG endpoint** (`quilt.jass.gg/u/<names>.svg`, confirmed working);
+**liquid-glass-cursor and onandemo are both npm-published and directly
+importable** (the former auto-inits from one script tag, Chromium-only; the
+latter is 12 KB, dependency-free); **incomerank ships a production-quality
+pre-rendered demo** built from its real geometry and audio code; **skills and
+subway-cursors have no live link and no honest visual demo** (subway-cursors'
+only asset is a 31 MB GIF of the copyrighted game its own author gitignored
+for DMCA reasons); **savemefrom's vergil.mp4 carries the same IP flag**;
+**andrew-dictate has zero visual assets anywhere** — a demo would need a new
+recording, which only jass can make. Stats inventory: mojify 10★, savemefrom
+1★, everything else 0; npm downloads single-digit; skills.sh reports 5
+installs. Full detail in the research file.
+
+## Question
+
+What is each of the eleven projects, actually — on screen, in mechanics, in
+numbers? Not what its one-line description implies. jass, closing ticket 11:
+"you have to actually look at each of the projects, cuz some of them what the
+actual project is, is way off from what you described." The pass-four demo
+guesses were made from eleven one-liners; this ticket replaces every guess
+with observed reality before ticket 15 designs anything.
+
+## Per entry, record
+
+For each of: andrew-dictate, better-splitwise, mojify, quilt, skills, ass,
+onandemo.js, savemefrom, incomerank, liquid-glass-cursor, subway-cursors —
+visit the live site (the `link` in `src/data/projects/`) and read the repo
+README, then record:
+
+1. **What it actually does** — the real mechanics, in two or three sentences.
+2. **Its signature visual or interaction** — the one thing you'd recognise it
+   by on screen.
+3. **What a truthful five-second in-row demo could perform** — a demo is only
+   honest if it is the product's own trick, executed at the product's own
+   quality. If no honest five-second demo exists, say so; not every entry
+   gets one.
+4. **Every number that exists** — GitHub stars, npm weekly downloads (for
+   anything published), forks, anything the site itself displays. Ticket 17
+   needs the complete inventory, including the embarrassing zeros.
+5. **Reusable assets** — does the project ship something (an SVG, a sprite, a
+   shader, a library) the portfolio could import directly rather than
+   reimplement?
+
+## Output
+
+`.scratch/site-rewrite/research/what-the-projects-actually-are.md` — one
+section per project, findings only, no design proposals. Ticket 15 does the
+designing.

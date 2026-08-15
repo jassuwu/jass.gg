@@ -1,121 +1,86 @@
 ---
-import BlurBottom from "./blur-bottom.astro";
+import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 
-// Static build-time timestamp
-const lastUpdated = new Date().toLocaleDateString("en-IN", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
-const country = "india";
-
-// Initial server-side rendered times (will be replaced by client-side updates)
-const initialTime12 = new Date().toLocaleTimeString("en-IN", {
-  timeZone: "Asia/Kolkata",
-  hour: "numeric",
-  minute: "2-digit",
-  hour12: true,
-});
-const initialTime24 = new Date().toLocaleTimeString("en-IN", {
-  timeZone: "Asia/Kolkata",
-  hour: "numeric",
-  minute: "2-digit",
-  hour12: false,
-});
+/* The stamp links to the commit it is claiming. A date on its own is an
+   assertion; a date that hands you the diff is evidence — and it is the only
+   thing on the page that is true because of how the page was built. */
 ---
 
-<BlurBottom />
-<footer
-  class="bg-background/70 text-primary/70 sticky bottom-0 z-50 w-full [mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_top,var(--background)_60%,transparent_100%)]">
-  <div class="container-narrow flex h-24 items-center py-4">
-    <!-- Mobile layout: stack vertically -->
-    <div class="flex w-full flex-col items-center gap-1 text-xs md:hidden">
-      <div class="flex items-center gap-2">
-        <p>jass.gg &copy;</p>
-        <span aria-hidden="true">•</span>
-        <p>{country}</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <p>
-          <time datetime={new Date().toISOString()}>
-            {lastUpdated}
-          </time>
-        </p>
-        <span aria-hidden="true">•</span>
-        <p>
-          <time id="live-time" datetime={new Date().toISOString()}>
-            {initialTime12} IST
-          </time>
-        </p>
-      </div>
-    </div>
-
-    <!-- Desktop layout: horizontal -->
-    <div class="hidden w-full items-center justify-evenly text-sm md:flex">
-      <p>jass.gg &copy;</p>
-      <span aria-hidden="true">•</span>
-      <p>
-        last updated on <time datetime={new Date().toISOString()}
-          >{lastUpdated}</time
-        >
-      </p>
-      <span aria-hidden="true">•</span>
-      <p>{country}</p>
-      <span aria-hidden="true">•</span>
-      <p>
-        <time id="live-time-desktop" datetime={new Date().toISOString()}>
-          {initialTime12} / {initialTime24} IST
+<footer class="mt-20 font-machine text-micro text-muted-foreground">
+  {
+    /* `<time datetime>` because the stamp is a date and the markup should
+  say so, not just the pixels — the machine role, carried into the HTML
+  itself. The full ISO instant rather than a bare day: the commit knows
+  the moment, and truncating it to a date would re-open the timezone
+  question the rendered text already glosses. Found only by whoever reads
+  source, which is who it is for. */
+  }
+  {
+    LAST_TOUCHED.commitUrl ? (
+      <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
+        last touched{" "}
+        <time datetime={LAST_TOUCHED.date.toISOString()}>
+          {formatStamp(LAST_TOUCHED.date)}
         </time>
-      </p>
-    </div>
-  </div>
+      </a>
+    ) : (
+      <span>
+        last touched{" "}
+        <time datetime={LAST_TOUCHED.date.toISOString()}>
+          {formatStamp(LAST_TOUCHED.date)}
+        </time>
+      </span>
+    )
+  }
+
+  {
+    /* AGENT DRAFT — jass rewrites (ticket 20). A rights fact, so it lives in
+  the machine role the footer already speaks. Its own line rather than the
+  stamp's: the stamp is a link, and a sentence sharing a link's line reads
+  as part of the claim being linked. Facts stack — this room is a colophon,
+  one fact per line. */
+  }
+  <p>© jass. all rights reserved, none exercised</p>
 </footer>
 
 <script>
-  function updateLiveTime(): void {
-    const now = new Date();
+  /* The 2am murmur (ticket 19). Every portfolio shows the owner's local
+     time; a friend notices yours. If it is the small hours where the reader
+     sits — hour 0 through 4, their clock — one line appears in the hand.
+     With JS off it never exists, which is the constraint working: the
+     murmur is the friend speaking, and the friend is JavaScript. No motion,
+     no reveal — for the reader it is for, it was always there.
 
-    const time12 = now.toLocaleTimeString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+     Test seam, documented for whoever checks the work: a sessionStorage key
+     `friend:pretend-hour` (0–23) overrides the clock so this can be
+     verified at a civilised hour. Anything that isn't an hour falls
+     through to the real one. */
 
-    const time24 = now.toLocaleTimeString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: false,
-    });
-
-    // Update mobile time (only 12-hour format)
-    const mobileTimeElement = document.getElementById("live-time");
-    if (mobileTimeElement) {
-      mobileTimeElement.textContent = `${time12} IST`;
-      mobileTimeElement.setAttribute("datetime", now.toISOString());
+  const raw = (() => {
+    try {
+      return sessionStorage.getItem("friend:pretend-hour");
+    } catch {
+      return null;
     }
+  })();
+  const hour =
+    raw !== null && /^\d{1,2}$/.test(raw) && Number(raw) <= 23
+      ? Number(raw)
+      : new Date().getHours();
 
-    // Update desktop time (both formats)
-    const desktopTimeElement = document.getElementById("live-time-desktop");
-    if (desktopTimeElement) {
-      desktopTimeElement.textContent = `${time12} / ${time24} IST`;
-      desktopTimeElement.setAttribute("datetime", now.toISOString());
-    }
-  }
-
-  // Only run on client-side
-  if (typeof window !== "undefined") {
-    // Update time immediately when script loads
-    updateLiveTime();
-
-    // Update time every minute
-    const intervalId = setInterval(updateLiveTime, 1000);
-
-    // Cleanup on page unload (good practice for SPAs)
-    window.addEventListener("beforeunload", () => {
-      clearInterval(intervalId);
-    });
+  if (hour <= 4) {
+    const murmur = document.createElement("p");
+    murmur.className = "font-hand text-micro text-accent-quiet";
+    /* AGENT DRAFT — jass rewrites (ticket 20). The first draft said "me
+       too, probably", which was a lie: jass's philosophy is being in bed
+       on time — bryan johnson hours, bed at 9:15. So the friend isn't up
+       with you; this is a note left by someone already asleep, scolding
+       you from under the covers. His fragments, assembled: */
+    murmur.textContent = "(go sleep girl. i've been in bed since 9:15)";
+    document.querySelector("footer")?.append(murmur);
   }
 </script>
+
+{
+  /* the mute egg's wiring lived here (ticket 21, cut — no one would find it); setMuted/isMuted stay on the bus as a dev seam: sessionStorage `friend:muted` */
+}

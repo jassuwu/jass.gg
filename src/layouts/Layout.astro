@@ -1,107 +1,131 @@
 ---
+import Font from "astro/components/Font.astro";
+import Analytics from "@vercel/analytics/astro";
+
+import { USERNAMES } from "@/constants";
+import { SOURCE_NOTE } from "@/intro";
 import "@/styles/global.css";
-import { Header, Footer, PostHog } from "@/components";
-import { ClientRouter } from "astro:transitions";
 
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
-  image?: string;
-  imageAlt?: string;
-  type?: "website" | "article";
-  publishedTime?: string;
-  modifiedTime?: string;
-  tags?: string[];
-  author?: string;
 }
 
-const {
-  title = "jass",
-  description = "Jass's personal website and blog",
-  image,
-  imageAlt,
-  type = "website",
-  publishedTime,
-  modifiedTime,
-  tags,
-  author = "Jass",
-} = Astro.props;
+const { title, description } = Astro.props;
 
-// Construct full URLs for Open Graph
-const canonicalURL = new URL(
-  Astro.url.pathname,
-  Astro.site || "https://jass.gg",
-);
-const imageURL = image ? new URL(image, Astro.site || "https://jass.gg") : null;
+// Absolute, because a link preview is fetched by a crawler that has no page to
+// resolve a relative URL against. `Astro.site` is set in astro.config.mjs, so
+// these throw at build time if it is ever removed — which is the right failure,
+// loudly at build rather than silently in a Discord embed.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/webp" href="/favicon.webp" />
-    <meta name="generator" content={Astro.generator} />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      /* The tab mark: a lime tile with the wordmark's own `j`, which is
+    `on-accent` on `accent-mark` — the token pair that exists for exactly this
+    and that nothing else on the site had ever used. It replaces jass's
+    illustrated avatar, which was a white square in dark browser chrome and a
+    brown smudge at 16px.
 
-    <!-- Basic meta tags -->
+    A favicon is judged at 16px and nowhere else, and the accent is the one
+    colour allowed to be a fill. A fill is the only thing that survives being
+    sixteen pixels wide, so the tile does the recognising and the letter is a
+    bonus at larger sizes.
+
+    SVG first for every current browser; the 32px PNG is the fallback for the
+    ones that predate SVG favicons. No apple-touch-icon — nothing asks this site
+    for one. */
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="32x32" />
     <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph meta tags -->
+    {
+      /* The card. Most people meet this site as a link pasted into Discord or
+    Twitter, so the preview is the first impression far more often than the page
+    is — and until now there were no `og:` tags at all, which meant the preview
+    was whatever the crawler scraped by accident.
+
+    Title and description are the page's own, not a second set written for
+    crawlers; a preview that says something the page doesn't is the same stale
+    second voice the meta description used to be.
+
+    The image repeats neither of them. Both platforms render title and
+    description as text beside the card, so the card carries only what text
+    can't: the wordmark. Width and height are declared so Discord lays the embed
+    out from the markup instead of blocking on the image. */
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content={type} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="jass.gg" />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="jass.gg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content={`@${USERNAMES.TWITTER}`} />
 
     {
-      imageURL && (
-        <>
-          <meta property="og:image" content={imageURL} />
-          <meta property="og:image:alt" content={imageAlt || title} />
-        </>
-      )
+      /* Preload only what renders above the fold. Bare `preload` preloads every
+    variant, including faces nothing uses. Excalifont sets the wordmark — the
+    largest text on the page — so it is preloaded whole. */
     }
-
-    {
-      publishedTime && (
-        <meta property="article:published_time" content={publishedTime} />
-      )
-    }
-    {
-      modifiedTime && (
-        <meta property="article:modified_time" content={modifiedTime} />
-      )
-    }
-    {author && <meta property="article:author" content={author} />}
-    {tags && tags.map((tag) => <meta property="article:tag" content={tag} />)}
-
-    <!-- Twitter Card meta tags -->
-    <meta
-      name="twitter:card"
-      content={imageURL ? "summary_large_image" : "summary"}
+    <Font
+      cssVariable="--font-baskervville"
+      preload={[{ weight: 400, style: "normal" }]}
     />
-    <meta name="twitter:creator" content="@jassdotgg" />
-    <meta name="twitter:site" content="@jassdotgg" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    {
+      /* Preloaded despite being a decoration, because it is 676 bytes and it
+    sets two glyphs in the first paragraph. Left to load on demand it would
+    swap in late, and a late swap on an ampersand is the one flash you would
+    actually watch happen. */
+    }
+    <Font cssVariable="--font-ampersand" preload />
+    <Font cssVariable="--font-ioskeley" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-excalifont" preload />
+  </head>
+  <body>
+    {
+      /* The View Source comment — the one element on the site whose audience
+    is someone reading the markup, not the page. `set:html` because Astro
+    strips template comments from output, which is normally right and here
+    would delete the entire point. Empty until jass writes it; see the
+    SOURCE_NOTE comment in `src/intro.ts` for the slot's constraints. */
+    }
+    {SOURCE_NOTE && <Fragment set:html={`<!-- ${SOURCE_NOTE} -->`} />}
+    <slot />
 
     {
-      imageURL && (
-        <>
-          <meta name="twitter:image" content={imageURL} />
-          <meta name="twitter:image:alt" content={imageAlt || title} />
-        </>
-      )
-    }
+      /* THIS IS THE FIRST SCRIPT ON THE SITE, and it ends an invariant that was
+    true for the whole rewrite: `dist/` shipped zero `.js` and zero `<script>`,
+    and every change was checked against that.
 
-    <ClientRouter />
-    <PostHog />
-  </head>
-  <body class="dark bg-background text-foreground h-full min-h-screen w-full">
-    <Header />
-    <slot />
-    <Footer />
+    It is allowed. The constraint has always been that JS may only *add* —
+    content and navigation are never gated on it — and analytics is the case it
+    named. But the check changes shape: the question is no longer "are there any
+    scripts" and is now "does every word, link and route still work with
+    JavaScript off". Verify that instead, and do not delete this to make a grep
+    come out clean.
+
+    It is last in the body on purpose. It is the only thing on the page nobody
+    asked for, so it loads after everything they did.
+
+    Vercel serves the beacon from this origin — `/_vercel/insights/script.js` —
+    which is the whole reason it is here rather than PostHog. A first-party path
+    is not what adblockers hunt for, and the audience for this site blocks
+    third-party analytics at a much higher rate than average. It also does
+    nothing at all off Vercel, so local dev and any future host stay silent. */
+    }
+    <Analytics />
   </body>
 </html>

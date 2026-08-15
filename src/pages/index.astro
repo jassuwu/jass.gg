@@ -1,17 +1,292 @@
 ---
-import { Layout } from "@/layouts";
-import { Hero, WorkExperiences, Projects } from "@/components";
+import { getCollection } from "astro:content";
+
+import Footer from "@/components/Footer.astro";
+import Wordmark from "@/components/Wordmark.astro";
+import { SOCIALS } from "@/constants";
+import { CLOSER, CLOSER_ASIDE, INTRO, TAGLINE } from "@/intro";
+import Layout from "@/layouts/Layout.astro";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+// Every entry, forever — no pagination, no filtering (ticket 07). The volume is
+// the argument.
+const SECTIONS = [
+  { id: "things", entries: projects.filter((p) => p.data.kind === "thing") },
+  { id: "toys", entries: projects.filter((p) => p.data.kind === "toy") },
+];
+
+// One link per entry, and it goes to the built thing. The repo used to sit
+// beside it as a second link; jass cut it — "let the site choose whether it
+// wants to show the person to github". Two entries have no site, so those
+// point at the repo and the rule still reads as "the name links to the thing".
+const destination = (p: (typeof projects)[number]) =>
+  p.data.link ?? p.data.github;
+
+// Tiny machine headings — the one part of stage one jass kept without notes.
+const HEADING = "font-machine text-micro text-muted-foreground";
+// The scroll margin is the page's own top padding, repeated. Both sections are
+// anchor targets (`#things`, `#toys`), and without it a jump welds the heading
+// to the top edge of the viewport. Matching `py-12 sm:py-16` means an anchored
+// section lands with exactly the air above it that the top of the page has — so
+// arriving at `/#toys` looks like arriving at a page, not like a scroll that
+// overshot.
+//
+// These two numbers are one decision in two places. Change the padding and this
+// has to follow, or the anchor quietly stops agreeing with the page.
+const SECTION = "mt-14 scroll-mt-12 sm:scroll-mt-16";
+
+// The gap between entries was never the problem — it was already the smaller
+// number. `text-body` carries a line-height of 1.7, which is a value chosen for
+// reading a paragraph, and these rows are not paragraphs. At 390px nearly every
+// description wraps to two lines, and 1.7 put 12.6px between those two lines
+// against only 8px between one entry and the next. The list was spaced so that
+// a single entry looked further apart than two different ones.
+//
+// So the leading comes down and the gap stays. The rule that has to hold is
+// ordering, not size: the space between entries must stay visibly larger than
+// the space inside one. At 1.4 that is 8px against 7.2px, and the row is 14%
+// shorter into the bargain, which is the part that reads as "less spacing".
+//
+// Do not tighten the gap below the internal leading to save more height. That
+// trade buys pixels and sells the list's structure.
+const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
+
+// The page is three things in this order: the intro, things, toys.
+//
+// There is no work section, and that is a decision rather than an omission.
+// Of 71 sites in the research directory, not one puts employment history on
+// its index — Anthony Fu, Robby Leonardi, Philippe Dubost and the rest all
+// move it to a separate résumé artifact. It kept losing here because it was a
+// CV block sitting in a project index, and no styling fixes that. The résumé
+// PDF is linked in the socials row and carries it.
+//
+// jass's reason, which is the better one: where he works and how long he has
+// worked shouldn't be what defines him. What he built should.
+//
+// The intro is jass's, verbatim, and it lives in `src/intro.ts` — three things
+// quote it now, so it has one home. Read the comment there before touching it.
 ---
 
-<Layout
-  title="jass.gg"
-  description="terminally online developer"
-  image="/opengraph.jpg"
-  imageAlt="preview of jass.gg"
-  type="website">
-  <main class="container-narrow h-full">
-    <Hero />
-    <WorkExperiences />
-    <Projects />
+<Layout title="jass.gg" description={TAGLINE}>
+  <main class="mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
+    <header>
+      <Wordmark />
+
+      {
+        /* Measured: at the full 624px column this paragraph sets ~81 characters
+      to the line, and comfortable is 60–75. Long measure is the most common
+      reason a page of plain text feels faintly tiring to read, and nobody can
+      ever name it — the eye loses the start of the next line on the return
+      sweep. Capping the prose at 34rem brings it to ~71.
+
+      The cap is on the PROSE ONLY and the lists keep the full width, which is
+      not an inconsistency but the point: a paragraph is read once, left to
+      right, and suffers from a long measure. A list is scanned down its left
+      edge and does not. Narrowing the container instead would fix this and make
+      the longest entry wrap on desktop, which is a worse trade. */
+      }
+      <p class="mt-8 max-w-[34rem] text-body">{INTRO}</p>
+
+      {
+        /* The closer, and the whole reason the socials row below it stops being
+      an unlabelled list of six words. See `src/intro.ts` before touching it.
+
+      ONE SENTENCE AND ITS MURMUR, on one line. The aside was its own paragraph
+      first, which made it a second statement; inline at 11px against 18px it
+      becomes what it always wanted to be — an actual aside, said quieter, in
+      the same breath. The size gap is doing the work the line break used to do,
+      and doing it better.
+
+      `whitespace-nowrap` because the pair does not fit one line at 390px and
+      never will. Left alone it breaks mid-phrase and reads as an accident; held
+      together it drops whole onto a second line, which is exactly how it looked
+      as its own paragraph. Desktop gets the single line, mobile loses nothing.
+
+      accent-quiet, not accent: this page's one full-strength accent belongs to
+      the wordmark. `/404` runs the same shape at full accent because it has no
+      wordmark to compete with, and the comment there has always said so — this
+      is the line it was describing. */
+      }
+      <p class="mt-5 text-body">
+        {CLOSER}{" "}
+        <span class="font-hand text-micro whitespace-nowrap text-accent-quiet"
+          >{CLOSER_ASIDE}</span
+        >
+      </p>
+
+      {
+        /* These links are 13px tall. Fine to read, mean to hit with a thumb.
+      `inline-block` plus vertical padding grows the tap target to ~29px
+      without moving a pixel of text, and the negative margin takes the added
+      height back out of the layout. Nobody sees this one. That is the point
+      of it. */
+      }
+      <ul
+        class="-my-1 mt-7 flex flex-wrap gap-x-4 font-machine text-meta text-muted-foreground">
+        {
+          /* `rel="me"` is the IndieWeb's identity handshake, and it is the
+        /llms.txt move again: serve a machine convention properly where no
+        human ever looks. The five external links are the claim "these
+        profiles are me"; github already links back to jass.gg, which is the
+        other half of the proof, and anything that verifies rel=me — Mastodon,
+        IndieAuth — gets a real answer. The résumé doesn't carry it because a
+        document is not an identity. Zero rendered pixels. */
+        }
+        {
+          SOCIALS.map((social) => (
+            <li>
+              <a
+                class="inline-block py-1"
+                href={social.href}
+                rel={social.href.startsWith("/") ? undefined : "me"}>
+                {social.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </header>
+
+    {
+      SECTIONS.map((section) => (
+        <section id={section.id} class={SECTION}>
+          <h2 class={HEADING}>{section.id}</h2>
+          <ul class={LIST}>
+            {section.entries.map((entry) => (
+              // No separator between name and line: foreground against muted
+              // does that work. A dash here collided with the dashes inside
+              // the descriptions themselves.
+              //
+              // That contrast is also what the row hover borrows. Hovering the
+              // name lifts the description out of muted too, so the entry
+              // wakes as one thing — a name and its line — which is what it is
+              // and which nothing at rest says.
+              //
+              // Keyed off `a:hover` rather than the row's own hover on
+              // purpose: pointing at the description does nothing. Text that
+              // brightens under the cursor promises a click, and the
+              // description isn't clickable. Only the link speaks for the row.
+              // `data-entry` is the handle the demo modules select by — the
+              // friend finds a row by the name of the thing it performs.
+              <li class="group" data-entry={entry.data.name}>
+                <a href={destination(entry)}>{entry.data.name}</a>
+                <span class="ml-2 text-muted-foreground transition-colors duration-150 group-has-[a:hover]:text-foreground">
+                  {entry.data.description}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    {
+      /* THERE IS NO WRITING SECTION. It held one line — `git push -f origin
+    twitter`, with the branch name linking out — and jass cut it: add it back
+    when there is actually something to add.
+
+    Keeping it was the weaker call and it is worth writing down why, because
+    the line was good and a future session will be tempted to restore it. A
+    section heading is a promise that something is under it. "writing" with a
+    joke where the writing should be is a section admitting it is empty, in a
+    list of two sections that are full. The joke was funny; the shape it sat in
+    was a placeholder, and this site does not ship placeholders.
+
+    It comes back with a post, not before. `src/data/blog/` still has its
+    `draft: true` stub and the collection is untouched. */
+    }
+
+    <Footer />
   </main>
 </Layout>
+
+<script>
+  /* The friend's call sheet. Every act on the page registers here and
+     nowhere else — one module per detail, one agent per module, so no two
+     bits ever edit the same file. A module owns everything about its act:
+     finding its element, its styles, its assets, its degradation. The
+     throwaway wave that proved the mechanism died here, replaced by the
+     real cast. */
+  import { register as agentsGag } from "@/scripts/demos/agents-gag";
+  import { register as dictateSong } from "@/scripts/demos/andrew-dictate-song";
+  import { register as assSlap } from "@/scripts/demos/ass-slap";
+  import { register as closerSweep } from "@/scripts/demos/closer-sweep";
+  import { register as liquidGlass } from "@/scripts/demos/liquid-glass";
+  import { register as onandemoCat } from "@/scripts/demos/onandemo-cat";
+  import { register as quilt } from "@/scripts/demos/quilt";
+  import { register as toysWobble } from "@/scripts/demos/toys-wobble";
+  import { register as vergilCut } from "@/scripts/demos/vergil-cut";
+
+  agentsGag();
+  dictateSong();
+  assSlap();
+  closerSweep();
+  liquidGlass();
+  onandemoCat();
+  quilt();
+  toysWobble();
+  vergilCut();
+</script>
+
+<style>
+  /* THE SECTION YOU ASKED FOR SIGNS ITSELF. The page has no nav, so nobody
+     arrives at /#things or /#toys from inside the page — an anchor arrival is
+     always someone who followed a shared link. When they land, the heading
+     draws the same 2px lime stroke a link draws on hover, holds it a beat,
+     and retracts it the way it came. Then the page is plain again.
+
+     Derivable, not decorative: the accent appears only when the reader asks
+     for it, and following an anchor is asking. The stroke vocabulary already
+     belongs to the site — this is the one moment a heading is the thing the
+     reader pointed at, so it borrows the pointed-at mark, once.
+
+     `width: fit-content` keeps the stroke under the word; an h2 is a block
+     and the gradient would otherwise paint to the column's right edge. It
+     changes nothing visible — the text was already at the left edge.
+
+     The 250ms delay lets the jump land before the pen moves, so the draw is
+     something the reader sees rather than something that happened during the
+     scroll. Costs nothing at rest: the animation ends at background-size 0,
+     which is the same state as never having run.
+
+     Scoped style rather than utilities because this needs keyframes, which is
+     exactly ticket 09's escape hatch. */
+  section:target > h2 {
+    width: fit-content;
+    background-image: linear-gradient(
+      var(--color-accent-mark),
+      var(--color-accent-mark)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 2px;
+    animation: heading-stroke 1.8s ease-out 250ms both;
+  }
+
+  @keyframes heading-stroke {
+    0% {
+      background-size: 0 2px;
+    }
+    30%,
+    70% {
+      background-size: 100% 2px;
+    }
+    100% {
+      background-size: 0 2px;
+    }
+  }
+
+  /* Unlike the link underline, which downgrades to appearing without travel,
+     this one is removed outright under reduced motion. The underline is the
+     site's only link affordance and must survive; this is a transient
+     orientation cue, and scroll position already answers "where am I". A cue
+     that exists only as motion goes away when motion does. */
+  @media (prefers-reduced-motion: reduce) {
+    section:target > h2 {
+      animation: none;
+    }
+  }
+</style>

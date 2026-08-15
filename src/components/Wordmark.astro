@@ -1,0 +1,513 @@
+---
+/* The wordmark is the one place a personal site earns its accent: a name in a
+   hand font is a signature, and colouring it is the smallest possible way to
+   say the palette out loud.
+
+   Ticket 13 finishes the thought: a signature is an act, not a glyph, so it
+   signs itself on every load and a dwell on the finished name signs it again.
+   That means the name can no longer be a text node — you cannot draw a font
+   file — so the four letterforms below are Excalifont's own outlines, traced
+   from `src/fonts/Excalifont-Regular.woff2` with fontTools, the same way the
+   favicon was made. Same glyphs, same advances (328 / 576 / 543 / 543, no
+   kerning in the font), same fill via `currentColor`. A different hand writing
+   his name would be a forgery.
+
+   The box is the old h1's box, reconstructed rather than approximated:
+   `text-display` is 2.75rem with line-height 1, and with Excalifont's 886/374
+   metrics on a 1000upm grid the baseline of that 1em line box sits 756 units
+   from its top. Hence `viewBox="0 -756 1990 1000"` and `height: 1em` — the
+   letters land on the same pixels the text did, and nothing shifts. The
+   descender of the j overflowed the old line box; `overflow: visible` lets it
+   keep doing that.
+
+   How the signing works, because it is not the obvious dash trick: a
+   handwriting font is filled outlines, and animating stroke-dashoffset on an
+   outline traces a hollow letter — an intro animation, not a pen. Instead each
+   letter's fill sits behind a mask, and inside the mask the same outline is
+   STROKED, fat (150 units, roughly twice the pen width), with the dash
+   animation running on that. The fat stroke's leading edge sweeps along the
+   outline and the fill appears behind it — ink coming off a nib. Each contour
+   was rotated to start where a pen would start (top of the j's stem, the top
+   right of each s), so the reveal runs in writing order, and the j's dot is
+   last in its path on purpose: the word finishes, then the j gets dotted,
+   which is how people actually sign.
+
+   Every mask also holds a plain white rect. That rect IS the static
+   signature: with JS off, or with reduced motion, or before the script runs,
+   the masks pass everything and this is exactly the filled wordmark it always
+   was. The script only ever toggles one class; everything it enables is
+   animation, and everything the page needs is already in the markup. */
+---
+
+<h1 class="font-hand text-display text-accent">
+  <span class="sr-only">jass</span>
+  <svg
+    class="sig"
+    viewBox="0 -756 1990 1000"
+    aria-hidden="true"
+    fill="currentColor">
+    {
+      /* The j and the a are each two subpaths — stem and dot, ring and its
+      counter — and they are kept as SEPARATE defs because the pens must dash
+      them separately: dash behaviour across subpaths is the least agreed-on
+      corner of SVG, and the first renderer this was tested in drew the dot
+      before the stem. One pen, one subpath, nothing to disagree about. */
+    }
+    <defs>
+      <path
+        id="wm-js"
+        d="M166 -316Q208 -289 212 -253Q260 -38 285 241Q290 305 259 349Q221 376 171 376Q130 376 69 355Q32 341 -47 290Q-69 280 -80 256Q-90 233 -85 208Q-79 190 -57 177Q-35 164 -13 164Q1 164 10 170Q16 179 24 202Q33 225 34 227Q103 282 153 282Q184 282 196 260Q205 200 185 76Q165 -47 164 -62Q160 -82 153 -128Q146 -175 138 -212Q131 -248 120 -277Q119 -292 135 -304Q151 -317 166 -316Z"
+      ></path>
+      <path
+        id="wm-jd"
+        d="M175 -415Q154 -417 118 -439Q83 -461 79 -463Q41 -495 51 -550Q73 -583 95 -583Q126 -583 130 -579Q136 -574 146 -565Q157 -556 162 -550Q168 -545 174 -536Q181 -528 183 -519Q186 -514 192 -502Q199 -490 202 -483Q206 -476 210 -466Q214 -455 216 -446Q216 -430 204 -420Q191 -411 175 -415Z"
+      ></path>
+      <path
+        id="wm-ao"
+        d="M523 7Q492 11 459 -2Q426 -14 407 -37Q398 -51 394 -56Q391 -62 384 -74Q377 -87 374 -95Q372 -103 369 -114Q366 -125 366 -136Q366 -146 369 -157Q370 -191 392 -226Q413 -261 435 -282Q457 -303 492 -332Q499 -337 502 -340Q544 -374 616 -374Q631 -374 711 -366Q713 -364 724 -359Q736 -354 741 -348Q746 -343 742 -334L755 -321Q777 -308 783 -296Q792 -281 816 -202Q818 -194 836 -148Q853 -102 855 -93Q880 -47 881 -32L886 -16Q885 -11 877 -5Q869 1 868 2Q851 8 816 -4Q809 -7 804 -12Q798 -16 796 -20Q793 -23 786 -33Q780 -43 777 -48L773 -53Q762 -79 739 -145Q699 -77 642 -34Q585 8 523 7Z"
+      ></path>
+      {
+        /* The a again, whole — outer ring and its counter in one path, because
+        a hole only exists when both windings share a fill. The pen strokes
+        `wm-ao`; the page fills `wm-a`. The one duplicated outline on the
+        site, and the mask bug above is why it stays duplicated. */
+      }
+      <path
+        id="wm-a"
+        d="M523 7Q492 11 459 -2Q426 -14 407 -37Q398 -51 394 -56Q391 -62 384 -74Q377 -87 374 -95Q372 -103 369 -114Q366 -125 366 -136Q366 -146 369 -157Q370 -191 392 -226Q413 -261 435 -282Q457 -303 492 -332Q499 -337 502 -340Q544 -374 616 -374Q631 -374 711 -366Q713 -364 724 -359Q736 -354 741 -348Q746 -343 742 -334L755 -321Q777 -308 783 -296Q792 -281 816 -202Q818 -194 836 -148Q853 -102 855 -93Q880 -47 881 -32L886 -16Q885 -11 877 -5Q869 1 868 2Q851 8 816 -4Q809 -7 804 -12Q798 -16 796 -20Q793 -23 786 -33Q780 -43 777 -48L773 -53Q762 -79 739 -145Q699 -77 642 -34Q585 8 523 7ZM518 -86Q535 -86 565 -94Q614 -112 654 -157Q693 -211 698 -252Q698 -255 702 -276Q706 -296 705 -304Q685 -299 648 -296Q610 -294 590 -290Q564 -286 537 -266Q510 -245 496 -227Q482 -209 458 -176Q441 -155 464 -113Q482 -86 518 -86Z"
+      ></path>
+      <path
+        id="wm-s"
+        d="M376 -361Q371 -361 344 -360Q317 -359 309 -358Q301 -358 279 -356Q257 -353 245 -350Q233 -347 217 -341Q201 -335 187 -327Q173 -322 168 -311Q164 -300 180 -292Q227 -260 317 -217Q407 -174 439 -156Q528 -100 528 -34Q528 60 301 68Q251 70 194 53Q137 36 97 5Q57 -10 66 -70Q68 -74 75 -85Q82 -96 85 -102Q137 -93 173 -58Q188 -46 205 -39Q222 -32 244 -30Q265 -27 279 -26Q293 -25 320 -26Q346 -26 357 -26Q385 -26 414 -37Q424 -41 426 -52Q428 -63 420 -70Q401 -84 322 -123Q242 -162 237 -165Q151 -192 85 -246Q80 -253 68 -262Q57 -272 50 -282Q43 -291 41 -303Q40 -342 79 -372L142 -412Q235 -449 319 -455Q321 -455 330 -454Q340 -453 342 -453Q343 -453 351 -452Q359 -451 361 -450Q363 -449 369 -447Q375 -445 378 -442Q380 -440 384 -436Q388 -433 390 -428Q393 -424 395 -418Q401 -383 376 -361Z"
+      ></path>
+    </defs>
+
+    {
+      /* userSpaceOnUse because the default mask region is a percentage box
+      that would clip the descender and the fat pen stroke; the explicit
+      rect is generous for the same reason. */
+    }
+    <mask
+      id="wm-mj"
+      maskUnits="userSpaceOnUse"
+      x="-300"
+      y="-800"
+      width="2600"
+      height="1300">
+      <rect
+        class="flood"
+        x="-300"
+        y="-800"
+        width="2600"
+        height="1300"
+        fill="#fff"></rect>
+      <use class="pen pen-j" href="#wm-js"></use>
+      <use class="pen pen-jd" href="#wm-jd"></use>
+    </mask>
+    <mask
+      id="wm-ma"
+      maskUnits="userSpaceOnUse"
+      x="-300"
+      y="-800"
+      width="2600"
+      height="1300">
+      <rect
+        class="flood"
+        x="-300"
+        y="-800"
+        width="2600"
+        height="1300"
+        fill="#fff"></rect>
+      <use class="pen pen-a" href="#wm-ao"></use>
+    </mask>
+    {
+      /* Both s masks hold their pen at the origin, and the advance happens
+      outside, on the group wrapping the fill — a transform on mask content
+      broke the mask outright in the one renderer this was testable in, and
+      a mask evaluated in the fill's own translated space needs none. */
+    }
+    <mask
+      id="wm-ms1"
+      maskUnits="userSpaceOnUse"
+      x="-300"
+      y="-800"
+      width="2600"
+      height="1300">
+      <rect
+        class="flood"
+        x="-300"
+        y="-800"
+        width="2600"
+        height="1300"
+        fill="#fff"></rect>
+      <use class="pen pen-s1" href="#wm-s"></use>
+    </mask>
+    <mask
+      id="wm-ms2"
+      maskUnits="userSpaceOnUse"
+      x="-300"
+      y="-800"
+      width="2600"
+      height="1300">
+      <rect
+        class="flood"
+        x="-300"
+        y="-800"
+        width="2600"
+        height="1300"
+        fill="#fff"></rect>
+      <use class="pen pen-s2" href="#wm-s"></use>
+    </mask>
+
+    <g mask="url(#wm-mj)">
+      <use href="#wm-js"></use>
+      <use href="#wm-jd"></use>
+    </g>
+    <use href="#wm-a" mask="url(#wm-ma)"></use>
+    <g transform="translate(904)">
+      <use href="#wm-s" mask="url(#wm-ms1)"></use>
+    </g>
+    <g transform="translate(1447)">
+      <use href="#wm-s" mask="url(#wm-ms2)"></use>
+    </g>
+  </svg>
+</h1>
+
+<script is:inline>
+  /* Inline, not bundled, for one reason: the signing must be armed before
+     first paint. A deferred module is a separate request, and on a cold cache
+     the page would paint the finished signature, then snatch it back and
+     redraw it — a re-sign, not an entrance. This runs during parse, right
+     after the h1 above it exists.
+
+     Armed, not started. `signing` alone holds the pens paused at their start;
+     the animation clock only runs once `go` lands, one rAF later — on the
+     first frame anyone actually sees. Without that, the clock starts during
+     parse and whatever the parser spends before paint is spent eating the j.
+     rAF also does not tick in a hidden tab, which falls out as exactly right:
+     a link opened in the background signs when the reader first looks at it,
+     not alone in the dark.
+
+     Two classes are the only thing JS touches. If this never runs, the markup
+     is the finished signature; if the animations never fire (browsers may
+     freeze them under load), the timeout restores it. The name must not be
+     losable to an edge case. */
+  (() => {
+    var sig = document.querySelector(".sig");
+    if (!sig) return;
+    var safety;
+    var sign = function () {
+      if (sig.classList.contains("signing")) return;
+      sig.classList.add("signing");
+      requestAnimationFrame(function () {
+        sig.classList.add("go");
+        clearTimeout(safety);
+        safety = setTimeout(function () {
+          sig.classList.remove("signing", "go");
+        }, 1000);
+      });
+    };
+    /* the s2 pen finishes last (635ms); its end is the pen lifting off */
+    sig.addEventListener("animationend", function (e) {
+      if (e.target.classList && e.target.classList.contains("pen-s2")) {
+        clearTimeout(safety);
+        sig.classList.remove("signing", "go");
+      }
+    });
+    sig.addEventListener("resign", sign);
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) sign();
+  })();
+</script>
+
+<script>
+  /* The re-sign goes through the friend, so the wordmark keeps the site's
+     dwell grammar — 500ms on pointer, scroll-dwell on touch — instead of
+     inventing a hover of its own. No `once`: signing again on request is the
+     point, and reduced motion is the friend's problem, already solved.
+
+     The sound half lives here and not in the inline script above, by
+     necessity: is:inline exists so the signing is armed before first paint,
+     and an inline script cannot import the bus. So this bundled half bridges
+     on the resign act it already owned — one trigger, two halves. That split
+     is also what keeps the LOAD signing silent: the load path runs entirely
+     inside the inline script, which touches no audio, and taste and law agree
+     it never should (sound on load is an ambush, and the browser forbids
+     audio before the first gesture anyway — the bus enforces that gate, so
+     nothing here works around it). */
+  import { ambient } from "@/scripts/friend";
+  import { play } from "@/scripts/sound";
+
+  /* The letter windows, in seconds — the same arithmetic as the keyframe
+     table in the style block below (constant pen speed, the word in ~620ms).
+     If the CSS timing ever moves, these move with it by hand: the scratch is
+     the sound OF that pen, and a desynced nib is worse than silence. */
+  const STROKES = [
+    [0.0, 0.128], // j — stem, top to bottom, round the hook
+    [0.13, 0.273], // a — bowl and tail in one stroke
+    [0.26, 0.405], // s — top curve, through the middle, out the bottom
+    [0.405, 0.55], // s — again, an advance over
+  ];
+  const DOT = 0.55; // the word finishes, then the j is dotted
+
+  /* Where the pen bites: each stroke's touch-down, plus the direction
+     changes the letterforms actually have — the j rounding its hook, the a
+     closing the bowl into the tail, each s reversing twice. Read off the
+     glyphs, not measured; plausible beats exact, because the ear checks
+     these against the ink as rhythm, not as coordinates. */
+  const TICKS = [
+    [0.0, 0.09], // j — down, round the hook
+    [0.13, 0.2], // a — down, the bowl closes into the tail
+    [0.26, 0.32, 0.37], // s — down, reverse, reverse
+    [0.405, 0.465, 0.515], // s again, an advance over
+  ];
+
+  /* White noise, made once — the nib is the filter, not the buffer. */
+  let noise: AudioBuffer | undefined;
+
+  /* A nib is noise dragged through paper, and the dragging is the part a
+     plain bandpass burst skips: smooth envelopes read as filtered hiss, not
+     friction. Four things close the gap, each named where it is built —
+     the paper, the barrel, the bite, the dab — all synthesis, because a
+     recorded pen could never land on these exact windows; the timing IS
+     the realism. Everything hangs off the gain the bus staged to whisper —
+     the bus owns the speaker, the gate, the duck and the mute; this only
+     shapes. */
+  function scratch(ctx: AudioContext, out: GainNode) {
+    if (!noise) {
+      const n = Math.ceil(ctx.sampleRate * 0.7);
+      noise = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = noise.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = noise;
+    /* The animation clock starts one rAF after the dispatch below; a hair
+       of lead keeps the first burst from landing before the ink. */
+    const t0 = ctx.currentTime + 0.02;
+
+    /* The paper. Everything sums here, and the summing gain is shaken at
+       ~30–80Hz by a second copy of the noise banded down to a slow
+       shudder — friction is a surface, not an envelope, and this flutter
+       is what a clean ramp can never fake. Depth 6 because the band
+       leaves almost nothing; it works out to roughly ±0.4 around 1. */
+    const paper = ctx.createGain();
+    const flutter = ctx.createBufferSource();
+    flutter.buffer = noise;
+    const slow = ctx.createBiquadFilter();
+    slow.type = "bandpass";
+    slow.frequency.value = 55;
+    slow.Q.value = 0.7;
+    const depth = ctx.createGain();
+    depth.gain.value = 6;
+    flutter.connect(slow);
+    slow.connect(depth);
+    depth.connect(paper.gain);
+
+    /* The shelf sits last: up close a pen has no treble to spare, and
+       rolling the top off is what moves the sound from "beside your ear"
+       to "on the desk". */
+    const shelf = ctx.createBiquadFilter();
+    shelf.type = "highshelf";
+    shelf.frequency.value = 5000;
+    shelf.gain.value = -7;
+    paper.connect(shelf);
+    shelf.connect(out);
+
+    /* The barrel: a quiet low-mid resonance riding each stroke's envelope
+       under the scratch — the part of a pen you feel more than hear. It
+       borrows the stroke gains below, so it lifts off when the nib does. */
+    const barrel = ctx.createBiquadFilter();
+    barrel.type = "bandpass";
+    barrel.frequency.value = 560 + Math.random() * 160;
+    barrel.Q.value = 0.9;
+    const barrelTrim = ctx.createGain();
+    barrelTrim.gain.value = 0.22;
+    src.connect(barrel);
+    barrel.connect(barrelTrim);
+
+    /* The nib, per letter, as before: centre jittered per stroke, drifting
+       down across it like a hand slowing into a curve, so no two strokes
+       are the same pen twice. Fast on, a sag mid-letter, lifted at the
+       end. */
+    for (const [from, to] of STROKES) {
+      const bp = ctx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.Q.value = 1.6;
+      const f = 2300 + Math.random() * 900;
+      bp.frequency.setValueAtTime(f, t0 + from);
+      bp.frequency.linearRampToValueAtTime(f * 0.8, t0 + to);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t0 + from);
+      g.gain.linearRampToValueAtTime(1.4, t0 + from + 0.012);
+      g.gain.linearRampToValueAtTime(0.85, t0 + (from + to) / 2);
+      g.gain.linearRampToValueAtTime(1.2, t0 + to - 0.02);
+      g.gain.linearRampToValueAtTime(0, t0 + to);
+      src.connect(bp);
+      bp.connect(g);
+      barrelTrim.connect(g);
+      g.connect(paper);
+    }
+
+    /* The bite: the pen presses harder for an instant at every tick —
+       brighter than the scratch, gone in 30ms. One filter, one gain, ten
+       envelopes. */
+    const bite = ctx.createBiquadFilter();
+    bite.type = "bandpass";
+    bite.frequency.value = 3800;
+    bite.Q.value = 3;
+    const bg = ctx.createGain();
+    bg.gain.value = 0;
+    src.connect(bite);
+    bite.connect(bg);
+    bg.connect(paper);
+    for (const t of TICKS.flat()) {
+      bg.gain.setValueAtTime(0, t0 + t);
+      bg.gain.linearRampToValueAtTime(0.7, t0 + t + 0.004);
+      bg.gain.linearRampToValueAtTime(0, t0 + t + 0.03);
+    }
+
+    /* The dab: a dot is felt pressed down and lifted, not a scratch —
+       lower than the strokes, no bite, an envelope with shoulders. */
+    const dab = ctx.createBiquadFilter();
+    dab.type = "bandpass";
+    dab.frequency.value = 1200;
+    dab.Q.value = 1.1;
+    const dg = ctx.createGain();
+    dg.gain.setValueAtTime(0, t0 + DOT);
+    dg.gain.linearRampToValueAtTime(0.9, t0 + DOT + 0.014);
+    dg.gain.linearRampToValueAtTime(0, t0 + DOT + 0.075);
+    src.connect(dab);
+    dab.connect(dg);
+    dg.connect(paper);
+
+    src.start(t0);
+    flutter.start(t0);
+    src.stop(t0 + 0.68);
+    flutter.stop(t0 + 0.68);
+  }
+
+  const sig = document.querySelector("svg.sig");
+  if (sig) {
+    ambient({
+      el: sig,
+      act: () => {
+        /* The inline half refuses a resign mid-signing; mirror that guard —
+           checked before the dispatch, which is what sets the class — so the
+           scratch never sounds while no ink is moving. */
+        if (!sig.classList.contains("signing"))
+          play({ tier: "whisper", synth: scratch });
+        sig.dispatchEvent(new Event("resign"));
+      },
+    });
+  }
+</script>
+
+<style>
+  .sig {
+    display: block;
+    height: 1em;
+    width: auto;
+    /* the j's descender overflowed the old line box; still does */
+    overflow: visible;
+  }
+
+  /* The pens live inside the masks and are never visible themselves — white
+     is mask language for "show", not a colour. Width 150 on letterforms whose
+     pen stroke measures ~80–87 units: fat enough that one pass of the outline
+     reveals the full stroke behind it, thin enough that the stem's pass stops
+     19 units short of the dot, which therefore stays undrawn until its own
+     turn. */
+  .pen {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 150;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Everything below exists only while `.signing` is set, and only for
+     readers who have not asked for less motion — for everyone else the flood
+     rects pass the masks whole and the block compiles to nothing happening.
+
+     The dash lengths are the measured outline lengths padded ~3%, because the
+     browser's own arc-length arithmetic will not equal fontTools' and a dash
+     that comes up short leaves a bitten letter. The keyframe percentages are
+     arc positions at constant pen speed (~8.7 units/ms, the whole word in
+     ~620ms — measured against the ticket's "600ms feels like a pen"):
+
+       j    0–128ms   stem, top to bottom, round the hook
+       a    130–273ms bowl and tail in one stroke
+       s    260–405ms top curve, through the middle, out the bottom
+       s    405–550ms again, offset an advance
+       j    550–620ms the dot — the word finishes, then the j is dotted
+
+     Each pen's remaining timeline is its outline's return edge, which paints
+     almost nothing new — it reads as the ink settling, and the next letter
+     starts over it rather than waiting. `linear`, because within one stroke
+     a pen does not ease. */
+  @media (prefers-reduced-motion: no-preference) {
+    .signing .flood {
+      opacity: 0;
+    }
+    /* armed but not started: pens hold at their first frame until the script
+       has seen a paint (the `go` class, one rAF after `signing`) */
+    .signing:not(.go) .pen {
+      animation-play-state: paused;
+    }
+    .signing .pen-j {
+      stroke-dasharray: 2160;
+      stroke-dashoffset: 2160;
+      animation: wm-sign-j 300ms linear both;
+    }
+    .signing .pen-jd {
+      stroke-dasharray: 540;
+      stroke-dashoffset: 540;
+      animation: wm-sign-out 70ms linear 550ms both;
+    }
+    .signing .pen-a {
+      stroke-dasharray: 1685;
+      stroke-dashoffset: 1685;
+      animation: wm-sign-a 200ms linear 130ms both;
+    }
+    .signing .pen-s1 {
+      stroke-dasharray: 2730;
+      stroke-dashoffset: 2730;
+      animation: wm-sign-s 230ms linear 260ms both;
+    }
+    .signing .pen-s2 {
+      stroke-dasharray: 2730;
+      stroke-dashoffset: 2730;
+      animation: wm-sign-s 230ms linear 405ms both;
+    }
+
+    @keyframes wm-sign-j {
+      42.6% {
+        stroke-dashoffset: 1037;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes wm-sign-a {
+      71.5% {
+        stroke-dashoffset: 435;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes wm-sign-out {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes wm-sign-s {
+      63% {
+        stroke-dashoffset: 1457;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  }
+</style>

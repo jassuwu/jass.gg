@@ -1,35 +1,155 @@
 ---
-import { Layout } from "@/layouts";
+import { URLS } from "@/constants";
+import Layout from "@/layouts/Layout.astro";
+
+// Ticket 07 gave this page a real job. There are no redirects, so every dead
+// URL lands here and will keep landing here for years.
+//
+// An earlier pass had it explaining that the old blog posts were deleted for
+// being AI-written. jass killed that: nobody arriving at a broken link wants
+// the site's backstory, and leading with an apology for old work is a bad first
+// impression. The page has one job now, which is to get the reader talking to
+// him instead of leaving.
+//
+// The number is the biggest thing on the page and it is in the machine role,
+// because 404 is a fact and machine is the role for facts. A monospace status
+// code at display size is also just what an HTTP error looks like.
+//
+// Only the three channels you can actually send a message to are here. The
+// résumé and linkedin are on the homepage and neither of them is a reply.
+//
+// COPY IS JASS'S, VERBATIM.
+const TALK = [
+  { label: "twitter", href: URLS.TWITTER },
+  { label: "discord", href: URLS.DISCORD },
+  { label: "email", href: URLS.EMAIL },
+];
 ---
 
-<Layout>
-  <!-- Full-screen video background -->
-  <video
-    src="https://media.tenor.com/pEO-GYmrOykAAAPs/anime-lost.webm"
-    autoplay
-    loop
-    muted
-    playsinline
-    class="fixed inset-0 z-0 h-full w-full object-cover"></video>
+<Layout title="404 | jass.gg" description="lost?">
+  <main class="mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
+    <p class="font-machine text-display">404</p>
 
-  <!-- Dark overlay for better text readability -->
-  <div class="bg-background/60 fixed inset-0 z-10"></div>
+    <p class="mt-8 text-body">
+      lost? looking for something specific? just talk to me.
+    </p>
+    {
+      /* Full accent, where the homepage's equivalent line is accent-quiet.
+    accent-quiet exists for one reason: to not compete with the wordmark. There
+    is no wordmark here, so the reason is gone and the line steps up. Each page
+    gets one full-strength accent and it goes to the most human thing on it. On
+    / that is his name. Here it is the joke. Not the error code, which is
+    chrome. */
+    }
+    <p class="mt-2 font-hand text-accent">(pls no one talks to me 😔)</p>
 
-  <!-- Main content - 404 centered -->
-  <main
-    class="relative z-30 flex items-center justify-center"
-    style="height: calc(100vh - 12rem);">
-    <div class="text-center">
-      <h1
-        class="font-comic-neue text-primary text-9xl font-bold drop-shadow-lg">
-        404
-      </h1>
-      <h2 class="text-foreground mt-4 text-xl font-bold drop-shadow-md">
-        page not found
-      </h2>
-      <p class="text-muted-foreground mt-2 drop-shadow-sm">
-        looks like you're lost in the void
-      </p>
-    </div>
+    <ul
+      class="-my-1 mt-7 flex flex-wrap gap-x-4 font-machine text-meta text-muted-foreground">
+      {
+        TALK.map((channel) => (
+          <li>
+            <a class="inline-block py-1" href={channel.href}>
+              {channel.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="inline-block py-1" href="/">home</a>
+      </li>
+    </ul>
   </main>
 </Layout>
+
+<script>
+  /* THE MONITOR SOMEONE LEFT ON. The page for people who are lost plays the
+     video people watch while lost: subway surfers, minecraft parkour, soap
+     cutting, the hydraulic press, kinetic sand, a GTA ramp. One of six per
+     view, at random — a curated set, not a feed.
+
+     Every clip loops without a visible cut. Not luck: none of the footage
+     ever revisits a frame, so each clip's first second is dissolved over its
+     last second in the encode, and the fade completes one frame before the
+     end — the final frame IS the frame before the loop point. The seam is
+     one frame of ordinary motion, which is the definition of nothing
+     happening. A loop that jump-cuts every half minute is a glitch on a
+     page that already told you something is broken; this one is just a
+     monitor that never stops.
+
+     It carries zero words on purpose. The joke line above owns this page's
+     humour; a caption here would be the bit explaining itself. Small, muted,
+     square-cornered, no accent — nothing about it may compete with the one
+     full-strength accent, and nothing on this site is rounded.
+
+     Built from JS because the page with JS off must be whole, and it is: the
+     404, the copy, the joke, the links. This element is the friend leaning
+     over on the worst page with something dumb to watch, and the friend is
+     JavaScript.
+
+     The data politeness, since someone on mobile data hitting a dead link
+     did not ask for megabytes of brainrot: preload="none", so arriving
+     costs one poster jpg (10–30 KB). The clip itself (1.0–2.9 MB, 33s loop)
+     only loads when play() fires, and play() only fires while the rectangle
+     is actually on screen. Reduced motion or Save-Data gets no autoplay at
+     all — the poster sits there like a paused monitor, and a click starts
+     it. Both readers asked for less, of different kinds, and get the same
+     honest still. */
+  const CLIPS = ["subway", "minecraft", "soap", "press", "sand", "ramp"];
+  const pick = CLIPS[Math.floor(Math.random() * CLIPS.length)];
+  const links = document.querySelector("main ul");
+
+  if (links && pick) {
+    const v = document.createElement("video");
+    v.src = `/brainrot/${pick}.mp4`;
+    v.poster = `/brainrot/${pick}.jpg`;
+    v.muted = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.preload = "none";
+    /* Intrinsic size so the box is reserved before the poster arrives —
+       the links must not jump. */
+    v.width = 480;
+    v.height = 270;
+    /* 340px on desktop (jass: "can takeover a larger space"); at 390px the
+       viewport takes over and it scales with the page instead of crowding
+       the column. mt-14 is the site's section gap — the distance of a
+       thing left in the corner, just a bigger thing now. One clip per page
+       view, looping itself seamlessly — never switching mid-visit. */
+    v.className = "mt-14 w-[min(340px,70vw)]";
+    /* It informs nobody of anything. A screen reader announcing "video" on
+       an error page is noise with no payoff. */
+    v.setAttribute("aria-hidden", "true");
+
+    const play = () => void v.play().catch(() => {});
+    const easy =
+      matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      ((navigator as { connection?: { saveData?: boolean } }).connection
+        ?.saveData ??
+        false);
+
+    if (easy) {
+      v.classList.add("cursor-pointer");
+      v.addEventListener("click", () => (v.paused ? play() : v.pause()));
+    } else {
+      /* Play only while visible. The page is short, so this mostly means
+         "always" — but a loop grinding away below the fold is a tab warming
+         a phone for nobody. */
+      new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) play();
+          else v.pause();
+        }
+      }).observe(v);
+    }
+
+    links.insertAdjacentElement("afterend", v);
+  }
+</script>
+
+<script>
+  /* THE WATER (ticket 23). Owned by its own module and nobody else — the
+     brainrot script above never touches this block, and this block never
+     touches the monitor. See src/scripts/water-404.ts. */
+  import { register as water } from "@/scripts/water-404";
+  water();
+</script>
