@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 
-import { SOCIALS, URLS } from "@/constants";
+import { SOCIALS } from "@/constants";
 import { INTRO, TAGLINE } from "@/intro";
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
@@ -115,28 +115,21 @@ const LIST = "mt-3 space-y-2 text-body";
       ))
     }
 
-    <section id="writing" class={SECTION}>
-      <h2 class={HEADING}>writing</h2>
-      <ul class={LIST}>
-        {
-          /* The section's entire content is one command, and the heading above
-        it supplies the sentence. Nothing explains the joke, which is the only
-        reason it is one.
+    {
+      /* THERE IS NO WRITING SECTION. It held one line — `git push -f origin
+    twitter`, with the branch name linking out — and jass cut it: add it back
+    when there is actually something to add.
 
-        The accent sits on `twitter` alone. It is the only link on the site
-        inside a run of text, where the usual separators have nothing to work
-        with, so colour has to mark it. Making the branch name the clickable
-        part is also the only honest place for it. accent-quiet, not accent,
-        because the wordmark holds this page's one full-strength accent. */
-        }
-        <li>
-          <code class="font-machine">
-            git push -f origin{" "}
-            <a class="text-accent-quiet" href={URLS.TWITTER}>twitter</a>
-          </code>
-        </li>
-      </ul>
-    </section>
+    Keeping it was the weaker call and it is worth writing down why, because
+    the line was good and a future session will be tempted to restore it. A
+    section heading is a promise that something is under it. "writing" with a
+    joke where the writing should be is a section admitting it is empty, in a
+    list of two sections that are full. The joke was funny; the shape it sat in
+    was a placeholder, and this site does not ship placeholders.
+
+    It comes back with a post, not before. `src/data/blog/` still has its
+    `draft: true` stub and the collection is untouched. */
+    }
 
     {
       /* The stamp links to the commit it is claiming. A date on its own is an

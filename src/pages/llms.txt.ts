@@ -46,9 +46,10 @@ export const GET: APIRoute = async ({ site }) => {
     INTRO,
     section("things", entries("thing")),
     section("toys", entries("toy")),
-    // The page's writing section is one command and nothing explains the joke.
-    // Explaining it here would be the only new sentence on the whole file.
-    section("writing", [`- [git push -f origin twitter](${URLS.TWITTER})`]),
+    // No writing section, matching the page — it comes back with a post. This
+    // file describes what is there, so an empty heading here would be a worse
+    // version of the same mistake: a machine reader has no sense of humour to
+    // fill it with.
     // Same six links the page shows, with one substitution: the résumé points
     // at `/resume.json` here rather than the PDF. The resume is typeset from
     // `resume/resume.yaml` and the JSON falls out of the same source, so the

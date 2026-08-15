@@ -114,9 +114,13 @@ its own, so nothing extra was needed for it.
 
 `src/pages/llms.txt.ts`, generated from the same collection the page renders,
 so it cannot describe a site that doesn't exist. Every word in it is jass's, in
-the page's own order — including the writing section, which is the one command
-and no explanation, because explaining it there would have been the only
-sentence on the file written for a machine.
+the page's own order. It also drops the writing section the same day the page
+did — an empty heading is worse here than on the page, because a machine reader
+has no sense of humour to fill it with.
+
+The résumé row resolves to `/resume.json` rather than the PDF. Both come out of
+`resume/resume.yaml`, so they cannot disagree, and handing a machine a PDF to
+parse when structured data sits beside it is the thing this file exists to avoid.
 
 One link per entry, the built thing, matching the page's rule. Adding `github`
 as a second link would help an agent hunting for source and is a one-line

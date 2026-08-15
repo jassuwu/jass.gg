@@ -110,7 +110,15 @@
   --text-meta--line-height: 1.5;
   --text-body: 1.125rem; /* 18px — where Baskervville stops looking thin */
   --text-body--line-height: 1.7;
-  --text-display: 3.25rem; /* one per page: the wordmark on /, 404 on /404 */
+  /* One per page: the wordmark on /, 404 on /404. Was 3.25rem and jass asked
+     for it quieter — a signature is not a headline, and at 52px against 18px
+     body the name was announcing rather than signing. 44px still reads as the
+     one oversized thing on the page without shouting.
+
+     Both pages move together on purpose. There is one display step, not a
+     per-page size; splitting it would turn a type scale into two type scales
+     for the sake of one glyph. */
+  --text-display: 2.75rem;
   --text-display--line-height: 1;
 }
 
