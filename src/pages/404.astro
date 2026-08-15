@@ -64,7 +64,17 @@ const TALK = [
 <script>
   /* THE MONITOR SOMEONE LEFT ON. The page for people who are lost plays the
      video people watch while lost: subway surfers, minecraft parkour, soap
-     cutting. One of three per view, at random — a curated set, not a feed.
+     cutting, the hydraulic press, kinetic sand, a GTA ramp. One of six per
+     view, at random — a curated set, not a feed.
+
+     Every clip loops without a visible cut. Not luck: none of the footage
+     ever revisits a frame, so each clip's first second is dissolved over its
+     last second in the encode, and the fade completes one frame before the
+     end — the final frame IS the frame before the loop point. The seam is
+     one frame of ordinary motion, which is the definition of nothing
+     happening. A loop that jump-cuts every half minute is a glitch on a
+     page that already told you something is broken; this one is just a
+     monitor that never stops.
 
      It carries zero words on purpose. The joke line above owns this page's
      humour; a caption here would be the bit explaining itself. Small, muted,
@@ -77,14 +87,14 @@ const TALK = [
      JavaScript.
 
      The data politeness, since someone on mobile data hitting a dead link
-     did not ask for a megabyte of brainrot: preload="none", so arriving
-     costs one poster jpg (9–27 KB). The clip itself (0.5–1.1 MB, 15s loop)
+     did not ask for megabytes of brainrot: preload="none", so arriving
+     costs one poster jpg (10–30 KB). The clip itself (1.0–2.9 MB, 33s loop)
      only loads when play() fires, and play() only fires while the rectangle
      is actually on screen. Reduced motion or Save-Data gets no autoplay at
      all — the poster sits there like a paused monitor, and a click starts
      it. Both readers asked for less, of different kinds, and get the same
      honest still. */
-  const CLIPS = ["subway", "minecraft", "soap"];
+  const CLIPS = ["subway", "minecraft", "soap", "press", "sand", "ramp"];
   const pick = CLIPS[Math.floor(Math.random() * CLIPS.length)];
   const links = document.querySelector("main ul");
 
