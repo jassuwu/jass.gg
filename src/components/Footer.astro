@@ -71,8 +71,12 @@ import { LAST_TOUCHED, formatStamp } from "@/last-touched";
   if (hour <= 4) {
     const murmur = document.createElement("p");
     murmur.className = "font-hand text-micro text-accent-quiet";
-    /* AGENT DRAFT — jass rewrites (ticket 20). */
-    murmur.textContent = "(you're up late. me too, probably)";
+    /* AGENT DRAFT — jass rewrites (ticket 20). The first draft said "me
+       too, probably", which was a lie: jass's philosophy is being in bed
+       on time — bryan johnson hours, bed at 9:15. So the friend isn't up
+       with you; this is a note left by someone already asleep, scolding
+       you from under the covers. His fragments, assembled: */
+    murmur.textContent = "(go sleep girl. i've been in bed since 9:15)";
     document.querySelector("footer")?.append(murmur);
   }
 </script>
