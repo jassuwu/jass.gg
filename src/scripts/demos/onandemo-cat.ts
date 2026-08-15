@@ -24,12 +24,13 @@
  * `pointer-events: none`, so no click ever lands on a cat.
  *
  * THE SOUND (ticket 21): the chase is silent — a hunting cat is — and the cat
- * says one short "nya" at the moment it catches the cursor: the first tick it
- * comes to rest inside the engine's own rest radius of the pointer. One per
- * act, whisper tier, synthesized — no asset, no loop, and never before the
- * bus's first-gesture gate (the bus keeps that law; nothing here asks twice).
- * The touch walk stays silent: its cursor is a fake planted offscreen, and a
- * cat that never catches anything has nothing to say.
+ * says one short "nya~" at the moment it catches the cursor: the first tick
+ * it comes to rest inside the engine's own rest radius of the pointer. One
+ * per act, whisper tier, a real recorded nya — half a second, mono, 3.5 KB,
+ * fetched only if a chase actually begins — and never before the bus's
+ * first-gesture gate (the bus keeps that law; nothing here asks twice). The
+ * touch walk stays silent: its cursor is a fake planted offscreen, and a cat
+ * that never catches anything has nothing to say.
  */
 
 import { ambient } from "@/scripts/friend";
@@ -53,6 +54,11 @@ const RUN_W = [
    cat idles once its center is within this of the pointer. The nya borrows
    the engine's own definition of "caught" instead of inventing one. */
 const REST_RADIUS = 48;
+
+/* The catch cue. A synthesized nya lived here once; a triangle wave is not a
+   cat. This is the real thing, and small enough that fetching it costs less
+   than the engine import it rides along with. */
+const NYA = "/sounds/nya.mp3";
 
 /* The engine's own cadence, kept so the exit matches its gait. */
 const TICK_MS = 100;
@@ -114,37 +120,6 @@ function whenMounted(cb: (el: HTMLElement) => void): void {
   }, 50);
 }
 
-/* One pitch-bent triangle syllable: a fast attack, a glide, an exponential
-   die-off. Two of these in a row — up-chirp then down-mew — read as a
-   cartoon "nya". Triangle over sine for the faint reedy edge a meow has. */
-function syllable(
-  c: AudioContext,
-  out: GainNode,
-  at: number,
-  dur: number,
-  f0: number,
-  f1: number,
-): void {
-  const o = c.createOscillator();
-  o.type = "triangle";
-  o.frequency.setValueAtTime(f0, at);
-  o.frequency.exponentialRampToValueAtTime(f1, at + dur);
-  const env = c.createGain();
-  env.gain.setValueAtTime(0, at);
-  env.gain.linearRampToValueAtTime(1, at + 0.015);
-  env.gain.exponentialRampToValueAtTime(0.001, at + dur);
-  o.connect(env).connect(out);
-  o.start(at);
-  o.stop(at + dur + 0.02);
-}
-
-/* "ny-aa": ~350ms total. Zero assets — the whole sound is these six numbers. */
-function nya(c: AudioContext, out: GainNode): void {
-  const t = c.currentTime;
-  syllable(c, out, t, 0.09, 660, 990);
-  syllable(c, out, t + 0.11, 0.24, 940, 520);
-}
-
 /* Watch the chase for the catch. The engine keeps its state private, so this
    reads what it publishes — the element's inline position — against our own
    copy of the pointer, and calls it caught by the engine's own rule: center
@@ -170,7 +145,7 @@ function watchForCatch(el: HTMLElement): () => void {
     const y = (parseFloat(el.style.top) || 0) + CELL / 2;
     if (Math.hypot(x - px, y - py) < REST_RADIUS) {
       stop();
-      play({ tier: "whisper", synth: nya });
+      play({ tier: "whisper", url: NYA });
     }
   }, TICK_MS);
   return stop;
@@ -180,6 +155,10 @@ function watchForCatch(el: HTMLElement): () => void {
    oneko's birthplace — and the entrance is part of the demo: it has to cross
    the page to reach you. */
 async function chase(): Promise<void> {
+  /* Warm the browser cache while the engine loads, so the bus's own fetch at
+     the catch — seconds from now — is a hit and the nya lands ON the moment.
+     Best-effort: if this fails the bus just fetches cold, a beat late. */
+  fetch(NYA).catch(() => {});
   const { onandemo } = await import("onandemo");
   const destroy = onandemo({ persist: false });
   whenMounted((el) => {
