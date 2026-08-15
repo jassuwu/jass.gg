@@ -1,10 +1,11 @@
 # The eye for detail
 
 Type: prototype
-Status: open
+Status: closed — resolved aug 15, spawned tickets 12–20
 Follows: 10 (which is closed in everything but name)
 
-**Read this cold. Start here, not at ticket 10.**
+**Closed. The philosophy below still governs; the build work now lives in
+tickets 12–20. A fresh session starts at the map's frontier, not here.**
 
 ## The destination
 
@@ -265,6 +266,58 @@ mechanical once the first pair exists.
 - **Marginalia pairs** — (word in the intro, meme) as above.
 - **The OG re-shoot** — the old card was a photograph of a screen, which only
   jass can retake. Still on the table from ticket 10.
+
+## Resolution (aug 15) — jass ruled on the whole program at once
+
+The fable session laid out a full-site judgment and a direction; jass answered
+point by point. These are his decisions, recorded verbatim in spirit:
+
+- **The organizing idea is ratified: the friend.** Everything static is the
+  document; everything JS is the friend — a character who leans over while you
+  read, speaks in the hand font, waits for the beat (dwell, not instant
+  hover), and never repeats a bit. Every new interaction passes one test: does
+  this feel like the site doing something, or like jass leaning over?
+- **The JS wall came down.** jass: it's completely fine if it adds to the
+  goal. The spine survives — every word, link and route works with JS
+  disabled — but JS is now the friend's body, not a compromise. The map's
+  standing constraint is rewritten.
+- **Aliveness lives in the entry list, not a new section.** jass on the
+  missing live artifact: "let's not pollute the page by just adding a section
+  for this. let's just do it along the showcase of all the works." That is
+  ticket 15: entries demo themselves.
+- **Mobile is a real direction, not a caveat.** The site's whole interaction
+  budget was hover-gated on a page whose audience arrives from twitter on
+  phones. The friend's grammar under a thumb is ticket 14, and it blocks the
+  demos.
+- **"The 404 out-personalities the homepage" — jass: "true, but how."** The
+  answer is the program itself: the friend gets a beat at every depth of the
+  visit — arrival (the signature signs itself, ticket 13), reading (the intro
+  comes alive, ticket 16), poking (the entries demo themselves, ticket 15),
+  leaving (the footer, ticket 19).
+- **The commit-subject reveal dies.** jass: "exactly" — nobody cares what
+  commit he made on a portfolio site. The stamp's date stays (currency claim);
+  the reveal slot goes to the friend. Ticket 19.
+- **The pass-four project-demo guesses are wrong in places.** jass: "you have
+  to actually look at each of the projects, cuz some of them what the actual
+  project is, is way off from what you described." Ticket 12 (research)
+  replaces every guess with reality before ticket 15 designs anything.
+- **Stats stay live.** jass: "proof by performance: TRUEEEEEE. but also don't
+  forget about the stats." The substance-signals thread reopens as ticket 17,
+  fed by ticket 12's numbers.
+- **The 404 does not remember old pages.** jass killed the path-echo idea
+  outright: "don't do the old pages. just forget about them or
+  location.pathname shit. 404 is 404." The brainrot idea lives — ticket 18.
+- **Words performing themselves: 100% agreed** — with the standing rule that
+  the copy leads and the trick follows; never write copy to enable a trick.
+  Ticket 16. Marginalia: yes, dwell-timed and rare, blocked on his pairs.
+- **The footer direction is loved** — the inversion (the friend notices the
+  reader's time instead of displaying jass's), the copyright joke slot.
+  Ticket 19.
+
+Pass one's built details (print/keyboard/touch paths to the stamp, the
+:target stroke, rel=me, `<time>`, the SOURCE_NOTE plumbing) all shipped and
+stand. The copy slots move to ticket 20, the standing queue of things only
+jass can supply.
 
 ## Done when
 
