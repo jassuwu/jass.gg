@@ -49,9 +49,18 @@ export const GET: APIRoute = async ({ site }) => {
     // The page's writing section is one command and nothing explains the joke.
     // Explaining it here would be the only new sentence on the whole file.
     section("writing", [`- [git push -f origin twitter](${URLS.TWITTER})`]),
+    // Same six links the page shows, with one substitution: the résumé points
+    // at `/resume.json` here rather than the PDF. The resume is typeset from
+    // `resume/resume.yaml` and the JSON falls out of the same source, so the
+    // two can't disagree — and handing a machine reader a PDF to parse when a
+    // structured copy of the identical data exists is the one thing this file
+    // is here to avoid. Humans still get the PDF, from the row on the page.
     section(
       "elsewhere",
-      SOCIALS.map((s) => `- [${s.label}](${absolute(s.href)})`),
+      SOCIALS.map(
+        (s) =>
+          `- [${s.label}](${absolute(s.href === URLS.RESUME ? "/resume.json" : s.href)})`,
+      ),
     ),
   ].join("\n\n");
 
