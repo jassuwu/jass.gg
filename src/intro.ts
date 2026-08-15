@@ -132,8 +132,13 @@ export const CLOSER_ASIDE = "(i'm just trying to find my people)";
  *
  * While this is `""`, nothing is emitted at all — the mechanism costs zero
  * bytes until the words exist.
+ *
+ * AGENT DRAFT — jass rewrites. He asked for a take to react to (grilling,
+ * aug 15); this is it, and it ships until his words replace it. The first
+ * draft listed the site's tricks and he killed it for explaining the jokes.
+ * This one states nothing, which is the register.
  */
-export const SOURCE_NOTE: string = "";
+export const SOURCE_NOTE: string = "hi. it's mostly just html.";
 
 /**
  * What search results and link previews show. It is the intro's first sentence,

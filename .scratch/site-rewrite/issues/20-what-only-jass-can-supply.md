@@ -24,9 +24,14 @@ and his (word, meme) picks. The brainrot self-recording item is dead
 
 ## The queue
 
-1. **`SOURCE_NOTE`** (`src/intro.ts`) — the View Source comment. Plumbed and
-   shipping zero bytes until filled. Constraints on the constant: deadpan,
-   nothing explaining it, no `--` inside.
+1. **`SOURCE_NOTE`** (`src/intro.ts`) — the View Source comment. Constraints
+   on the constant: deadpan, nothing explaining it, no `--` inside. **Agent
+   draft landed aug 15: `hi. it's mostly just html.`** — awaiting jass's
+   rewrite. (A first draft listing the site's tricks was killed on sight for
+   explaining the jokes; whatever replaces the draft must state nothing.)
+   The other two drafts awaiting his rewrite, homes pending ticket 19's
+   build: the murmur `(you're up late. me too, probably)` and the copyright
+   line `© jass. all rights reserved, none exercised`.
 2. **Marginalia pairs** — (word in the intro, meme) — the word is voice, the
    meme is taste. Two is probably the right number for the whole intro;
    ticket 16 builds them.
