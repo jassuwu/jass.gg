@@ -1,0 +1,8 @@
+# pyyaml       — read resume.yaml (tools/yaml2json.py)
+# pdfminer.six — the extraction gates. NOT interchangeable with poppler: poppler
+#                silently repairs tracked-out text and cannot see the bug the
+#                gates exist to catch. See tools/check.py.
+# pypdf        — page count and structure-tree checks
+pyyaml==6.0.2
+pdfminer.six==20250506
+pypdf==5.1.0

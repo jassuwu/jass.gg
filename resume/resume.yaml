@@ -1,0 +1,204 @@
+# The resume. This file is the source of truth; resume.typ is only how it looks.
+#
+# Field names follow JSON Resume (https://jsonresume.org/schema) so the content
+# outlives the renderer. If Typst ever becomes a bad bet, this file is unchanged
+# and only resume.typ gets rewritten.
+#
+# Dates are ISO `YYYY-MM`. An absent `endDate` means "Present". Do not write
+# display strings like "Oct 2025 - Present" here. resume.typ formats them, which
+# keeps the format consistent and the data machine-readable.
+#
+# Titles here are conventional ones, NOT the titles on LinkedIn. "savior of
+# prod" is a good joke and an ATS match failure: title is one of the few fields
+# every parser scores against the job req. The voice lives in the bullets.
+#
+# "Engineer" everywhere, never "Developer". Nium's is written out rather than
+# left as "SDE II": no parser expands an acronym, so the acronym would make the
+# current and most senior role score worst on the one field every ATS reads.
+# "Development" is not "Developer" and the rule survives intact.
+#
+# The DeFi role is NOT titled "Independent Contributor", which was the first
+# instinct and is wrong. It was a full-time role for those ten months. The
+# independence describes how he got in the door, not what he was once through
+# it, and putting it in the title slot makes a full-time job read as contract
+# work to both a parser and a recruiter.
+#
+# "Software & Product Engineer" is what the ten months actually were: frontend
+# and contract integrations, plus product discussions, a dashboard rewrite
+# nobody asked for, and user research in Indonesia. "Product Engineer" is a real
+# title that means exactly "engineer who also owns product calls", so it matches
+# and it is true.
+#
+# The anonymous start is a better story than any title could carry, and the last
+# bullet on that role tells it. Titles are for matching. Bullets are for stories.
+
+basics:
+  name: Karthickpranav S N
+  label: Software Engineer
+  email: jass@jass.gg
+  url: https://www.jass.gg
+  # Replaces the old skills grid. A list of every technology I have touched is
+  # both unreadable and never complete; this says what I am and what I want next,
+  # and the bullets below carry the keywords on their own.
+  #
+  # Three deliberate choices:
+  #
+  # "Engineer", not "frontend engineer". Most of the work has been frontend and
+  # the bullets say so loudly enough. Naming it here narrows the roles this
+  # document is allowed to win.
+  #
+  # "fintech", not "payments and Web3". The Web3 experience is real and stays in
+  # the bullets, but leading with it sorts me into Web3-only pipelines, which is
+  # not what I am looking for next.
+  #
+  # The last sentence is the one that has to survive edits. It is the actual
+  # differentiator, the thing the Cypher bullets directly below then prove, and
+  # it is the same belief the jass.gg homepage states in its own voice. Two
+  # registers, one idea, deliberately not the same sentence.
+  #
+  # Its closing list names categories rather than one vivid example. An earlier
+  # draft ended "the template every other repo copies", which reads better and
+  # claims less: it describes a single thing I did instead of the kind of work I
+  # want more of. The vivid version still exists, as evidence, in the DeFi
+  # bullet. State the category here and let the bullets prove it.
+  summary: >-
+    Engineer, three years in, most of it in fintech. I do my best work when I
+    can pick something up and own it end to end, given room to decide how. My
+    favourite work ships nothing a user will ever see and makes every engineer
+    around me faster: build and compile times, CI, shared templates, automation,
+    internal tooling.
+  location:
+    region: India
+  profiles:
+    - network: GitHub
+      username: jassuwu
+      url: https://github.com/jassuwu
+    - network: X
+      username: jassdotgg
+      url: https://x.com/jassdotgg
+    - network: LinkedIn
+      username: kprnv
+      url: https://linkedin.com/in/kprnv
+
+work:
+  # NEEDS REAL BULLETS. Three months in and LinkedIn carries a single emoji, so
+  # there is nothing here to transcribe. The acquisition line is context, not an
+  # accomplishment. Replace it with work as soon as there is some.
+  - name: Nium
+    position: Software Development Engineer II
+    location: Chennai, India
+    startDate: 2026-06
+    highlights:
+      - Joined through Nium's acquisition of Cypher, continuing on payments
+        infrastructure.
+
+  - name: Cypher
+    position: Software Engineer
+    location: Chennai, India
+    startDate: 2025-10
+    endDate: 2026-06
+    highlights:
+      - Rebuilt CI/CD. Pre-commit went from unusable to 8 seconds, CI from 17
+        minutes to 5, tests from 10 minutes to 90 seconds. The team stopped
+        reaching for --no-verify.
+      # Block scalar because a plain YAML scalar cannot contain ": ".
+      - >-
+        Modernized the stack in every repo I touched: Vite for create-react-app
+        and webpack, Bun for Node, Biome for ESLint and Prettier, viem for
+        ethers. Installs, builds and static analysis fell from minutes to
+        milliseconds, up to 50x in places.
+      - Audited the internal ledger against payment providers and closed it out,
+        taking hundreds of thousands of inconsistencies to zero unknowns, each
+        one categorized by root cause.
+      - Built the marketing site solo, from design handoff to launch. Astro,
+        AI-scaled page generation, SEO, accessibility, LLM crawlability.
+
+  - name: Stealth DeFi Protocol
+    position: Software & Product Engineer
+    location: Remote
+    startDate: 2024-12
+    endDate: 2025-09
+    highlights:
+      - Built the frontend template the company now copies into all of its
+        frontends, and spent the time to make it something the next engineer
+        would not curse me for.
+      - Shipped smart contract integrations in user-facing apps, rewrote the
+        internal dashboard nobody asked for and everyone needed, and ran user
+        research in Indonesia.
+      - Joined after contributing anonymously for two months. First remote role,
+        so I over-communicated on purpose and nobody had to guess what I was on.
+
+  - name: Cypher Wallet (YC W22)
+    position: Software Engineer Intern
+    location: Chennai, India
+    startDate: 2023-05
+    endDate: 2023-12
+    highlights:
+      - Owned and shipped React Native features for the mobile app, and part of
+        the React dapp.
+      - Built an internal tool on Next.js 13 and set up transactional email with
+        React Email and AWS SES.
+      - First Web3 role. Learned the space by working in it.
+
+# One line each. These are side projects on a page that has to fit three jobs;
+# a recruiter needs to know what each one is and what it is written in, and the
+# link carries the rest. Kept in sync with src/data/projects, which the profile
+# README at github.com/jassuwu/jassuwu governs.
+projects:
+  - name: andrew-dictate
+    url: https://dictate.jass.gg
+    startDate: 2026
+    keywords: [Swift, macOS]
+    description:
+      On-device speech-to-text for macOS. Nothing leaves the machine, and it
+      replaces a subscription.
+
+  - name: mojify
+    url: https://mojify.jass.gg
+    startDate: 2026
+    keywords: [Go, FFmpeg]
+    description: Turns video into coloured ASCII and emoji. Wraps FFmpeg and yt-dlp.
+
+  - name: quilt
+    url: https://quilt.jass.gg
+    startDate: 2026
+    keywords: [TypeScript, Astro]
+    description:
+      Merges the contribution graphs of several GitHub accounts into one
+      embeddable SVG. No login.
+
+  - name: better-splitwise
+    url: https://bettersplitwise.jass.gg
+    startDate: 2026
+    keywords: [TypeScript, OCR]
+    description: Scans a receipt, splits the bill by item, pushes the result to Splitwise.
+
+# One line, not a grid. The old version had seven labelled rows and read as a
+# form; it also claimed "Code Review" as a skill. This is only what I would
+# defend in an interview, and it exists mostly so a keyword parser has somewhere
+# obvious to look.
+skills:
+  - name: Stack
+    keywords:
+      [
+        TypeScript,
+        Go,
+        Swift,
+        Python,
+        Solidity,
+        React,
+        React Native,
+        Next.js,
+        Astro,
+        Node.js,
+        NestJS,
+        PostgreSQL,
+        Redis,
+        Docker,
+        AWS,
+        viem,
+        wagmi,
+      ]
+# Education is deliberately absent. It was a Master of Science finished in 2025
+# and it cost four lines to say something no one should be hiring on. If a
+# process needs it, it is in the LinkedIn profile linked at the top.

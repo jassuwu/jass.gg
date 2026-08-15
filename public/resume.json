@@ -1,0 +1,144 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Karthickpranav S N",
+    "label": "Software Engineer",
+    "email": "jass@jass.gg",
+    "url": "https://www.jass.gg",
+    "summary": "Engineer, three years in, most of it in fintech. I do my best work when I can pick something up and own it end to end, given room to decide how. My favourite work ships nothing a user will ever see and makes every engineer around me faster: build and compile times, CI, shared templates, automation, internal tooling.",
+    "location": {
+      "region": "India"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "jassuwu",
+        "url": "https://github.com/jassuwu"
+      },
+      {
+        "network": "X",
+        "username": "jassdotgg",
+        "url": "https://x.com/jassdotgg"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "kprnv",
+        "url": "https://linkedin.com/in/kprnv"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Nium",
+      "position": "Software Development Engineer II",
+      "location": "Chennai, India",
+      "startDate": "2026-06",
+      "highlights": [
+        "Joined through Nium's acquisition of Cypher, continuing on payments infrastructure."
+      ]
+    },
+    {
+      "name": "Cypher",
+      "position": "Software Engineer",
+      "location": "Chennai, India",
+      "startDate": "2025-10",
+      "endDate": "2026-06",
+      "highlights": [
+        "Rebuilt CI/CD. Pre-commit went from unusable to 8 seconds, CI from 17 minutes to 5, tests from 10 minutes to 90 seconds. The team stopped reaching for --no-verify.",
+        "Modernized the stack in every repo I touched: Vite for create-react-app and webpack, Bun for Node, Biome for ESLint and Prettier, viem for ethers. Installs, builds and static analysis fell from minutes to milliseconds, up to 50x in places.",
+        "Audited the internal ledger against payment providers and closed it out, taking hundreds of thousands of inconsistencies to zero unknowns, each one categorized by root cause.",
+        "Built the marketing site solo, from design handoff to launch. Astro, AI-scaled page generation, SEO, accessibility, LLM crawlability."
+      ]
+    },
+    {
+      "name": "Stealth DeFi Protocol",
+      "position": "Software & Product Engineer",
+      "location": "Remote",
+      "startDate": "2024-12",
+      "endDate": "2025-09",
+      "highlights": [
+        "Built the frontend template the company now copies into all of its frontends, and spent the time to make it something the next engineer would not curse me for.",
+        "Shipped smart contract integrations in user-facing apps, rewrote the internal dashboard nobody asked for and everyone needed, and ran user research in Indonesia.",
+        "Joined after contributing anonymously for two months. First remote role, so I over-communicated on purpose and nobody had to guess what I was on."
+      ]
+    },
+    {
+      "name": "Cypher Wallet (YC W22)",
+      "position": "Software Engineer Intern",
+      "location": "Chennai, India",
+      "startDate": "2023-05",
+      "endDate": "2023-12",
+      "highlights": [
+        "Owned and shipped React Native features for the mobile app, and part of the React dapp.",
+        "Built an internal tool on Next.js 13 and set up transactional email with React Email and AWS SES.",
+        "First Web3 role. Learned the space by working in it."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "andrew-dictate",
+      "url": "https://dictate.jass.gg",
+      "startDate": "2026",
+      "keywords": [
+        "Swift",
+        "macOS"
+      ],
+      "description": "On-device speech-to-text for macOS. Nothing leaves the machine, and it replaces a subscription."
+    },
+    {
+      "name": "mojify",
+      "url": "https://mojify.jass.gg",
+      "startDate": "2026",
+      "keywords": [
+        "Go",
+        "FFmpeg"
+      ],
+      "description": "Turns video into coloured ASCII and emoji. Wraps FFmpeg and yt-dlp."
+    },
+    {
+      "name": "quilt",
+      "url": "https://quilt.jass.gg",
+      "startDate": "2026",
+      "keywords": [
+        "TypeScript",
+        "Astro"
+      ],
+      "description": "Merges the contribution graphs of several GitHub accounts into one embeddable SVG. No login."
+    },
+    {
+      "name": "better-splitwise",
+      "url": "https://bettersplitwise.jass.gg",
+      "startDate": "2026",
+      "keywords": [
+        "TypeScript",
+        "OCR"
+      ],
+      "description": "Scans a receipt, splits the bill by item, pushes the result to Splitwise."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Stack",
+      "keywords": [
+        "TypeScript",
+        "Go",
+        "Swift",
+        "Python",
+        "Solidity",
+        "React",
+        "React Native",
+        "Next.js",
+        "Astro",
+        "Node.js",
+        "NestJS",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "AWS",
+        "viem",
+        "wagmi"
+      ]
+    }
+  ]
+}

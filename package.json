@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "resume": "./resume/build.sh",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",

@@ -12,7 +12,12 @@ bun install
 bun run dev      # dev server
 bun run build    # static build to dist/
 bun run verify   # format:check + lint + astro check + build
+bun run resume   # typeset resume/resume.yaml into public/, then gate it
 ```
+
+the resume is typeset from source in [`resume/`](resume/README.md) — edit
+`resume/resume.yaml`, run `bun run resume`, commit the built pdf. ci rebuilds
+and byte-compares, so it cannot go stale.
 
 ## constraints
 

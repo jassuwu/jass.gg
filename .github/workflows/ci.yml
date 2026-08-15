@@ -25,3 +25,74 @@ jobs:
 
       - name: Verify project
         run: bun run verify
+
+  # public/resume.pdf is committed, so Vercel serves it as an ordinary static
+  # file and a deploy has no resume build step to fail. The cost of committing a
+  # build output is that it can go stale, and this job is what makes that
+  # impossible: it rebuilds from resume.yaml and byte-compares.
+  #
+  # That comparison is only meaningful because Typst output is reproducible —
+  # `--creation-timestamp 0` plus an exact compiler pin plus vendored fonts.
+  # Verified: identical sha256 from macOS/arm64 and Alpine/x86_64. If a future
+  # Typst version breaks that, this job goes red on every push and the fix is to
+  # bump the pin, not to loosen the comparison.
+  #
+  # It is a separate job from `verify` on purpose. `bun run verify` stays a fast
+  # JS-only loop that needs no Python and no Typst.
+  resume:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Not typst-community/setup-typst: Typst ships a static musl binary with no
+      # runtime dependencies, so a checksummed download is fewer moving parts than
+      # a third-party action and pins the artifact itself rather than a tag.
+      # Bump TYPST_VERSION and TYPST_SHA256 together with the pin in
+      # resume/build.sh.
+      - name: Install Typst
+        env:
+          TYPST_VERSION: 0.15.1
+          TYPST_SHA256: a6d077d0a95eed5a2eba715b2dae06be954f624ccbf85758a03f389ded33118c
+        run: |
+          tarball=typst-x86_64-unknown-linux-musl.tar.xz
+          curl -fsSL -o "$tarball" \
+            "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/${tarball}"
+          echo "${TYPST_SHA256}  ${tarball}" | sha256sum -c -
+          tar -xJf "$tarball"
+          echo "$PWD/typst-x86_64-unknown-linux-musl" >>"$GITHUB_PATH"
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: resume/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r resume/requirements.txt
+
+      # PY skips the venv provisioning in build.sh — the runner's Python is not
+      # externally-managed, so the packages are already importable. OUT sends the
+      # build somewhere other than public/ so the committed files stay untouched
+      # and can be compared against.
+      #
+      # This also runs the ATS gates (resume/check.py) on the fresh build, so a
+      # change that breaks extraction fails here even if someone committed the
+      # matching PDF.
+      - name: Rebuild the resume
+        env:
+          PY: python
+          OUT: ${{ runner.temp }}/resume
+        run: |
+          mkdir -p "$OUT"
+          ./resume/build.sh
+
+      - name: Committed resume is current
+        run: |
+          if ! cmp -s "${{ runner.temp }}/resume/resume.pdf" public/resume.pdf ||
+             ! cmp -s "${{ runner.temp }}/resume/resume.json" public/resume.json; then
+            echo "::error::public/resume.pdf is stale — run 'bun run resume' and commit the result"
+            exit 1
+          fi
+          echo "resume is current"
