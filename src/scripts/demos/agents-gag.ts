@@ -21,6 +21,7 @@
  * stays the page.
  */
 import { ambient } from "@/scripts/friend";
+import * as sound from "@/scripts/sound";
 
 const WORD = "agents";
 const PHRASE = "mostly the former";
@@ -37,6 +38,34 @@ const OUT = 350;
 /* Clearly not the reader's cursor: foreground at six tenths. Translucent is
    the one place opacity is honest — this is a ghost, not text. */
 const GHOST = 0.6;
+
+/* The ghost's mouse (ticket 21): ~2ms of noise through a bandpass, which is
+   a plastic microswitch and not a beep. Zero assets — a transient this short
+   would cost more as a file than as a loop. Press and release sit at
+   slightly different pitches, and the up-click rides a little higher and
+   lighter than the down, because that is what a real button does. Both go
+   through the bus at a whisper: this is a dwell act, and the bus already
+   holds the gate, the mute, and the hidden tab. */
+const click =
+  (hz: number, level: number) =>
+  (ctx: AudioContext, out: GainNode): void => {
+    const n = Math.max(1, Math.floor(ctx.sampleRate * 0.002));
+    const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++)
+      d[i] = (Math.random() * 2 - 1) * (1 - i / n) * level;
+    const s = ctx.createBufferSource();
+    s.buffer = buf;
+    const f = ctx.createBiquadFilter();
+    f.type = "bandpass";
+    f.frequency.value = hz;
+    f.Q.value = 2;
+    s.connect(f);
+    f.connect(out);
+    s.start();
+  };
+const PRESS = click(1700, 1);
+const RELEASE = click(2100, 0.75);
 
 /** The viewport point of the caret before character `offset`. */
 function caret(node: Text, offset: number): DOMRect {
@@ -85,6 +114,7 @@ function play(word: Element, node: Text, from: number, to: number): void {
 
   let raf = 0;
   let held = -1;
+  let pressed = false;
   const t0 = performance.now();
 
   /* The tip of the arrow is at (2,1) in its own box; put() lands the tip on
@@ -127,6 +157,12 @@ function play(word: Element, node: Text, from: number, to: number): void {
       const bow = Math.sin(Math.min(p, 1) * Math.PI) * 7;
       put(sx + (a.x - sx) * p, sy + (a.y + a.height * 0.72 - sy) * p + bow);
     } else if (t < FADE + TRAVEL + DRAG) {
+      /* The button goes down on the first drag frame — the click IS the
+         moment the selection starts, not the travel before it. */
+      if (!pressed) {
+        pressed = true;
+        sound.play({ tier: "whisper", synth: PRESS });
+      }
       const p = pull((t - FADE - TRAVEL) / DRAG);
       const f = from + (to - from) * p;
       const k = Math.round(f);
@@ -153,6 +189,10 @@ function play(word: Element, node: Text, from: number, to: number): void {
       if (held !== -1) {
         sel.removeAllRanges();
         held = -1;
+        /* The up-click lives here and only here. done() also lets go of the
+           selection, but silently — an interrupted ghost doesn't finish its
+           gesture, so an abort mid-drag never earns the release. */
+        sound.play({ tier: "whisper", synth: RELEASE });
       }
       ghost.style.opacity = String(
         GHOST * (1 - (t - FADE - TRAVEL - DRAG - HOLD) / OUT),
