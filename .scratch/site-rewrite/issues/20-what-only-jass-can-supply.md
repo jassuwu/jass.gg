@@ -30,8 +30,9 @@ and his (word, meme) picks. The brainrot self-recording item is dead
    rewrite. (A first draft listing the site's tricks was killed on sight for
    explaining the jokes; whatever replaces the draft must state nothing.)
    The other two drafts awaiting his rewrite, now live in
-   `src/components/Footer.astro`: the murmur `(you're up late. me too,
-   probably)` and the copyright line `© jass. all rights reserved, none
+   `src/components/Footer.astro`: the murmur `(go sleep girl. i've been
+   in bed since 9:15)` — redrafted from jass's own fragments (bryan johnson
+   hours; the friend scolds from bed, not from beside you) and the copyright line `© jass. all rights reserved, none
    exercised`.
 2. **Marginalia pairs** — (word in the intro, meme) — the word is voice, the
    meme is taste. Two is probably the right number for the whole intro;
