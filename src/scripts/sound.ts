@@ -36,6 +36,12 @@ interface Cue {
   url?: string;
   /** Zero-asset cues: handed the context and a gain staged to the tier. */
   synth?: (ctx: AudioContext, out: GainNode) => void;
+  /**
+   * How one hot cue sits under the tier without moving the ladder: a 0..1
+   * trim multiplied into the staged gain, default 1. The ladder stays two
+   * rungs; this is a cue admitting its source material runs loud.
+   */
+  level?: number;
 }
 
 /* Created only inside the wake handler — its absence IS the gate. */
@@ -106,7 +112,7 @@ export function play(cue: Cue): void {
   c.resume();
   stopAll();
   const g = c.createGain();
-  g.gain.value = GAIN[cue.tier];
+  g.gain.value = GAIN[cue.tier] * (cue.level ?? 1);
   g.connect(c.destination);
   const mouth: typeof live = { g };
   live = mouth;

@@ -26,6 +26,11 @@ export function register(): void {
   if (!el) return;
   ambient({
     el,
-    act: () => play({ tier: "whisper", url: "/sounds/andrew-dictate.mp3" }),
+    // level 0.4 under the whisper tier (0.08 × 0.4 = 0.032): the clip runs
+    // hot at the shared floor, and jass asked for "even less volume" —
+    // audible if you're listening, deniable if you weren't. His ear owns
+    // this number.
+    act: () =>
+      play({ tier: "whisper", level: 0.4, url: "/sounds/andrew-dictate.mp3" }),
   });
 }
