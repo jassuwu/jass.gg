@@ -271,7 +271,34 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
   </main>
 </Layout>
 
+<script>
+  import { ambient } from "@/scripts/friend";
+
+  /* THROWAWAY (ticket 14). The mechanism needs one act wired to it so the
+     grammar can be judged on a real phone: dwell on an entry row and its
+     underline waves — draws in, retracts. It borrows the link's existing
+     stroke so it adds nothing new to judge except the TIMING, which is the
+     only thing on trial. Delete this act the moment the first real demo
+     lands; the module stays. */
+  for (const row of document.querySelectorAll("section li")) {
+    const link = row.querySelector("a");
+    if (!link) continue;
+    ambient({
+      el: row,
+      act: () => {
+        link.classList.add("friend-wave");
+        setTimeout(() => link.classList.remove("friend-wave"), 650);
+      },
+    });
+  }
+</script>
+
 <style>
+  /* THROWAWAY (ticket 14) — the wave the script above rides. Dies with it. */
+  a.friend-wave {
+    background-size: 100% 2px;
+  }
+
   /* THE SECTION YOU ASKED FOR SIGNS ITSELF. The page has no nav, so nobody
      arrives at /#things or /#toys from inside the page — an anchor arrival is
      always someone who followed a shared link. When they land, the heading
