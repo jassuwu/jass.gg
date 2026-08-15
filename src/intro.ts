@@ -91,15 +91,26 @@ export const INTRO =
  * The aside deliberately does NOT restate who — CLOSER already filtered. Two
  * lines doing the same filtering would be one line's work done twice.
  *
- * LENGTH IS A HARD CONSTRAINT, measured not guessed. At 18px Excalifont the
- * 390px column leaves 342px. This line is 294px and holds. jass's first version
- * — "i just want people who like things i like to be in my circle" — was 511px,
- * and even trimmed to "...things i like" it was 356px. A wrapped whisper is not
- * a whisper. Anything written into this slot must be measured, not eyeballed.
+ * LENGTH IS A HARD CONSTRAINT, measured not guessed. The two run on ONE LINE
+ * now, at 11px against the closer's 18px, and the pair is 406px against a 624px
+ * desktop column — comfortable. It cannot fit 390px mobile at any size (the
+ * closer alone is 221px of the 342px available), so the aside is `nowrap` and
+ * drops whole to a second line there. That is the wrap being chosen rather than
+ * suffered.
+ *
+ * jass's first version — "i just want people who like things i like to be in my
+ * circle" — was 511px at 18px, and even trimmed to "...things i like" it was
+ * 356px. Shrinking to 11px bought room, but not licence: anything written into
+ * this slot must be measured, not eyeballed, and a two-line murmur is not a
+ * murmur.
  */
 export const CLOSER = "i'd like to see what you ship.";
 
-/** See CLOSER. `accent-quiet` and `mt-2` on the page, and both matter. */
+/**
+ * See CLOSER. Rendered inline after it in the hand font at `text-micro` and
+ * `accent-quiet`. The 11px-against-18px size gap is what makes it an aside —
+ * it used to be a separate paragraph, which made it a second statement instead.
+ */
 export const CLOSER_ASIDE = "(i'm just trying to find my people)";
 
 /**

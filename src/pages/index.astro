@@ -83,21 +83,30 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
 
       {
         /* The closer, and the whole reason the socials row below it stops being
-      an unlabelled list of six words. See `src/intro.ts` before touching either
-      line — they are one move and the second one has a measured width limit.
+      an unlabelled list of six words. See `src/intro.ts` before touching it.
 
-      `mt-5` sets it apart from the intro without starting a new section, and
-      `mt-2` on the aside is the tight gap that makes it a stage whisper on the
-      same breath rather than a third paragraph. Let that drift and the joke
-      stops being an aside.
+      ONE SENTENCE AND ITS MURMUR, on one line. The aside was its own paragraph
+      first, which made it a second statement; inline at 11px against 18px it
+      becomes what it always wanted to be — an actual aside, said quieter, in
+      the same breath. The size gap is doing the work the line break used to do,
+      and doing it better.
+
+      `whitespace-nowrap` because the pair does not fit one line at 390px and
+      never will. Left alone it breaks mid-phrase and reads as an accident; held
+      together it drops whole onto a second line, which is exactly how it looked
+      as its own paragraph. Desktop gets the single line, mobile loses nothing.
 
       accent-quiet, not accent: this page's one full-strength accent belongs to
-      the wordmark. `/404` runs the identical shape at full accent because it
-      has no wordmark to compete with, and the comment there has always said so
-      — this is the line it was describing. */
+      the wordmark. `/404` runs the same shape at full accent because it has no
+      wordmark to compete with, and the comment there has always said so — this
+      is the line it was describing. */
       }
-      <p class="mt-5 text-body">{CLOSER}</p>
-      <p class="mt-2 font-hand text-accent-quiet">{CLOSER_ASIDE}</p>
+      <p class="mt-5 text-body">
+        {CLOSER}{" "}
+        <span class="font-hand text-micro whitespace-nowrap text-accent-quiet"
+          >{CLOSER_ASIDE}</span
+        >
+      </p>
 
       {
         /* These links are 13px tall. Fine to read, mean to hit with a thumb.
