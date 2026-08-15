@@ -37,6 +37,26 @@ about quality than any stat — and ticket 17 handles the numbers side.
 - **Prefer the project's own assets** (ticket 12 item 5) over reimplementation.
 - Passes, not pitches: build a batch, jass kills what's noise.
 
+## Settled (grilling, aug 15)
+
+- **Pass one builds the certain tier**: quilt (embed the live SVG endpoint),
+  onandemo (the real published engine, the real cat), liquid-glass-cursor
+  (the real npm script; Chromium-only, nothing on Firefox/Safari).
+- **savemefrom is upgraded from in-row demo to full-page gag**, in jass's
+  words: reimplement what savemefrom does, on this portfolio — click/tap the
+  row's description and *this page* gets judgment-cut, slices, and comes back
+  whole. **Repeatable** (a deliberate click is consent), lazy-loaded on first
+  intent, the vergil clip re-encoded smaller than savemefrom's 15.2 MB
+  original. IP stance from jass: "i don't really think it matters."
+- **mojify: only if embedding its real render earns its place on screen** —
+  jass: "we can generate and embed something if needed, but let's not force
+  it."
+- **The no-performance rows stay plain, firmly** (skills, subway-cursors,
+  better-splitwise, andrew-dictate). Uneven-ness is what makes the performing
+  rows feel found instead of installed. If the plain rows feel dead once pass
+  one ships, the fallback is depth-in-writing for the `things` — never
+  manufactured filler details.
+
 ## Done when
 
 Every entry has either a working demo jass kept or an explicit "stays plain"

@@ -1,8 +1,22 @@
 # Stats that tell the truth
 
 Type: grilling (HITL)
-Status: open — **unblocked**; ticket 12's inventory is in
-[research/what-the-projects-actually-are.md](../research/what-the-projects-actually-are.md)
+Status: closed — resolved aug 15 in the grilling session
+
+## Resolution
+
+**No number renders today.** The inventory (mojify 10★, savemefrom 1★, all
+else 0★, single-digit npm downloads, 5 skills.sh installs) can't carry
+substance — a lone `10★` reads as a participation trophy. Proof by
+performance (ticket 15) is the substance signal this site can afford.
+
+**The trigger, written down so this isn't re-litigated from scratch:** revisit
+when any entry crosses ~50 GitHub stars or gains a real, citable usage number
+(users, installs, downloads at a magnitude that survives being printed).
+Thresholded-or-nothing still governs at that point.
+
+**Instrumenting the project sites stays out of scope** for this map — it's
+its own effort with its own destination.
 
 ## Question
 

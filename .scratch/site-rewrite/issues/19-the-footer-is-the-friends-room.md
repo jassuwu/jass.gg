@@ -37,6 +37,21 @@ joke) earn the one clever slot?
    mechanisms were pass-three work worth keeping if something true sits
    behind them.
 
+## Settled (grilling, aug 15)
+
+- **The 2am murmur gets the one clever slot** — the friend notices the
+  *reader's* time; hand font, accent-quiet, appears only in the small hours,
+  reader-local via JS (the friend's body; JS-off simply never sees it, which
+  is the constraint working).
+- **The copyright line exists as a plain deadpan fact** — machine role,
+  always present. A fact that happens to be funny isn't a second clever
+  thing; it's the machine doing its job.
+- **jass's own local time is dropped entirely.**
+- **The stamp keeps its date and commit link**; the commit-subject reveal
+  (and its hover/focus/print plumbing) is removed when the murmur lands.
+- Words are drafted by the agent as placeholders and flagged in ticket 20 for
+  jass to rewrite — his explicit instruction in the grilling session.
+
 ## Done when
 
 The footer's final contents are decided, the copy slots are filed in 20, and

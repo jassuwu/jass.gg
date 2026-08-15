@@ -11,6 +11,17 @@ standing queue of inputs that only jass can produce, because the copy rule
 has no exception and taste calls are his. Each item unblocks work the moment
 it lands; none of them block each other.
 
+## Amendment (grilling, aug 15) — the copy rule bends, on jass's instruction
+
+On the three open lines (SOURCE_NOTE, the 2am murmur, the copyright fact)
+jass said: "just do your take on it and just mention that these are the
+things that I'd have to take a look at and write my own." So: **agent drafts
+ship as placeholders, each flagged `AGENT DRAFT — jass rewrites` at its
+definition site**, and this queue tracks them until his words replace them.
+The marginalia pairs are NOT covered by this — they wait for the mechanism
+and his (word, meme) picks. The brainrot self-recording item is dead
+(footage comes off youtube, ticket 18).
+
 ## The queue
 
 1. **`SOURCE_NOTE`** (`src/intro.ts`) — the View Source comment. Plumbed and

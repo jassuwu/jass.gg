@@ -33,6 +33,12 @@ first impression stops being static without gaining any decoration at rest.
   it? The "no hover choreography" precedent was about links; the wordmark
   isn't one. Judge it built, not argued.
 
+## Settled (grilling, aug 15)
+
+It signs on **every load** — it is the page's entrance, and once-only would
+make it a splash screen with extra steps. **Hover re-signs**, quietly; the
+wordmark isn't a link, so no precedent breaks.
+
 ## Done when
 
 jass has seen it on the real page at both widths and either killed it or kept

@@ -32,6 +32,18 @@ is the idea that lives.
 4. **Does it read as the friend** — leaning over on the worst page with
    something dumb to watch — **or as decoration?** Judge on screen.
 
+## Settled (grilling, aug 15)
+
+- **Footage: generic gameplay off youtube** — jass: "just get some off of yt.
+  it's just gameplay." IP stance: "some general subway surfers gameplay
+  video and minecraft speedrun video, some satisfying video generic brainrot
+  should definitely be okay."
+- **Form: a small curated set, picked at random per visit, lazy-loaded** —
+  jass: "lazy load random curated brainrot." Muted, cropped small, compressed
+  hard (~1–2 MB per loop), machine-framed like a monitor in the corner,
+  poster-with-tap under data-saver. The page's one full accent stays on the
+  joke line.
+
 ## Done when
 
 jass has seen it on the real 404 and kept or killed it.
