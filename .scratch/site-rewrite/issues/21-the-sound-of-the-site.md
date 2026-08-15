@@ -1,8 +1,14 @@
 # The sound of the site
 
 Type: prototype (HITL)
-Status: open — direction approved by jass in full ("i like literally
-everything about this"), build fanning out as a fable workflow
+Status: built (fable workflow, aug 15) — the bus (1,181 B minified) and all
+ten cues are on the branch, one commit each, verified in-browser except by
+ear. Open pending jass's listening pass: the whisper gain (`GAIN.whisper`
+in `src/scripts/sound.ts`) is the knob, the mute egg is the © line. The
+vergil cut's ring was cut to fade with the strip drift so the snap home
+lands in silence; the touch cat walk is silent by geometry (its synthetic
+cursor never enters the rest radius); unmute plays no confirmation, because
+a confirmation sound is a UI bleep.
 Follows: the nine details of tickets 13/15/16/18/19
 
 ## The grammar (approved, do not re-derive)
