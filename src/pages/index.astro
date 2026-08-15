@@ -79,7 +79,20 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
       }
       <h1 class="font-hand text-display text-accent">jass</h1>
 
-      <p class="mt-8 text-body">{INTRO}</p>
+      {
+        /* Measured: at the full 624px column this paragraph sets ~81 characters
+      to the line, and comfortable is 60–75. Long measure is the most common
+      reason a page of plain text feels faintly tiring to read, and nobody can
+      ever name it — the eye loses the start of the next line on the return
+      sweep. Capping the prose at 34rem brings it to ~71.
+
+      The cap is on the PROSE ONLY and the lists keep the full width, which is
+      not an inconsistency but the point: a paragraph is read once, left to
+      right, and suffers from a long measure. A list is scanned down its left
+      edge and does not. Narrowing the container instead would fix this and make
+      the longest entry wrap on desktop, which is a worse trade. */
+      }
+      <p class="mt-8 max-w-[34rem] text-body">{INTRO}</p>
 
       {
         /* The closer, and the whole reason the socials row below it stops being
@@ -181,7 +194,7 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
     assertion; a date that hands you the diff is evidence — and it is the only
     thing on the page that is true because of how the page was built. */
     }
-    <footer class="mt-20 font-machine text-micro text-muted-foreground">
+    <footer class="group mt-20 font-machine text-micro text-muted-foreground">
       {
         LAST_TOUCHED.commitUrl ? (
           <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
@@ -189,6 +202,33 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
           </a>
         ) : (
           <span>last touched {formatStamp(LAST_TOUCHED.date)}</span>
+        )
+      }
+
+      {
+        /* The stamp says a date and hands over a link. This says what actually
+      changed — the stamp's own argument was that a date alone is an assertion
+      and a date that gives you the diff is evidence, and until now it was one
+      click short of its own claim.
+
+      Hidden until the footer is hovered, because a commit subject is written
+      for whoever works on the repo rather than for a visitor: at rest it is
+      noise, found by someone who went looking it is the page showing its
+      working. That also makes it the only thing here nobody needs to see.
+
+      `opacity`, not `hidden`, so the space is reserved and nothing moves when
+      it appears — and it sits at the very bottom of the page, so even that
+      costs nothing above it. `aria-hidden` because a screen reader would
+      otherwise read a decoration it can never trigger; the link above already
+      says everything that matters. */
+      }
+      {
+        LAST_TOUCHED.subject && (
+          <p
+            aria-hidden="true"
+            class="max-w-[34rem] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            {LAST_TOUCHED.subject}
+          </p>
         )
       }
     </footer>
