@@ -22,9 +22,18 @@
  * cat ships as a data URL inside the bundle — no asset request, no ?url
  * plumbing, no cost to a reader who never dwells. The engine's own element is
  * `pointer-events: none`, so no click ever lands on a cat.
+ *
+ * THE SOUND (ticket 21): the chase is silent — a hunting cat is — and the cat
+ * says one short "nya" at the moment it catches the cursor: the first tick it
+ * comes to rest inside the engine's own rest radius of the pointer. One per
+ * act, whisper tier, synthesized — no asset, no loop, and never before the
+ * bus's first-gesture gate (the bus keeps that law; nothing here asks twice).
+ * The touch walk stays silent: its cursor is a fake planted offscreen, and a
+ * cat that never catches anything has nothing to say.
  */
 
 import { ambient } from "@/scripts/friend";
+import { play } from "@/scripts/sound";
 
 const ROW = 'li[data-entry="onandemo.js"]';
 
@@ -40,6 +49,10 @@ const RUN_W = [
   [4, 2],
   [4, 3],
 ] as const;
+/* The engine's default rest radius (frame-map.ts, tuned nowhere by us): the
+   cat idles once its center is within this of the pointer. The nya borrows
+   the engine's own definition of "caught" instead of inventing one. */
+const REST_RADIUS = 48;
 
 /* The engine's own cadence, kept so the exit matches its gait. */
 const TICK_MS = 100;
@@ -101,6 +114,68 @@ function whenMounted(cb: (el: HTMLElement) => void): void {
   }, 50);
 }
 
+/* One pitch-bent triangle syllable: a fast attack, a glide, an exponential
+   die-off. Two of these in a row — up-chirp then down-mew — read as a
+   cartoon "nya". Triangle over sine for the faint reedy edge a meow has. */
+function syllable(
+  c: AudioContext,
+  out: GainNode,
+  at: number,
+  dur: number,
+  f0: number,
+  f1: number,
+): void {
+  const o = c.createOscillator();
+  o.type = "triangle";
+  o.frequency.setValueAtTime(f0, at);
+  o.frequency.exponentialRampToValueAtTime(f1, at + dur);
+  const env = c.createGain();
+  env.gain.setValueAtTime(0, at);
+  env.gain.linearRampToValueAtTime(1, at + 0.015);
+  env.gain.exponentialRampToValueAtTime(0.001, at + dur);
+  o.connect(env).connect(out);
+  o.start(at);
+  o.stop(at + dur + 0.02);
+}
+
+/* "ny-aa": ~350ms total. Zero assets — the whole sound is these six numbers. */
+function nya(c: AudioContext, out: GainNode): void {
+  const t = c.currentTime;
+  syllable(c, out, t, 0.09, 660, 990);
+  syllable(c, out, t + 0.11, 0.24, 940, 520);
+}
+
+/* Watch the chase for the catch. The engine keeps its state private, so this
+   reads what it publishes — the element's inline position — against our own
+   copy of the pointer, and calls it caught by the engine's own rule: center
+   within REST_RADIUS. Until the reader's mouse actually moves there is no
+   pointer to catch (the engine agrees: it rests at spawn until then), so the
+   nya cannot fire on the spawn point. Fires at most once, then stands down;
+   returns a stop for the act's end. */
+function watchForCatch(el: HTMLElement): () => void {
+  let px: number | undefined;
+  let py = 0;
+  const onMove = (e: MouseEvent): void => {
+    px = e.clientX;
+    py = e.clientY;
+  };
+  addEventListener("mousemove", onMove);
+  const stop = (): void => {
+    window.clearInterval(timer);
+    removeEventListener("mousemove", onMove);
+  };
+  const timer = window.setInterval(() => {
+    if (px === undefined) return;
+    const x = (parseFloat(el.style.left) || 0) + CELL / 2;
+    const y = (parseFloat(el.style.top) || 0) + CELL / 2;
+    if (Math.hypot(x - px, y - py) < REST_RADIUS) {
+      stop();
+      play({ tier: "whisper", synth: nya });
+    }
+  }, TICK_MS);
+  return stop;
+}
+
 /* Pointer: the real chase. persist off, so the cat spawns at (32, 32) —
    oneko's birthplace — and the entrance is part of the demo: it has to cross
    the page to reach you. */
@@ -108,7 +183,9 @@ async function chase(): Promise<void> {
   const { onandemo } = await import("onandemo");
   const destroy = onandemo({ persist: false });
   whenMounted((el) => {
+    const stopWatching = watchForCatch(el);
     window.setTimeout(() => {
+      stopWatching();
       const east = parseFloat(el.style.left) + CELL / 2 > window.innerWidth / 2;
       destroy();
       exitRun(el, east);
