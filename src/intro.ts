@@ -54,34 +54,53 @@ export const INTRO =
   "i build a lot of toys, occasionally useful things. im on twitter releasing & watching what's releasing every day. i love doing work that has 0 user impact, but 100x the dev's lives. im excited about & scared of my agents, mostly the former.";
 
 /**
- * THE CLOSER SLOT IS OPEN, AND IT IS DELIBERATELY EMPTY RATHER THAN FILLED.
+ * THE CLOSER. Two lines, and they are one move — do not ship either alone.
  *
- * It held "i also love video games, but i don't get to play them as much now.
- * gimme an excuse and join me for a sesh?" — cut by jass. Splitting it into its
- * own paragraph fixed how it sat on the page but not what it was doing.
+ * It replaces "i also love video games, but i don't get to play them as much
+ * now. gimme an excuse and join me for a sesh?", which jass cut. What he wanted
+ * instead, in his words: something that forms a connection with the reader so
+ * that people who like what he likes end up around him — without asking for a
+ * follow, which he called cringe and which he was right about. An ask is a
+ * transaction, and it arrives before the reader has decided they care.
  *
- * What he wants there instead, in his words: something that "forms a connection
- * between me and the reader", so that "people who like things i like" end up in
- * his circle. What he does not want is asking for a follow, which he calls
- * cringe, and he is right — an ask is a transaction, and it arrives before the
- * reader has decided they care.
+ * CLOSER IS AN OFFER, NOT A REQUEST, and that is why it works. It gives the
+ * reader attention rather than asking for theirs, and it is already true of him
+ * — INTRO says he watches what's releasing every day. It also filters by
+ * activity: someone who builds reads it and feels seen, someone who doesn't
+ * quietly isn't the audience. That is the filter jass wanted. An earlier draft
+ * said "exclusive circle", which filters by permission instead, and that is the
+ * version that would have repelled exactly the people he was hoping for.
  *
- * Two constraints for whoever writes it, jass included:
+ * IT NEEDS NO CALL TO ACTION because the socials row sits directly beneath it.
+ * Six links, previously unlabelled — a list with no reason attached. This line
+ * gives them the reason, and the row finishes the sentence: so show me, here is
+ * where i am. An earlier draft ended "so reach out pls", which asked for the
+ * thing the six links were already offering.
  *
- * 1. It goes ABOVE the socials row, in the paragraph slot at `mt-5`. The row is
- *    six unlabelled words and no reason. One line above it turns a list of links
- *    into an invitation without a single word of asking — the mechanism is
- *    already on the page, it just has no reason attached.
+ * CLOSER_ASIDE is the `/404` move on a different axis. There, "just talk to me"
+ * is punctured by "(pls no one talks to me 😔)" — the offer, then the admission
+ * that it does not work, in a quieter voice. You cannot feel sold to by someone
+ * who just told you nobody is buying. Repeating that joke here would turn a
+ * voice into a tic, so this one deflates by admitting the MOTIVE instead: the
+ * quiet true reason under a line that would otherwise be pure generosity.
  *
- * 2. `/404` already solves this exact problem in his voice: "just talk to me",
- *    then "(pls no one talks to me 😔)" in the hand font. It states the want and
- *    undercuts it in the same breath, and it is warm rather than needy. The
- *    self-awareness is what removes the cringe. Whatever lands here should be in
- *    that register, and it should not repeat that joke.
+ * "just" is the whole tone and must survive any edit. "i'm trying to find my
+ * people" is a plan. "i'm JUST trying to find my people" is a confession, and
+ * only the second one is warm.
  *
- * Nothing renders in this slot until he writes it. An empty slot is honest; a
- * placeholder closer would be the writing section all over again.
+ * The aside deliberately does NOT restate who — CLOSER already filtered. Two
+ * lines doing the same filtering would be one line's work done twice.
+ *
+ * LENGTH IS A HARD CONSTRAINT, measured not guessed. At 18px Excalifont the
+ * 390px column leaves 342px. This line is 294px and holds. jass's first version
+ * — "i just want people who like things i like to be in my circle" — was 511px,
+ * and even trimmed to "...things i like" it was 356px. A wrapped whisper is not
+ * a whisper. Anything written into this slot must be measured, not eyeballed.
  */
+export const CLOSER = "i'd like to see what you ship.";
+
+/** See CLOSER. `accent-quiet` and `mt-2` on the page, and both matter. */
+export const CLOSER_ASIDE = "(i'm just trying to find my people)";
 
 /**
  * What search results and link previews show. It is the intro's first sentence,

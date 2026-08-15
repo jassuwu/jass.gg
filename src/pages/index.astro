@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 
 import { SOCIALS } from "@/constants";
-import { INTRO, TAGLINE } from "@/intro";
+import { CLOSER, CLOSER_ASIDE, INTRO, TAGLINE } from "@/intro";
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
 
@@ -80,6 +80,24 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
       <h1 class="font-hand text-display text-accent">jass</h1>
 
       <p class="mt-8 text-body">{INTRO}</p>
+
+      {
+        /* The closer, and the whole reason the socials row below it stops being
+      an unlabelled list of six words. See `src/intro.ts` before touching either
+      line — they are one move and the second one has a measured width limit.
+
+      `mt-5` sets it apart from the intro without starting a new section, and
+      `mt-2` on the aside is the tight gap that makes it a stage whisper on the
+      same breath rather than a third paragraph. Let that drift and the joke
+      stops being an aside.
+
+      accent-quiet, not accent: this page's one full-strength accent belongs to
+      the wordmark. `/404` runs the identical shape at full accent because it
+      has no wordmark to compete with, and the comment there has always said so
+      — this is the line it was describing. */
+      }
+      <p class="mt-5 text-body">{CLOSER}</p>
+      <p class="mt-2 font-hand text-accent-quiet">{CLOSER_ASIDE}</p>
 
       {
         /* These links are 13px tall. Fine to read, mean to hit with a thumb.

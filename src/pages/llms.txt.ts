@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 
 import { SOCIALS, URLS } from "@/constants";
-import { INTRO, TAGLINE } from "@/intro";
+import { CLOSER, CLOSER_ASIDE, INTRO, TAGLINE } from "@/intro";
 
 /**
  * `/llms.txt` — the site, in the format an agent reads (Jeremy Howard's
@@ -44,6 +44,7 @@ export const GET: APIRoute = async ({ site }) => {
     "# jass.gg",
     `> ${TAGLINE}`,
     INTRO,
+    `${CLOSER} ${CLOSER_ASIDE}`,
     section("things", entries("thing")),
     section("toys", entries("toy")),
     // No writing section, matching the page — it comes back with a post. This
