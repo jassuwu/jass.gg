@@ -1,8 +1,8 @@
 # Stats that tell the truth
 
 Type: grilling (HITL)
-Status: open
-Blocked by: 12 (what the projects actually are)
+Status: open — **unblocked**; ticket 12's inventory is in
+[research/what-the-projects-actually-are.md](../research/what-the-projects-actually-are.md)
 
 ## Question
 

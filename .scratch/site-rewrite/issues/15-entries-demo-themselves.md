@@ -2,7 +2,8 @@
 
 Type: prototype (HITL)
 Status: open
-Blocked by: 12 (what the projects actually are), 14 (the friend under a thumb)
+Blocked by: 14 (the friend under a thumb) — 12 is closed; its findings are in
+[research/what-the-projects-actually-are.md](../research/what-the-projects-actually-are.md)
 
 ## Question
 

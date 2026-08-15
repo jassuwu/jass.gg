@@ -1,8 +1,29 @@
 # What the projects actually are
 
 Type: research (AFK)
-Status: open
-Blocks: 15 (entries demo themselves), 17 (stats that tell the truth)
+Status: closed — resolved aug 15; findings in
+[research/what-the-projects-actually-are.md](../research/what-the-projects-actually-are.md)
+Blocks: 15 (entries demo themselves), 17 (stats that tell the truth) — both
+now unblocked on this ticket's side
+
+## Resolution
+
+All eleven projects observed at the live site and repo level, every claim
+cited, all checks run 2026-08-15. Headlines: **ass is a real Three.js
+soft-body physics toy** (slap the specimen, it ripples, with procedural
+foley) — categorically not what any guess assumed; **quilt has a live
+embeddable SVG endpoint** (`quilt.jass.gg/u/<names>.svg`, confirmed working);
+**liquid-glass-cursor and onandemo are both npm-published and directly
+importable** (the former auto-inits from one script tag, Chromium-only; the
+latter is 12 KB, dependency-free); **incomerank ships a production-quality
+pre-rendered demo** built from its real geometry and audio code; **skills and
+subway-cursors have no live link and no honest visual demo** (subway-cursors'
+only asset is a 31 MB GIF of the copyrighted game its own author gitignored
+for DMCA reasons); **savemefrom's vergil.mp4 carries the same IP flag**;
+**andrew-dictate has zero visual assets anywhere** — a demo would need a new
+recording, which only jass can make. Stats inventory: mojify 10★, savemefrom
+1★, everything else 0; npm downloads single-digit; skills.sh reports 5
+installs. Full detail in the research file.
 
 ## Question
 
