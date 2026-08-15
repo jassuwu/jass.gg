@@ -23,32 +23,22 @@ export interface LastTouched {
   date: Date;
   /** Absent when git isn't available, which is the only case with no commit. */
   commitUrl?: string;
-  /**
-   * The commit's subject line — what actually changed.
-   *
-   * The stamp's whole argument is that a date on its own is an assertion and a
-   * date that hands you the diff is evidence. It was handing over a link, which
-   * is one click short of the claim. This is the sentence.
-   *
-   * It stays hidden until hover on purpose. Commit subjects are written for
-   * whoever is working on the repo, not for a visitor, so on the page at rest
-   * it would be noise; found by someone who went looking, it is the page
-   * showing its working.
-   */
-  subject?: string;
 }
 
+/* The commit's subject line used to ride along here, revealed under the stamp
+   on hover. jass killed it in ticket 19: nobody cares what commit he made on
+   a portfolio site. The date and its link were always the whole claim. */
 function lastContentCommit(): LastTouched {
   try {
-    const [iso, sha, subject] = execSync(
-      `git log -1 --format=%cI%n%H%n%s -- ${TRACKED.join(" ")}`,
+    const [iso, sha] = execSync(
+      `git log -1 --format=%cI%n%H -- ${TRACKED.join(" ")}`,
       { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
     )
       .trim()
       .split("\n");
     const date = new Date(iso ?? "");
     if (Number.isNaN(date.getTime()) || !sha) return { date: new Date() };
-    return { date, commitUrl: `${REPO}/commit/${sha}`, subject };
+    return { date, commitUrl: `${REPO}/commit/${sha}` };
   } catch {
     return { date: new Date() };
   }
