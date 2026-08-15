@@ -303,4 +303,16 @@
   section {
     break-inside: avoid;
   }
+
+  /* The stamp's working prints. On screen the commit subject hides behind a
+     hover, and this block's whole premise is that paper can't hover — the
+     same reasoning that prints an href after every link. Left alone it would
+     be worse than absent: `opacity: 0` still reserves the space, so the sheet
+     would end on a paragraph-shaped blank hole. Paper gets the sentence.
+
+     Wins over the `opacity-0` utility for the reason stated at the top of
+     this block: unlayered beats layered, utilities included. */
+  footer p {
+    opacity: 1;
+  }
 }

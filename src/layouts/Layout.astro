@@ -3,6 +3,7 @@ import Font from "astro/components/Font.astro";
 import Analytics from "@vercel/analytics/astro";
 
 import { USERNAMES } from "@/constants";
+import { SOURCE_NOTE } from "@/intro";
 import "@/styles/global.css";
 
 interface Props {
@@ -94,6 +95,14 @@ const ogImage = new URL("/og.png", Astro.site);
     <Font cssVariable="--font-excalifont" preload />
   </head>
   <body>
+    {
+      /* The View Source comment — the one element on the site whose audience
+    is someone reading the markup, not the page. `set:html` because Astro
+    strips template comments from output, which is normally right and here
+    would delete the entire point. Empty until jass writes it; see the
+    SOURCE_NOTE comment in `src/intro.ts` for the slot's constraints. */
+    }
+    {SOURCE_NOTE && <Fragment set:html={`<!-- ${SOURCE_NOTE} -->`} />}
     <slot />
 
     {

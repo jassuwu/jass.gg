@@ -131,9 +131,21 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
       <ul
         class="-my-1 mt-7 flex flex-wrap gap-x-4 font-machine text-meta text-muted-foreground">
         {
+          /* `rel="me"` is the IndieWeb's identity handshake, and it is the
+        /llms.txt move again: serve a machine convention properly where no
+        human ever looks. The five external links are the claim "these
+        profiles are me"; github already links back to jass.gg, which is the
+        other half of the proof, and anything that verifies rel=me — Mastodon,
+        IndieAuth — gets a real answer. The résumé doesn't carry it because a
+        document is not an identity. Zero rendered pixels. */
+        }
+        {
           SOCIALS.map((social) => (
             <li>
-              <a class="inline-block py-1" href={social.href}>
+              <a
+                class="inline-block py-1"
+                href={social.href}
+                rel={social.href.startsWith("/") ? undefined : "me"}>
                 {social.label}
               </a>
             </li>
@@ -196,12 +208,28 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
     }
     <footer class="group mt-20 font-machine text-micro text-muted-foreground">
       {
+        /* `<time datetime>` because the stamp is a date and the markup should
+      say so, not just the pixels — the machine role, carried into the HTML
+      itself. The full ISO instant rather than a bare day: the commit knows
+      the moment, and truncating it to a date would re-open the timezone
+      question the rendered text already glosses. Found only by whoever reads
+      source, which is who it is for. */
+      }
+      {
         LAST_TOUCHED.commitUrl ? (
           <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
-            last touched {formatStamp(LAST_TOUCHED.date)}
+            last touched{" "}
+            <time datetime={LAST_TOUCHED.date.toISOString()}>
+              {formatStamp(LAST_TOUCHED.date)}
+            </time>
           </a>
         ) : (
-          <span>last touched {formatStamp(LAST_TOUCHED.date)}</span>
+          <span>
+            last touched{" "}
+            <time datetime={LAST_TOUCHED.date.toISOString()}>
+              {formatStamp(LAST_TOUCHED.date)}
+            </time>
+          </span>
         )
       }
 
@@ -220,13 +248,21 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
       it appears — and it sits at the very bottom of the page, so even that
       costs nothing above it. `aria-hidden` because a screen reader would
       otherwise read a decoration it can never trigger; the link above already
-      says everything that matters. */
+      says everything that matters.
+
+      `group-focus-within` because hover-only would contradict the site's own
+      focus ring, whose comment calls the keyboard the one way to find links
+      without a pointer. Tab to the stamp and the working appears; the
+      keyboard's hover is focus. Paper gets it too — see the print block in
+      global.css — because paper can't hover either, and an invisible
+      paragraph would otherwise reserve a blank hole at the end of the
+      sheet. */
       }
       {
         LAST_TOUCHED.subject && (
           <p
             aria-hidden="true"
-            class="max-w-[34rem] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            class="max-w-[34rem] opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100">
             {LAST_TOUCHED.subject}
           </p>
         )
@@ -234,3 +270,63 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
     </footer>
   </main>
 </Layout>
+
+<style>
+  /* THE SECTION YOU ASKED FOR SIGNS ITSELF. The page has no nav, so nobody
+     arrives at /#things or /#toys from inside the page — an anchor arrival is
+     always someone who followed a shared link. When they land, the heading
+     draws the same 2px lime stroke a link draws on hover, holds it a beat,
+     and retracts it the way it came. Then the page is plain again.
+
+     Derivable, not decorative: the accent appears only when the reader asks
+     for it, and following an anchor is asking. The stroke vocabulary already
+     belongs to the site — this is the one moment a heading is the thing the
+     reader pointed at, so it borrows the pointed-at mark, once.
+
+     `width: fit-content` keeps the stroke under the word; an h2 is a block
+     and the gradient would otherwise paint to the column's right edge. It
+     changes nothing visible — the text was already at the left edge.
+
+     The 250ms delay lets the jump land before the pen moves, so the draw is
+     something the reader sees rather than something that happened during the
+     scroll. Costs nothing at rest: the animation ends at background-size 0,
+     which is the same state as never having run.
+
+     Scoped style rather than utilities because this needs keyframes, which is
+     exactly ticket 09's escape hatch. */
+  section:target > h2 {
+    width: fit-content;
+    background-image: linear-gradient(
+      var(--color-accent-mark),
+      var(--color-accent-mark)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 2px;
+    animation: heading-stroke 1.8s ease-out 250ms both;
+  }
+
+  @keyframes heading-stroke {
+    0% {
+      background-size: 0 2px;
+    }
+    30%,
+    70% {
+      background-size: 100% 2px;
+    }
+    100% {
+      background-size: 0 2px;
+    }
+  }
+
+  /* Unlike the link underline, which downgrades to appearing without travel,
+     this one is removed outright under reduced motion. The underline is the
+     site's only link affordance and must survive; this is a transient
+     orientation cue, and scroll position already answers "where am I". A cue
+     that exists only as motion goes away when motion does. */
+  @media (prefers-reduced-motion: reduce) {
+    section:target > h2 {
+      animation: none;
+    }
+  }
+</style>

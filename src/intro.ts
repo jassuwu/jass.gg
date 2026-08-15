@@ -114,6 +114,28 @@ export const CLOSER = "i'd like to see what you ship.";
 export const CLOSER_ASIDE = "(i'm just trying to find my people)";
 
 /**
+ * THE VIEW SOURCE COMMENT. Empty until jass writes it, and it must be his —
+ * the copy rule has no exception for copy nobody renders.
+ *
+ * The slot: this audience opens devtools on a site this deliberately plain,
+ * because the plainness is the puzzle. The comment is wit placed where nobody
+ * puts wit — zero JS, zero rendered bytes, found only by someone who went
+ * looking, which makes it the purest easter egg the site can hold.
+ *
+ * It ships as the first thing inside <body> (see Layout.astro), so the reader
+ * meets it right after scrolling past the machine tags in the head. Deadpan,
+ * nothing explaining it — same register as the rest of the site.
+ *
+ * Hard constraint: it cannot contain `--`, which terminates an HTML comment
+ * early and would spill the rest onto the page. Em dashes are fine; double
+ * hyphens are not.
+ *
+ * While this is `""`, nothing is emitted at all — the mechanism costs zero
+ * bytes until the words exist.
+ */
+export const SOURCE_NOTE: string = "";
+
+/**
  * What search results and link previews show. It is the intro's first sentence,
  * taken rather than restated, so it cannot drift from the paragraph it is a
  * sentence of. Safe on this copy specifically: it is plain lowercase prose with

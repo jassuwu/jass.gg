@@ -195,6 +195,77 @@ begin 404ing, including three posts in Google's index. That is the recorded
 decision — no redirects, which is what makes `/404` load-bearing — and it is
 cheap to reverse with a `vercel.json` if it turns out to sting.
 
+## Pass one (aug 15) — what got built, and the structural fact it surfaced
+
+The structural fact first, because it shapes every later pass: **the
+"tell-a-friend" eggs are all gated on jass's words.** The View Source comment,
+the marginalia memes, a humans.txt — every detail with actual personality needs
+his voice, because the site's personality _is_ his voice. So a session's build
+pass splits cleanly: build everything copy-free that defends itself, and wire
+the copy-gated ones so each becomes a one-constant edit when the words arrive.
+
+Built, each with its defence in a comment at the site:
+
+- **Paper gets the stamp's working** — the commit subject prints; the print
+  block's own premise is that paper can't hover. Also fixed a latent artifact:
+  `opacity: 0` was reserving a blank paragraph-shaped hole at the sheet's end.
+- **The keyboard gets it too** — `group-focus-within` reveals the subject; the
+  focus ring's comment calls the keyboard the one pointerless way to find
+  things, and a hover-only reveal contradicted it.
+- **The section you asked for signs itself** — `section:target > h2` draws the
+  site's 2px lime stroke and retracts it the way it came, once, on anchor
+  arrival. The page has no nav, so an anchor arrival is always an outside
+  link; accent appears only when the reader asks, and following an anchor is
+  asking. Removed outright under reduced motion (a transient cue, not an
+  affordance).
+- **`rel="me"` on the five external socials** — the /llms.txt move again:
+  serve a machine convention where no human looks. GitHub links back, so the
+  handshake actually closes.
+- **`<time datetime>` on the stamp** — the markup says the date is a date, for
+  whoever reads source.
+- **View Source comment plumbing** — `SOURCE_NOTE` in `src/intro.ts`, emitted
+  as the first thing in `<body>` via `set:html` (Astro strips real template
+  comments). Empty string ships zero bytes. The slot's constraints are on the
+  constant; the words are jass's.
+
+## The marginalia reveal — questions settled, build blocked on content
+
+The four questions the ticket said to settle before building, settled:
+
+- **JS off:** pure CSS (`:hover`/`:focus-within` on a span, sibling or
+  `:has()` selector to the reveal). The no-JS path _is_ the only path; nothing
+  degrades because nothing is JS.
+- **Keyboard and touch:** the marked word gets `tabindex="0"`. Keyboard: tab
+  lands a lime ring on a word mid-paragraph with no visible reason — the
+  mystery is the egg working — and the margin answers. Touch: a tap focuses
+  the span, which is the same reveal. Recorded tension: a focusable
+  non-interactive span is an a11y anti-pattern; a screen reader hits a stop
+  that announces a bare word. Mitigation at build time (`aria-hidden` on the
+  reveal is already precedent — the stamp subject does it).
+- **Is the word marked?** No. A genuine egg is hidden; the intro is read with
+  a cursor over it, and discovery-by-accident is the mechanism.
+- **Cost per instance:** one span + one absolutely-positioned figure in the
+  true margin, which exists only above ~1100px viewport; below that the
+  reveal is display:none and mobile loses nothing at rest. ~15 minutes of
+  build per instance once jass supplies the pair.
+
+**Blocked on jass:** each instance is a (word, meme) pair, and both halves are
+his — the word choice is voice and the meme is taste. The mechanism is
+mechanical once the first pair exists.
+
+## Copy slots open for jass — shapes and constraints, no drafts
+
+- **The View Source comment** (`SOURCE_NOTE`, `src/intro.ts`). Deadpan, nothing
+  explaining it; no `--` inside (terminates the comment). It sits right after
+  the head's machine tags — the reader arrives having just scrolled past
+  og-tags and font preloads. Shapes that fit the register: a remark aimed at
+  exactly the kind of person who is currently reading it; or the site stating
+  a fact about itself no renderer shows; or one line that rewards the trip
+  without acknowledging the trip exists.
+- **Marginalia pairs** — (word in the intro, meme) as above.
+- **The OG re-shoot** — the old card was a photograph of a screen, which only
+  jass can retake. Still on the table from ticket 10.
+
 ## Done when
 
 jass says the page is done, which is ticket 08's close condition too.
