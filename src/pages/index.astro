@@ -26,16 +26,34 @@ const destination = (p: (typeof projects)[number]) =>
 
 // Tiny machine headings — the one part of stage one jass kept without notes.
 const HEADING = "font-machine text-micro text-muted-foreground";
-// The scroll margin is the page's own top padding, repeated. Every section
-// here is an anchor target (`#things`, `#toys`, `#writing`), and without it a
-// jump welds the heading to the top edge of the viewport. Matching `py-16
-// sm:py-24` means an anchored section lands with exactly the air above it that
-// the top of the page has — so arriving at `/#toys` looks like arriving at a
-// page, not like a scroll that overshot.
-const SECTION = "mt-14 scroll-mt-16 sm:scroll-mt-24";
-const LIST = "mt-3 space-y-2 text-body";
+// The scroll margin is the page's own top padding, repeated. Both sections are
+// anchor targets (`#things`, `#toys`), and without it a jump welds the heading
+// to the top edge of the viewport. Matching `py-12 sm:py-16` means an anchored
+// section lands with exactly the air above it that the top of the page has — so
+// arriving at `/#toys` looks like arriving at a page, not like a scroll that
+// overshot.
+//
+// These two numbers are one decision in two places. Change the padding and this
+// has to follow, or the anchor quietly stops agreeing with the page.
+const SECTION = "mt-14 scroll-mt-12 sm:scroll-mt-16";
 
-// The page is four things in this order: the intro, things, toys, writing.
+// The gap between entries was never the problem — it was already the smaller
+// number. `text-body` carries a line-height of 1.7, which is a value chosen for
+// reading a paragraph, and these rows are not paragraphs. At 390px nearly every
+// description wraps to two lines, and 1.7 put 12.6px between those two lines
+// against only 8px between one entry and the next. The list was spaced so that
+// a single entry looked further apart than two different ones.
+//
+// So the leading comes down and the gap stays. The rule that has to hold is
+// ordering, not size: the space between entries must stay visibly larger than
+// the space inside one. At 1.4 that is 8px against 7.2px, and the row is 14%
+// shorter into the bargain, which is the part that reads as "less spacing".
+//
+// Do not tighten the gap below the internal leading to save more height. That
+// trade buys pixels and sells the list's structure.
+const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
+
+// The page is three things in this order: the intro, things, toys.
 //
 // There is no work section, and that is a decision rather than an omission.
 // Of 71 sites in the research directory, not one puts employment history on
@@ -52,7 +70,7 @@ const LIST = "mt-3 space-y-2 text-body";
 ---
 
 <Layout title="jass.gg" description={TAGLINE}>
-  <main class="mx-auto w-full max-w-2xl px-6 py-16 sm:py-24">
+  <main class="mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
     <header>
       {
         /* The wordmark is the one place a personal site earns its accent: a
