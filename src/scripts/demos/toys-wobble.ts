@@ -28,9 +28,58 @@
  *
  * Reduced motion: a toy that is only motion has no honest still form — it is
  * not translated, it is absent. The module returns before touching the DOM.
+ *
+ * The sound (ticket 21): the label is also an instrument. Each letter is a
+ * marimba bar — a poke strikes it at a whisper, synthesized through the bus,
+ * zero assets. The pitch belongs to the letter, not to the poke, so poking
+ * t-o-y-s left to right always plays the same four-note lick. The bus's one
+ * mouth means a fast run damps each bar as the next is struck — which is what
+ * a real marimba does under one pair of hands, so the rule and the material
+ * agree for free. The sound rides the same guards as the swing: gated behind
+ * the reader's first gesture by the bus, absent under reduced motion because
+ * the whole act is.
  */
 
+import { play } from "@/scripts/sound";
+
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+
+/* The voicing: C5, E5, D5, G5 — up a third, back a step, up a fourth. A lick,
+   not a scale: no three neighbours in a row, and the contour turns. It sits in
+   C major with no leading tone, so any partial poke order still lands as
+   consonant, and the full run ends on the fifth — up, open, unresolved — the
+   right cadence for a heading whose whole job is an invitation. */
+const HZ = [523.25, 659.25, 587.33, 783.99];
+
+/* A struck bar. The fundamental is a sine with a fast exponential decay —
+   which is simply what a struck idiophone does — and a quieter second
+   harmonic dies first, the brief wooden edge that says mallet, not beep.
+   Peaks sum to 1 so the tier gain staged by the bus is the ceiling. */
+function ding(i: number): void {
+  const f = HZ[i % HZ.length];
+  play({
+    tier: "whisper",
+    synth(ctx, out) {
+      const t = ctx.currentTime;
+      for (const [mult, peak, tail] of [
+        [1, 0.85, 0.45],
+        [2, 0.15, 0.12],
+      ]) {
+        const o = ctx.createOscillator();
+        o.frequency.value = f * mult;
+        const g = ctx.createGain();
+        /* Exponential ramps can't touch zero; 1e-4 of a whisper is silence.
+           The 4ms rise is only there so the strike doesn't click. */
+        g.gain.setValueAtTime(1e-4, t);
+        g.gain.exponentialRampToValueAtTime(peak, t + 0.004);
+        g.gain.exponentialRampToValueAtTime(1e-4, t + tail);
+        o.connect(g).connect(out);
+        o.start(t);
+        o.stop(t + tail);
+      }
+    },
+  });
+}
 
 /* Two and a half swings, decayed to nothing. The sine ends on a zero
    crossing, so the last keyframe is exactly the rest pose — no snap when
@@ -60,7 +109,7 @@ export function register(): void {
   if (!h2 || !word) return;
   h2.setAttribute("aria-label", word);
   h2.textContent = "";
-  for (const ch of word) {
+  for (const [i, ch] of [...word].entries()) {
     const s = document.createElement("span");
     s.textContent = ch;
     s.setAttribute("aria-hidden", "true");
@@ -72,8 +121,12 @@ export function register(): void {
       "display:inline-block;transform-origin:50% 85%;touch-action:manipulation;-webkit-user-select:none;user-select:none";
     const poke = (e: PointerEvent): void => {
       /* Checked again here, not just at register: a reader who asks for less
-         motion mid-visit gets it, even with the letters already wrapped. */
-      if (!reduced.matches) kick(s, e.clientX);
+         motion mid-visit gets it, even with the letters already wrapped. The
+         note lives inside the same check — a dead act makes no sound. */
+      if (!reduced.matches) {
+        kick(s, e.clientX);
+        ding(i);
+      }
     };
     /* enter kicks on hover and on a touch's first contact; down lets a
        reader already parked on a letter poke it again. On a tap both fire in
