@@ -1,15 +1,18 @@
 /**
  * SAVEMEFROM DEMOS ITSELF (ticket 15). The row's line reads "paste a url,
- * vergil slices the page to pieces", and clicking it collects: green flash,
+ * vergil slices the page to pieces", and lingering on it collects: green flash,
  * vergil's slash plays over THIS page, the page comes apart into diagonal
  * pieces, drifts, and snaps back whole. The product's own trick, performed on
  * the portfolio that lists it — the one entry whose demo is a full-page gag,
  * because a page-sized effect shrunk into a row would be a thumbnail of
  * itself.
  *
- * Deliberate, not ambient: a judgment cut is not something the friend does
- * uninvited. The description span is the handle — never the link, which keeps
- * navigating — and a click is consent, so it repeats.
+ * Ambient, on the row: dwell on pointer, scroll-dwell on touch. The friend
+ * cuts when the reader lingers, not when they ask — the egg goes back to
+ * being unmarked. It repeats on re-dwell, but one cut per stay: a pointer
+ * parked on the row fires once, and the row must be left and re-entered
+ * before the blade comes out again. The link keeps navigating; nothing here
+ * steals a tap.
  *
  * The mechanism is savemefrom's own, not an homage to it: the same clip,
  * re-cut to its 1.5s of green-screen (160 KB against the original 15.2 MB —
@@ -28,18 +31,22 @@
  * strips spawn behind it, so the swap from "slashed page" to "page in
  * pieces" happens under a flash instead of on camera.
  *
- * The cut sounds (ticket 21): click-armed, so full tier — the reader asked.
- * Everything goes through the sound bus, the one mouth; the video element
- * itself stays muted forever. See AUDIO below for why the track ships
- * beside the mp4 instead of inside it.
+ * The cut sounds (ticket 21): full tier, jass's call, even though the
+ * ladder says dwell whispers — a judgment cut does not whisper, and this is
+ * the one exception, on purpose. Everything goes through the sound bus, the
+ * one mouth; the video element itself stays muted forever. Before the
+ * reader's first real gesture the bus is still gated, so an early dwell
+ * cuts in silence — the bus's law, not this module's problem. See AUDIO
+ * below for why the track ships beside the mp4 instead of inside it.
  *
- * Lazy: nothing is fetched until the first pointer enters the row. Reduced
- * motion: nothing at all, and no `still` — a slice with no motion is a
- * broken page, not a quieter one — so the module also skips the preload and
- * the cursor hint, and the row is just a row. A dead act makes no sound:
- * the register bails before any listener exists, so the cue dies with it.
+ * Lazy: nothing is fetched until intent — first pointer into the row, or on
+ * touch the row's first arrival in the dwell band. Reduced motion: nothing
+ * at all, and no `still` — a slice with no motion is a broken page, not a
+ * quieter one — so the module also skips the preload, and the row is just a
+ * row. A dead act makes no sound: the register bails before any listener
+ * exists, so the cue dies with it.
  */
-import { deliberate } from "@/scripts/friend";
+import { ambient } from "@/scripts/friend";
 import { play, stopAll } from "@/scripts/sound";
 
 /* Six pieces at tan(12°). More strips read as confetti, fewer as a page
@@ -67,6 +74,15 @@ const AUDIO = "/vergil.m4a";
 
 let video: HTMLVideoElement | undefined;
 let running = false;
+
+/* The cooldown. `running` only stops the act overlapping itself; dwell
+   needs more. On pointer the dwell timer arms once per enter, so a parked
+   cursor is already safe — but on touch the friend re-runs everything in
+   the band at every scroll pause, and a row that happens to rest mid-screen
+   would chain-cut the page back to back. One cut per stay: set when the
+   blade comes out, cleared only when the row is left — pointerleave on
+   pointer, band exit on touch. */
+let cooling = false;
 
 /* Built on first intent, kept for repeats. The filter is savemefrom's,
    verbatim: the matrix drives any green-dominant pixel's alpha below zero,
@@ -192,15 +208,16 @@ function slice(onDone: () => void): void {
 }
 
 function perform(): void {
-  if (running) return;
+  if (running || cooling) return;
   running = true;
+  cooling = true;
   const v = ensureVideo();
   flash();
   document.body.append(v);
   v.currentTime = 0;
 
   /* One path out, whatever the video does: ended, errored, or never came
-     (first tap on touch races the lazy load; offline gets nothing). The
+     (a quick scroll-dwell can race the lazy load; offline gets nothing). The
      watchdog outlives the clip by a second — worst case the flash lands,
      nothing slashes, and the page still gets cut, which is most of the
      joke. */
@@ -224,40 +241,56 @@ function perform(): void {
   v.onended = proceed;
   v.onerror = proceed;
   /* The act takes the mouth: nothing whispers under a judgment cut. Full
-     tier because a click asked. The bus holds the rest of the law — muted
-     site or missing file and the page just gets cut silently, which is
-     still most of the joke. */
+     tier even though dwell armed it — the header says why. The bus holds
+     the rest of the law — gated, muted, or missing file and the page just
+     gets cut silently, which is still most of the joke. */
   stopAll();
   play({ tier: "full", url: AUDIO });
   v.play().catch(proceed);
 }
 
 export function register(): void {
-  const desc = document.querySelector('li[data-entry="savemefrom"] > span');
-  if (!(desc instanceof HTMLElement)) return;
+  const row = document.querySelector('li[data-entry="savemefrom"]');
+  if (!row) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  /* The row's own line is the instruction — "vergil slices the page to
-     pieces" — so the description gets the one affordance that costs nothing
-     at rest: a pointer cursor, visible only to a cursor already on it. The
-     hover-brightening stays keyed to the link alone; the index's comment
-     about the description not promising a click predates the description
-     being able to keep the promise. */
-  desc.style.cursor = "pointer";
 
   /* First intent fetches the clip and warms the http cache for the audio —
      a bare fetch, no Audio(), no bus: the bus does its own fetch on first
-     play, and this makes that one instant instead of late. The li catches
-     the pointer before the span does, and on touch the entering tap is the
-     click itself, which is what the watchdog above is for. */
-  desc.parentElement?.addEventListener(
-    "pointerenter",
-    () => {
-      ensureVideo();
-      fetch(AUDIO).catch(() => {});
-    },
-    { once: true },
-  );
+     play, and this makes that one instant instead of late. Doubly useful
+     now: dwell gives 500ms of warning where a click gave a whole approach. */
+  let preloaded = false;
+  const preload = (): void => {
+    if (preloaded) return;
+    preloaded = true;
+    ensureVideo();
+    fetch(AUDIO).catch(() => {});
+  };
+  row.addEventListener("pointerenter", preload, { once: true });
 
-  deliberate(desc, { el: desc, act: perform });
+  if (matchMedia("(hover: hover)").matches) {
+    /* Leaving the row is what ends a stay on pointer devices. */
+    row.addEventListener("pointerleave", () => {
+      cooling = false;
+    });
+  } else {
+    /* On touch a stay ends when the row leaves the dwell band. The margin
+       mirrors the friend's — its band is private, so the number lives here
+       twice; if the friend ever moves its band, this one drifts a little
+       and the cooldown just clears slightly early or late, nothing worse.
+       Entering the band is also the earliest honest intent touch has, so
+       it doubles as the preload. */
+    new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) preload();
+          else cooling = false;
+        }
+      },
+      { rootMargin: "-35% 0px -35% 0px" },
+    ).observe(row);
+  }
+
+  /* No `once`: the cut repeats on a fresh stay, and `cooling` above is what
+     keeps a single stay to a single cut. */
+  ambient({ el: row, act: perform });
 }
