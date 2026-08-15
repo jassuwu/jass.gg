@@ -46,21 +46,23 @@ li.friend-quilt-row { position: relative; }
 .friend-quilt {
   position: absolute;
   bottom: calc(100% + 0.5rem);
-  left: 0;
-  /* 35rem — 70% of the SVG's native 800px, and just shy of the row's own
-     ~39rem: big enough to read the weeks, still a held-up strip and not a
-     billboard. min() keeps it inside the row on narrow screens, and the
-     overlay means no width ever moves a row. */
-  width: min(100%, 35rem);
+  left: 50%;
+  /* Full native size — the SVG is 800px wide, which is 50rem, wider than
+     the 42rem column. It spills past the row into the page margins on
+     purpose (jass: "it can takeover a larger space, cuz it's not that
+     visible") — centered on the row, held up with both hands rather than
+     pinched in one. The viewport clamp keeps phones whole, and the overlay
+     still moves no row. */
+  width: min(calc(100vw - 2rem), 50rem);
   height: auto;
   opacity: 0;
-  transform: translateY(4px);
+  transform: translate(-50%, 4px);
   pointer-events: none;
   transition: opacity 200ms ease-out, transform 200ms ease-out;
 }
-.friend-quilt-up { opacity: 1; transform: none; }
+.friend-quilt-up { opacity: 1; transform: translate(-50%, 0); }
 @media (prefers-reduced-motion: reduce) {
-  .friend-quilt { transition: none; transform: none; }
+  .friend-quilt { transition: none; transform: translate(-50%, 0); }
 }`;
 
 export function register(): void {
