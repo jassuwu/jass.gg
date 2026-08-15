@@ -29,9 +29,10 @@ and his (word, meme) picks. The brainrot self-recording item is dead
    draft landed aug 15: `hi. it's mostly just html.`** — awaiting jass's
    rewrite. (A first draft listing the site's tricks was killed on sight for
    explaining the jokes; whatever replaces the draft must state nothing.)
-   The other two drafts awaiting his rewrite, homes pending ticket 19's
-   build: the murmur `(you're up late. me too, probably)` and the copyright
-   line `© jass. all rights reserved, none exercised`.
+   The other two drafts awaiting his rewrite, now live in
+   `src/components/Footer.astro`: the murmur `(you're up late. me too,
+   probably)` and the copyright line `© jass. all rights reserved, none
+   exercised`.
 2. **Marginalia pairs** — (word in the intro, meme) — the word is voice, the
    meme is taste. Two is probably the right number for the whole intro;
    ticket 16 builds them.
