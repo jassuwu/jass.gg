@@ -28,12 +28,19 @@
  * strips spawn behind it, so the swap from "slashed page" to "page in
  * pieces" happens under a flash instead of on camera.
  *
+ * The cut sounds (ticket 21): click-armed, so full tier — the reader asked.
+ * Everything goes through the sound bus, the one mouth; the video element
+ * itself stays muted forever. See AUDIO below for why the track ships
+ * beside the mp4 instead of inside it.
+ *
  * Lazy: nothing is fetched until the first pointer enters the row. Reduced
  * motion: nothing at all, and no `still` — a slice with no motion is a
  * broken page, not a quieter one — so the module also skips the preload and
- * the cursor hint, and the row is just a row.
+ * the cursor hint, and the row is just a row. A dead act makes no sound:
+ * the register bails before any listener exists, so the cue dies with it.
  */
 import { deliberate } from "@/scripts/friend";
+import { play, stopAll } from "@/scripts/sound";
 
 /* Six pieces at tan(12°). More strips read as confetti, fewer as a page
    fold; six is where it still reads as swordwork. */
@@ -44,6 +51,19 @@ const SLICE_MS = 1600;
 /* Above the page, below nothing that matters: the overlay sheet, then the
    keyed video, then the green flash on top. */
 const Z = 40;
+
+/* The slash rides the bus, not the video track. Muxing audio back into the
+   mp4 was the other option and it loses twice: the clip ends at the 1.5s
+   whiteout but the sound doesn't — the final hit rings for another ~0.7s,
+   and cutting that ring at the container edge is audible — and a video
+   element speaks outside the bus, where nothing can duck it and the mute
+   egg can't reach it. So: the source clip's own first 2.2s, mono aac,
+   17 KB, same t=0 as the video (the shared quarter-second of silence at
+   the head absorbs any start skew), faded out under the drift. The cut
+   sounds, the ring carries the flying pieces, and the snap home lands in
+   restored silence — the page pretends nothing happened, and so does the
+   speaker. */
+const AUDIO = "/vergil.m4a";
 
 let video: HTMLVideoElement | undefined;
 let running = false;
@@ -203,6 +223,12 @@ function perform(): void {
   const watchdog = window.setTimeout(proceed, 2600);
   v.onended = proceed;
   v.onerror = proceed;
+  /* The act takes the mouth: nothing whispers under a judgment cut. Full
+     tier because a click asked. The bus holds the rest of the law — muted
+     site or missing file and the page just gets cut silently, which is
+     still most of the joke. */
+  stopAll();
+  play({ tier: "full", url: AUDIO });
   v.play().catch(proceed);
 }
 
@@ -219,12 +245,19 @@ export function register(): void {
      being able to keep the promise. */
   desc.style.cursor = "pointer";
 
-  /* First intent fetches the clip; the li catches the pointer before the
-     span does, and on touch the entering tap is the click itself, which is
-     what the watchdog above is for. */
-  desc.parentElement?.addEventListener("pointerenter", () => ensureVideo(), {
-    once: true,
-  });
+  /* First intent fetches the clip and warms the http cache for the audio —
+     a bare fetch, no Audio(), no bus: the bus does its own fetch on first
+     play, and this makes that one instant instead of late. The li catches
+     the pointer before the span does, and on touch the entering tap is the
+     click itself, which is what the watchdog above is for. */
+  desc.parentElement?.addEventListener(
+    "pointerenter",
+    () => {
+      ensureVideo();
+      fetch(AUDIO).catch(() => {});
+    },
+    { once: true },
+  );
 
   deliberate(desc, { el: desc, act: perform });
 }
