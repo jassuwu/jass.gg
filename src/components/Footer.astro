@@ -40,56 +40,8 @@ import { LAST_TOUCHED, formatStamp } from "@/last-touched";
   as part of the claim being linked. Facts stack — this room is a colophon,
   one fact per line. */
   }
-  {
-    /* THE MUTE EGG (ticket 21, approved). Clicking this line mutes the site —
-  "all rights reserved, none exercised" made literal the moment it is
-  exercised. A <button>, not a clickable <p>, because a clickable paragraph
-  exists only for whoever can see a pointer: this one is focusable, Enter and
-  Space fire it, and the script below hands it aria-pressed and a label that
-  says the quiet part. Preflight already strips every piece of button chrome
-  — border, padding, margin, background, font, radius, all verified against
-  the built CSS — so the style block covers only what the UA adds beyond
-  chrome.
-
-  No visible confirmation, in either direction. The "one exercised" rewrite
-  was weighed and killed: a boilerplate line that keeps score stops reading
-  as boilerplate, and the deadpan IS the joke — a visible state change is a
-  confirmation, which is UI feedback, which this site's sound grammar exists
-  to refuse. The honest confirmation already ships: the site goes quiet.
-  With JS off the button does nothing, and a button that does nothing is
-  still a fact. */
-  }
-  <p>
-    <button class="rights" type="button">
-      © jass. all rights reserved, none exercised
-    </button>
-  </p>
+  <p>© jass. all rights reserved, none exercised</p>
 </footer>
-
-<style>
-  /* Only what preflight leaves standing. The UA centers button text, shows
-     an arrow over it, and (engine-depending) refuses to let it be selected.
-     This line was selectable text yesterday and stays selectable text today
-     — I-beam included — because the egg's cover is that nothing changed; an
-     arrow over one line of the colophon would itself be the tell. The cost,
-     stated plainly: a triple-click that selects the line also toggles the
-     mute. Rare, silent, and one more click undoes it. */
-  .rights {
-    text-align: inherit;
-    cursor: text;
-    -webkit-user-select: text;
-    user-select: text;
-  }
-
-  /* Links get this exact ring in global.css. A button pretending to be text
-     may not keep up the pretence for the keyboard — the tab stop is the one
-     place the egg is marked, so it takes the site's focus mark unchanged:
-     same lime, same offset. */
-  .rights:focus-visible {
-    outline: 2px solid var(--color-accent-mark);
-    outline-offset: 3px;
-  }
-</style>
 
 <script>
   /* The 2am murmur (ticket 19). Every portfolio shows the owner's local
@@ -125,37 +77,6 @@ import { LAST_TOUCHED, formatStamp } from "@/last-touched";
   }
 </script>
 
-<script>
-  /* The mute egg's wiring (ticket 21). The right being exercised is the
-     site's one right to make sound; setMuted holds for the visit
-     (friend:muted, the bus's key) and stops anything mid-cue. Unmuting
-     plays nothing — silence is the resting state, and a sound confirming
-     sound-is-back-on would be a UI bleep, the exact thing the grammar
-     refuses.
-
-     The ARIA arrives from here rather than the markup on purpose: with JS
-     off the button can do nothing, and a label promising "mute the site's
-     sounds" on a button that can't would be the page lying to exactly the
-     readers who depend on the label. The name leads with the visible text
-     (WCAG 2.5.3 — voice-control users say what they see) and then says
-     what it does, so a screen reader still gets the copyright fact before
-     the quiet part out loud. aria-pressed is the whole state; sighted
-     pointer users get nothing, which is the approved design, not an
-     oversight. */
-  import { isMuted, setMuted } from "@/scripts/sound";
-
-  const rights = document.querySelector<HTMLButtonElement>("footer .rights");
-  if (rights) {
-    rights.setAttribute(
-      "aria-label",
-      "© jass. all rights reserved, none exercised — mute the site's sounds",
-    );
-    const reflect = () =>
-      rights.setAttribute("aria-pressed", String(isMuted()));
-    reflect();
-    rights.addEventListener("click", () => {
-      setMuted(!isMuted());
-      reflect();
-    });
-  }
-</script>
+{
+  /* the mute egg's wiring lived here (ticket 21, cut — no one would find it); setMuted/isMuted stay on the bus as a dev seam: sessionStorage `friend:muted` */
+}
