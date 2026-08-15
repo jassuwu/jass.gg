@@ -105,5 +105,12 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Both demo packages load lazily, on first dwell. Left alone, Vite's dev
+    // optimizer discovers each one the first time someone dwells and reloads
+    // the whole page mid-act — once per package per dev session. Pre-bundling
+    // them costs nothing in prod (Rollup ignores this) and keeps dev honest.
+    optimizeDeps: {
+      include: ["onandemo", "liquid-glass-cursor"],
+    },
   },
 });
