@@ -133,3 +133,11 @@ const TALK = [
     links.insertAdjacentElement("afterend", v);
   }
 </script>
+
+<script>
+  /* THE WATER (ticket 23). Owned by its own module and nobody else — the
+     brainrot script above never touches this block, and this block never
+     touches the monitor. See src/scripts/water-404.ts. */
+  import { register as water } from "@/scripts/water-404";
+  water();
+</script>
