@@ -116,12 +116,10 @@ export function start(): void {
   if (started) return;
   started = true;
 
-  /* The tears need a crier. The emoji in the joke line anchors WHERE she
-     sits — the copy is jass's and stays untouched — but the crying itself
-     was promoted (his ask): a classic transparent anime-girl bawl sticker
-     appears beside the line and the tears fall from HER eyes. The emoji
-     Range stays as the fallback crier if the sticker never loads: the bit
-     degrades to the original joke, never to nothing-for-a-reason. */
+  /* The tears need a crier. The emoji lives in the live text — found via
+     Range so the DOM is never touched, and re-measured every spawn so
+     scroll and resize cost nothing extra. No emoji, no water: the bit has
+     no source and silently doesn't exist. */
   let crier: Text | null = null;
   let crierAt = -1;
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -135,37 +133,6 @@ export function start(): void {
   }
   if (!crier) return;
   const emojiNode = crier;
-
-  /* The girl. Absolutely positioned in document flow beside the joke line,
-     re-seated on resize, faded in with the same few-seconds patience the
-     whole bit has. aria-hidden and empty alt: to a screen reader this page
-     already said everything it has to say. */
-  const girl = document.createElement("img");
-  girl.src = "/water/crier.gif";
-  girl.alt = "";
-  girl.setAttribute("aria-hidden", "true");
-  girl.style.cssText =
-    "position:absolute;width:clamp(90px,18vw,150px);height:auto;" +
-    "opacity:0;transition:opacity 900ms ease-out;pointer-events:none;z-index:29";
-  let girlReady = false;
-  const seatGirl = (): void => {
-    const line = emojiNode.parentElement;
-    if (!line) return;
-    const b = line.getBoundingClientRect();
-    girl.style.left = `${b.right + scrollX + 14}px`;
-    girl.style.top = `${b.top + scrollY + b.height / 2 - 40}px`;
-  };
-  girl.addEventListener("load", () => {
-    girlReady = true;
-    seatGirl();
-    document.body.appendChild(girl);
-    requestAnimationFrame(() => {
-      girl.style.opacity = "1";
-    });
-  });
-  girl.addEventListener("error", () => {
-    girlReady = false; /* the emoji cries alone, as originally written */
-  });
 
   const canvas = document.createElement("canvas");
   /* Above the page, under nothing that matters; pointer-events: none is the
@@ -261,28 +228,16 @@ export function start(): void {
     }
   };
 
-  /** Where a tear wells up: under one of the girl's eyes, alternating —
-   * the fractions were read off the sticker's actual face (eyes at ~34%
-   * and ~58% of her box, cheek line at ~45%). Falls back to the 😔's eyes
-   * if she never arrived. Measured live either way, so scrolling never
-   * strands the tears mid-air. */
+  /** Where a tear wells up: just under one eye of the 😔, alternating.
+   * Measured live so scrolling never strands the tears mid-air. */
   const eye = (): { x: number; y: number } | null => {
-    leftEye = !leftEye;
-    if (girlReady && girl.isConnected) {
-      const g = girl.getBoundingClientRect();
-      if (g.width > 0) {
-        return {
-          x: g.left + g.width * (leftEye ? 0.34 : 0.58),
-          y: g.top + g.height * 0.45,
-        };
-      }
-    }
     if (!emojiNode.isConnected) return null;
     const r = document.createRange();
     r.setStart(emojiNode, crierAt);
     r.setEnd(emojiNode, crierAt + 2); /* surrogate pair */
     const b = r.getBoundingClientRect();
     if (b.width === 0) return null;
+    leftEye = !leftEye;
     return {
       x: b.left + b.width * (leftEye ? 0.34 : 0.66),
       y: b.top + b.height * 0.58,
@@ -451,10 +406,7 @@ export function start(): void {
   };
   document.addEventListener("visibilitychange", onVis);
 
-  const onResize = (): void => {
-    rebuild();
-    seatGirl();
-  };
+  const onResize = (): void => rebuild();
   addEventListener("resize", onResize);
 
   const scheme = matchMedia("(prefers-color-scheme: dark)");
@@ -472,7 +424,6 @@ export function start(): void {
     scheme.removeEventListener("change", readInk);
     reduced.removeEventListener("change", drain);
     canvas.remove();
-    girl.remove(); /* she was never there either */
   };
   reduced.addEventListener("change", drain);
 
