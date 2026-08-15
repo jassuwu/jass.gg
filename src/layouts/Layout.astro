@@ -1,5 +1,6 @@
 ---
 import Font from "astro/components/Font.astro";
+import Analytics from "@vercel/analytics/astro";
 
 import { USERNAMES } from "@/constants";
 import "@/styles/global.css";
@@ -87,5 +88,28 @@ const ogImage = new URL("/og.png", Astro.site);
   </head>
   <body>
     <slot />
+
+    {
+      /* THIS IS THE FIRST SCRIPT ON THE SITE, and it ends an invariant that was
+    true for the whole rewrite: `dist/` shipped zero `.js` and zero `<script>`,
+    and every change was checked against that.
+
+    It is allowed. The constraint has always been that JS may only *add* —
+    content and navigation are never gated on it — and analytics is the case it
+    named. But the check changes shape: the question is no longer "are there any
+    scripts" and is now "does every word, link and route still work with
+    JavaScript off". Verify that instead, and do not delete this to make a grep
+    come out clean.
+
+    It is last in the body on purpose. It is the only thing on the page nobody
+    asked for, so it loads after everything they did.
+
+    Vercel serves the beacon from this origin — `/_vercel/insights/script.js` —
+    which is the whole reason it is here rather than PostHog. A first-party path
+    is not what adblockers hunt for, and the audience for this site blocks
+    third-party analytics at a much higher rate than average. It also does
+    nothing at all off Vercel, so local dev and any future host stay silent. */
+    }
+    <Analytics />
   </body>
 </html>

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^7.2.2",
     "tailwindcss": "^4.3.3"
   },

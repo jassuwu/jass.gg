@@ -21,8 +21,12 @@ more designed, it's the wrong change.
 These were all settled, several of them the hard way. A fresh session that
 reopens any of them is wasting the session.
 
-- **No-JS is a hard constraint.** `dist/` currently ships zero `.js` and zero
-  `<script>`. JS may only _add_. Check this after every change.
+- **No-JS is a hard constraint, but the check has changed.** `dist/` shipped
+  zero `.js` and zero `<script>` for the whole rewrite, and then Vercel Web
+  Analytics went in — one 2.8 KB inline module, last in the body, loading a
+  deferred first-party beacon. That grep is now false on purpose. **Check
+  instead that every word, link and route works with JavaScript disabled**, and
+  do not delete the beacon to make the old check pass.
 - **Links carry no decoration at rest, anywhere.** Two attempts at a resting
   mark were rejected on sight. Position and colour separate links instead;
   lime arrives on hover and focus. The known cost is written into `global.css`.
