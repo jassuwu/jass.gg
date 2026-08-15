@@ -25,8 +25,63 @@
 import type { createLiquidGlassCursor } from "liquid-glass-cursor";
 
 import { ambient } from "../friend";
+import { play } from "../sound";
 
 type Destroy = ReturnType<typeof createLiquidGlassCursor>;
+
+/**
+ * The sound of the glass (ticket 21): one soft droplet when it arrives, one
+ * when it leaves. No continuous watery bed — silence is the resting state,
+ * and a cursor is not a faucet. Synthesized, zero assets: a short sine blip
+ * pushed through a resonant lowpass that sweeps shut reads as a drop hitting
+ * water. Arrive sits higher than leave, the way a fuller glass rings higher —
+ * same drop, different level. Whisper tier because dwell is what earned it.
+ *
+ * The droplet is keyed to the effect ENGAGING, not to the dwell: it plays
+ * only after the lazy import resolves and create() has mounted the glass,
+ * and the leave drop only if there was a glass to take away. A Firefox or
+ * Safari reader never gets here at all (register bails before wiring), so
+ * nobody hears a droplet for an effect they cannot see.
+ */
+function droplet(pitch: number): void {
+  play({
+    tier: "whisper",
+    synth: (ctx, out) => {
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      /* The quick upward bend is the physics of the thing: a drop's bubble
+         shrinks as it rings, and pitch rising ~a fifth over 100ms is the
+         "bloip" everyone knows. Flat pitch reads as a phone notification. */
+      osc.frequency.setValueAtTime(pitch, t);
+      osc.frequency.exponentialRampToValueAtTime(pitch * 1.5, t + 0.1);
+      const lp = ctx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.Q.value = 5;
+      lp.frequency.setValueAtTime(pitch * 4, t);
+      lp.frequency.exponentialRampToValueAtTime(pitch, t + 0.16);
+      const env = ctx.createGain();
+      /* 5ms in so the sine never starts mid-cycle (that pops), exponential
+         out because that is how ringing dies, then a hard zero — the ramp
+         can't reach it and a tail parked at 0.001 is still a tail. */
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(1, t + 0.005);
+      env.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      env.gain.linearRampToValueAtTime(0, t + 0.22);
+      osc.connect(lp).connect(env).connect(out);
+      osc.start(t);
+      osc.stop(t + 0.22);
+      /* The bus only disconnects its own gain when the next act ducks this
+         one; the drop tidies its private nodes the moment it has rung out. */
+      osc.onended = () => env.disconnect();
+    },
+  });
+}
+
+/* Arrive a fourth above leave: related enough to be the same water, apart
+   enough that on/off never reads as a stutter of one sound. */
+const ARRIVE = 660;
+const LEAVE = 494;
 
 export function register(): void {
   const row = document.querySelector<HTMLElement>(
@@ -89,6 +144,9 @@ export function register(): void {
         document.dispatchEvent(
           new MouseEvent("mousemove", { clientX: px, clientY: py }),
         );
+        /* Only here, where the glass is actually on screen — a dwell whose
+           import is still in flight has nothing to sound like yet. */
+        droplet(ARRIVE);
       });
     },
   });
@@ -100,7 +158,11 @@ export function register(): void {
      unique id, so enter/leave any number of times leaves no residue. */
   row.addEventListener("pointerleave", () => {
     wanted = false;
-    destroy?.();
+    if (!destroy) return;
+    destroy();
     destroy = undefined;
+    /* Guarded by destroy: a pass-through that left mid-import took no glass
+       with it, so it gets no drop. The sound is OF the leaving. */
+    droplet(LEAVE);
   });
 }
