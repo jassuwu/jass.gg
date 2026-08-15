@@ -223,12 +223,100 @@
   /* The re-sign goes through the friend, so the wordmark keeps the site's
      dwell grammar — 500ms on pointer, scroll-dwell on touch — instead of
      inventing a hover of its own. No `once`: signing again on request is the
-     point, and reduced motion is the friend's problem, already solved. */
+     point, and reduced motion is the friend's problem, already solved.
+
+     The sound half lives here and not in the inline script above, by
+     necessity: is:inline exists so the signing is armed before first paint,
+     and an inline script cannot import the bus. So this bundled half bridges
+     on the resign act it already owned — one trigger, two halves. That split
+     is also what keeps the LOAD signing silent: the load path runs entirely
+     inside the inline script, which touches no audio, and taste and law agree
+     it never should (sound on load is an ambush, and the browser forbids
+     audio before the first gesture anyway — the bus enforces that gate, so
+     nothing here works around it). */
   import { ambient } from "@/scripts/friend";
+  import { play } from "@/scripts/sound";
+
+  /* The letter windows, in seconds — the same arithmetic as the keyframe
+     table in the style block below (constant pen speed, the word in ~620ms).
+     If the CSS timing ever moves, these move with it by hand: the scratch is
+     the sound OF that pen, and a desynced nib is worse than silence. */
+  const STROKES = [
+    [0.0, 0.128], // j — stem, top to bottom, round the hook
+    [0.13, 0.273], // a — bowl and tail in one stroke
+    [0.26, 0.405], // s — top curve, through the middle, out the bottom
+    [0.405, 0.55], // s — again, an advance over
+  ];
+  const DOT = 0.55; // the word finishes, then the j is dotted
+
+  /* White noise, made once — the nib is the filter, not the buffer. */
+  let noise: AudioBuffer | undefined;
+
+  /* A nib is noise dragged through paper: white noise through a bandpass
+     reads as scratch, and each letter gets its own filter — centre jittered
+     per stroke, drifting down across it like a hand slowing into a curve —
+     so no two strokes are the same pen twice. The envelope is the stroke:
+     fast on, a slight sag mid-letter, lifted off at the end. The dot is not
+     a stroke, so it is not a burst: one tick, higher and harder, gone in
+     40ms. All of it hangs off the gain the bus staged to whisper — the bus
+     owns the speaker, the gate, the duck and the mute; this only shapes. */
+  function scratch(ctx: AudioContext, out: GainNode) {
+    if (!noise) {
+      const n = Math.ceil(ctx.sampleRate * 0.7);
+      noise = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = noise.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = noise;
+    /* The animation clock starts one rAF after the dispatch below; a hair
+       of lead keeps the first burst from landing before the ink. */
+    const t0 = ctx.currentTime + 0.02;
+    for (const [from, to] of STROKES) {
+      const bp = ctx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.Q.value = 1.6;
+      const f = 2300 + Math.random() * 900;
+      bp.frequency.setValueAtTime(f, t0 + from);
+      bp.frequency.linearRampToValueAtTime(f * 0.8, t0 + to);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t0 + from);
+      g.gain.linearRampToValueAtTime(1.4, t0 + from + 0.012);
+      g.gain.linearRampToValueAtTime(0.85, t0 + (from + to) / 2);
+      g.gain.linearRampToValueAtTime(1.2, t0 + to - 0.02);
+      g.gain.linearRampToValueAtTime(0, t0 + to);
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(out);
+    }
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 4200;
+    bp.Q.value = 4;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t0 + DOT);
+    g.gain.linearRampToValueAtTime(1.8, t0 + DOT + 0.006);
+    g.gain.linearRampToValueAtTime(0, t0 + DOT + 0.045);
+    src.connect(bp);
+    bp.connect(g);
+    g.connect(out);
+    src.start(t0);
+    src.stop(t0 + 0.68);
+  }
 
   const sig = document.querySelector("svg.sig");
   if (sig) {
-    ambient({ el: sig, act: () => sig.dispatchEvent(new Event("resign")) });
+    ambient({
+      el: sig,
+      act: () => {
+        /* The inline half refuses a resign mid-signing; mirror that guard —
+           checked before the dispatch, which is what sets the class — so the
+           scratch never sounds while no ink is moving. */
+        if (!sig.classList.contains("signing"))
+          play({ tier: "whisper", synth: scratch });
+        sig.dispatchEvent(new Event("resign"));
+      },
+    });
   }
 </script>
 
