@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 
+import Footer from "@/components/Footer.astro";
+import Wordmark from "@/components/Wordmark.astro";
 import { SOCIALS } from "@/constants";
 import { CLOSER, CLOSER_ASIDE, INTRO, TAGLINE } from "@/intro";
-import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
 
 const projects = (await getCollection("projects")).sort(
@@ -72,12 +73,7 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
 <Layout title="jass.gg" description={TAGLINE}>
   <main class="mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
     <header>
-      {
-        /* The wordmark is the one place a personal site earns its accent: a
-      name in a hand font is a signature, and colouring it is the smallest
-      possible way to say the palette out loud. */
-      }
-      <h1 class="font-hand text-display text-accent">jass</h1>
+      <Wordmark />
 
       {
         /* Measured: at the full 624px column this paragraph sets ~81 characters
@@ -173,7 +169,9 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
               // purpose: pointing at the description does nothing. Text that
               // brightens under the cursor promises a click, and the
               // description isn't clickable. Only the link speaks for the row.
-              <li class="group">
+              // `data-entry` is the handle the demo modules select by — the
+              // friend finds a row by the name of the thing it performs.
+              <li class="group" data-entry={entry.data.name}>
                 <a href={destination(entry)}>{entry.data.name}</a>
                 <span class="ml-2 text-muted-foreground transition-colors duration-150 group-has-[a:hover]:text-foreground">
                   {entry.data.description}
@@ -201,104 +199,33 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
     `draft: true` stub and the collection is untouched. */
     }
 
-    {
-      /* The stamp links to the commit it is claiming. A date on its own is an
-    assertion; a date that hands you the diff is evidence — and it is the only
-    thing on the page that is true because of how the page was built. */
-    }
-    <footer class="group mt-20 font-machine text-micro text-muted-foreground">
-      {
-        /* `<time datetime>` because the stamp is a date and the markup should
-      say so, not just the pixels — the machine role, carried into the HTML
-      itself. The full ISO instant rather than a bare day: the commit knows
-      the moment, and truncating it to a date would re-open the timezone
-      question the rendered text already glosses. Found only by whoever reads
-      source, which is who it is for. */
-      }
-      {
-        LAST_TOUCHED.commitUrl ? (
-          <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
-            last touched{" "}
-            <time datetime={LAST_TOUCHED.date.toISOString()}>
-              {formatStamp(LAST_TOUCHED.date)}
-            </time>
-          </a>
-        ) : (
-          <span>
-            last touched{" "}
-            <time datetime={LAST_TOUCHED.date.toISOString()}>
-              {formatStamp(LAST_TOUCHED.date)}
-            </time>
-          </span>
-        )
-      }
-
-      {
-        /* The stamp says a date and hands over a link. This says what actually
-      changed — the stamp's own argument was that a date alone is an assertion
-      and a date that gives you the diff is evidence, and until now it was one
-      click short of its own claim.
-
-      Hidden until the footer is hovered, because a commit subject is written
-      for whoever works on the repo rather than for a visitor: at rest it is
-      noise, found by someone who went looking it is the page showing its
-      working. That also makes it the only thing here nobody needs to see.
-
-      `opacity`, not `hidden`, so the space is reserved and nothing moves when
-      it appears — and it sits at the very bottom of the page, so even that
-      costs nothing above it. `aria-hidden` because a screen reader would
-      otherwise read a decoration it can never trigger; the link above already
-      says everything that matters.
-
-      `group-focus-within` because hover-only would contradict the site's own
-      focus ring, whose comment calls the keyboard the one way to find links
-      without a pointer. Tab to the stamp and the working appears; the
-      keyboard's hover is focus. Paper gets it too — see the print block in
-      global.css — because paper can't hover either, and an invisible
-      paragraph would otherwise reserve a blank hole at the end of the
-      sheet. */
-      }
-      {
-        LAST_TOUCHED.subject && (
-          <p
-            aria-hidden="true"
-            class="max-w-[34rem] opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100">
-            {LAST_TOUCHED.subject}
-          </p>
-        )
-      }
-    </footer>
+    <Footer />
   </main>
 </Layout>
 
 <script>
-  import { ambient } from "@/scripts/friend";
+  /* The friend's call sheet. Every act on the page registers here and
+     nowhere else — one module per detail, one agent per module, so no two
+     bits ever edit the same file. A module owns everything about its act:
+     finding its element, its styles, its assets, its degradation. The
+     throwaway wave that proved the mechanism died here, replaced by the
+     real cast. */
+  import { register as agentsGag } from "@/scripts/demos/agents-gag";
+  import { register as liquidGlass } from "@/scripts/demos/liquid-glass";
+  import { register as onandemoCat } from "@/scripts/demos/onandemo-cat";
+  import { register as quilt } from "@/scripts/demos/quilt";
+  import { register as toysWobble } from "@/scripts/demos/toys-wobble";
+  import { register as vergilCut } from "@/scripts/demos/vergil-cut";
 
-  /* THROWAWAY (ticket 14). The mechanism needs one act wired to it so the
-     grammar can be judged on a real phone: dwell on an entry row and its
-     underline waves — draws in, retracts. It borrows the link's existing
-     stroke so it adds nothing new to judge except the TIMING, which is the
-     only thing on trial. Delete this act the moment the first real demo
-     lands; the module stays. */
-  for (const row of document.querySelectorAll("section li")) {
-    const link = row.querySelector("a");
-    if (!link) continue;
-    ambient({
-      el: row,
-      act: () => {
-        link.classList.add("friend-wave");
-        setTimeout(() => link.classList.remove("friend-wave"), 650);
-      },
-    });
-  }
+  agentsGag();
+  liquidGlass();
+  onandemoCat();
+  quilt();
+  toysWobble();
+  vergilCut();
 </script>
 
 <style>
-  /* THROWAWAY (ticket 14) — the wave the script above rides. Dies with it. */
-  a.friend-wave {
-    background-size: 100% 2px;
-  }
-
   /* THE SECTION YOU ASKED FOR SIGNS ITSELF. The page has no nav, so nobody
      arrives at /#things or /#toys from inside the page — an anchor arrival is
      always someone who followed a shared link. When they land, the heading

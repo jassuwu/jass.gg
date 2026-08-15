@@ -1,0 +1,56 @@
+---
+import { LAST_TOUCHED, formatStamp } from "@/last-touched";
+
+/* The stamp links to the commit it is claiming. A date on its own is an
+   assertion; a date that hands you the diff is evidence — and it is the only
+   thing on the page that is true because of how the page was built.
+
+   Ticket 19 owns this file: the commit-subject reveal below dies when the
+   murmur and the copyright line land, per the grilling settlement. Until the
+   agent replaces it, the built state ships unchanged. */
+---
+
+<footer class="group mt-20 font-machine text-micro text-muted-foreground">
+  {
+    /* `<time datetime>` because the stamp is a date and the markup should
+  say so, not just the pixels — the machine role, carried into the HTML
+  itself. The full ISO instant rather than a bare day: the commit knows
+  the moment, and truncating it to a date would re-open the timezone
+  question the rendered text already glosses. Found only by whoever reads
+  source, which is who it is for. */
+  }
+  {
+    LAST_TOUCHED.commitUrl ? (
+      <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
+        last touched{" "}
+        <time datetime={LAST_TOUCHED.date.toISOString()}>
+          {formatStamp(LAST_TOUCHED.date)}
+        </time>
+      </a>
+    ) : (
+      <span>
+        last touched{" "}
+        <time datetime={LAST_TOUCHED.date.toISOString()}>
+          {formatStamp(LAST_TOUCHED.date)}
+        </time>
+      </span>
+    )
+  }
+
+  {
+    /* Dead reveal walking (ticket 19). The commit subject is the site talking
+  to its own repo — jass: nobody cares what commit he made on a portfolio
+  site. The agent working ticket 19 removes this block, its print rule in
+  global.css, and the focus-within/hover classes, in the same change that
+  lands the murmur. */
+  }
+  {
+    LAST_TOUCHED.subject && (
+      <p
+        aria-hidden="true"
+        class="max-w-[34rem] opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100">
+        {LAST_TOUCHED.subject}
+      </p>
+    )
+  }
+</footer>
