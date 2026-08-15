@@ -36,6 +36,45 @@ export default defineConfig({
       fallbacks: ["Georgia", "Times New Roman", "serif"],
     },
     {
+      // The ampersand, and nothing else — 676 bytes containing one glyph.
+      //
+      // Baskervville's italic ampersand is a different drawing from its roman
+      // one: the roman sets a symbol, the italic sets the `et` ligature it came
+      // from, by hand. It is the best glyph in the family and the intro uses
+      // two of them.
+      //
+      // Shipping the whole italic face for two characters would cost ~30 KB and
+      // a swap flash on the two most decorative glyphs on the page, so this is
+      // that face subset to U+0026 and nothing else. It goes FIRST in the paper
+      // stack (see global.css) and everything it cannot draw — which is
+      // everything — falls straight through to Baskervville proper.
+      //
+      // No fallbacks on purpose: a fallback here would swallow the whole
+      // alphabet before Baskervville ever got a turn.
+      //
+      // Renamed rather than kept as "Baskervville", which is what OFL asks of a
+      // modified copy. See src/fonts/LICENSES.md.
+      name: "BaskervvilleAmpersand",
+      cssVariable: "--font-ampersand",
+      provider: fontProviders.local(),
+      fallbacks: [],
+      options: {
+        variants: [
+          // `style: "normal"` is declared, and it is deliberate. The file
+          // carries an italic angle, so left alone Astro reads that and emits
+          // `font-style: italic` — which would mean the face never matches in
+          // roman body text, which is the only place it is ever wanted. The
+          // glyph is drawn italic; the face is declared normal. That mismatch
+          // IS the technique.
+          {
+            src: ["./src/fonts/BaskervvilleAmpersand.woff2"],
+            weight: 400,
+            style: "normal",
+          },
+        ],
+      },
+    },
+    {
       // The machine. Dates, periods, repo names — anything factual.
       // Subset from ~480 KB/weight to ~34 KB; the upstream build is an Iosevka
       // config carrying thousands of glyphs we will never render.

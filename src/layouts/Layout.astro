@@ -83,6 +83,13 @@ const ogImage = new URL("/og.png", Astro.site);
       cssVariable="--font-baskervville"
       preload={[{ weight: 400, style: "normal" }]}
     />
+    {
+      /* Preloaded despite being a decoration, because it is 676 bytes and it
+    sets two glyphs in the first paragraph. Left to load on demand it would
+    swap in late, and a late swap on an ampersand is the one flash you would
+    actually watch happen. */
+    }
+    <Font cssVariable="--font-ampersand" preload />
     <Font cssVariable="--font-ioskeley" preload={[{ weight: 400 }]} />
     <Font cssVariable="--font-excalifont" preload />
   </head>

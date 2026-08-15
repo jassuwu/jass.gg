@@ -93,9 +93,19 @@ const LIST = "mt-3 space-y-2 text-body";
               // No separator between name and line: foreground against muted
               // does that work. A dash here collided with the dashes inside
               // the descriptions themselves.
-              <li>
+              //
+              // That contrast is also what the row hover borrows. Hovering the
+              // name lifts the description out of muted too, so the entry
+              // wakes as one thing — a name and its line — which is what it is
+              // and which nothing at rest says.
+              //
+              // Keyed off `a:hover` rather than the row's own hover on
+              // purpose: pointing at the description does nothing. Text that
+              // brightens under the cursor promises a click, and the
+              // description isn't clickable. Only the link speaks for the row.
+              <li class="group">
                 <a href={destination(entry)}>{entry.data.name}</a>
-                <span class="ml-2 text-muted-foreground">
+                <span class="ml-2 text-muted-foreground transition-colors duration-150 group-has-[a:hover]:text-foreground">
                   {entry.data.description}
                 </span>
               </li>

@@ -9,7 +9,21 @@
    emitted to :root. That's what we want: Astro owns the actual font stack, so
    there's no reason to ship a second indirection to the browser. */
 @theme inline {
-  --font-paper: var(--font-baskervville);
+  /* Two families, and the order is the whole trick. The first one contains a
+     single glyph — Baskervville's ITALIC ampersand, subset to 676 bytes — so
+     every `&` on the site gets the `et` ligature drawn by hand, and every other
+     character in the language falls through to Baskervville proper because the
+     first face has nothing to offer it.
+
+     No markup, no `<em>`, no per-instance decision: it applies to any `&`
+     anyone ever writes, including ones in copy that doesn't exist yet. The cost
+     is one 676-byte request that only fires on a page containing an ampersand.
+
+     The hazard, stated so nobody trips on it: swap the paper typeface and this
+     face does NOT follow. It is Baskervville's ampersand specifically, and it
+     would sit in the new face looking wrong. Regenerate it (see
+     `.scratch/site-rewrite/tools/`) or drop it. */
+  --font-paper: var(--font-ampersand), var(--font-baskervville);
   --font-machine: var(--font-ioskeley);
   --font-hand: var(--font-excalifont);
 }
@@ -111,6 +125,13 @@
     font-family: var(--font-paper);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+
+    /* No orphans. The intro is five sentences in one paragraph and the browser
+       will happily leave "sesh?" alone on a line of its own at some widths —
+       which is the single most common way a page of plain text looks unset
+       rather than typeset. Costs one declaration and nobody will ever be able
+       to tell you what changed. */
+    text-wrap: pretty;
   }
 
   /* Links carry no decoration at rest. Ticket 03 gave them a thick lime
@@ -133,11 +154,49 @@
     text-decoration: none;
   }
 
+  /* The underline DRAWS. It is not a decoration switched on — it is a gradient
+     with no width that grows to full width, which means it enters from the left
+     and, on leave, retracts back to the left it came from. Most implementations
+     fade it out or collapse it from the right; going back the way it came is
+     the difference between a line appearing and a line being drawn.
+
+     That matters here more than it would elsewhere. This is the site's only
+     link affordance — nothing marks a link at rest — so this stroke is the
+     entire interaction budget, and the wordmark above it is a hand font. A line
+     that draws reads as a pen. A line that blinks reads as CSS.
+
+     `text-decoration` cannot animate, which is why this is a background at all.
+     `background-origin: content-box` keeps the stroke tight under the text on
+     the socials row and the stamp, where the links carry vertical padding to be
+     thumb-sized — without it the line would hang 4px low on exactly those and
+     nowhere else. `box-decoration-break: clone` is defensive: no link on the
+     site wraps today, but one that did would otherwise get a single stroke
+     stretched across both fragments. */
+  a {
+    background-image: linear-gradient(
+      var(--color-accent-mark),
+      var(--color-accent-mark)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-origin: content-box;
+    background-size: 0 2px;
+    transition: background-size 140ms ease-out;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
   a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--color-accent-mark);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.2em;
+    background-size: 100% 2px;
+  }
+
+  /* Anyone who has asked for less motion gets the old behaviour exactly: the
+     underline still appears, it just stops travelling. The affordance is never
+     what gets removed. */
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
   }
 
   /* Focus used to share the rule above, which looked deliberate and wasn't:
