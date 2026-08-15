@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 
 import { SOCIALS } from "@/constants";
-import { ASIDE, INTRO, TAGLINE } from "@/intro";
+import { INTRO, TAGLINE } from "@/intro";
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 import Layout from "@/layouts/Layout.astro";
 
@@ -80,14 +80,6 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
       <h1 class="font-hand text-display text-accent">jass</h1>
 
       <p class="mt-8 text-body">{INTRO}</p>
-
-      {
-        /* The gap is deliberately smaller than every other gap in the header.
-      Same voice, next thought — not a new section. Big enough that the change
-      of subject is announced, small enough that the two paragraphs still read
-      as one person talking. */
-      }
-      <p class="mt-5 text-body">{ASIDE}</p>
 
       {
         /* These links are 13px tall. Fine to read, mean to hit with a thumb.

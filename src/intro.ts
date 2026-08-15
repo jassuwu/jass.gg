@@ -10,10 +10,8 @@
  * is the only one about paid work, the agents line is the only sentence on the
  * site that says how jass thinks, and "every day" is the only claim of currency.
  *
- * The fifth job — the invitation — moved out to ASIDE below. See the comment
- * there for why; the short version is that four sentences of work claims set an
- * expectation, and the two sentences that broke it were breaking it inside the
- * same block.
+ * There used to be a fifth job — an invitation — and it is gone for now. The
+ * closer that replaces it is an open question; see the block below INTRO.
  *
  * The work sentence was added later, in jass's words, and it is the only thing
  * here about his job. The site had nothing at all on that, which left a visitor
@@ -23,9 +21,9 @@
  *
  * ORDER. The paragraph runs: what he ships in public, then where he ships it,
  * then what he values in the work he is paid for, then how he thinks about the
- * tools. ASIDE then carries the human bit and the invitation. Public, then
- * private, then personal — the paragraph break falls exactly on that last turn,
- * which is why it works.
+ * tools. Public, then private — the personal turn that used to end it was cut,
+ * and the closer that takes its place belongs after this paragraph, not inside
+ * it. That was the lesson of the version that got cut.
  *
  * The work sentence sits third and not second because it belongs next to the
  * agents line. Agents are the clearest current case of a tool that costs a user
@@ -35,7 +33,8 @@
  *
  * The work sentence cannot go first: the first sentence feeds TAGLINE below, so
  * moving it would silently rewrite the meta description and the /llms.txt
- * summary. It cannot go last either; ASIDE holds that end now.
+ * summary. It should not go last either; the end of the header belongs to a
+ * closer aimed at the reader, not to another claim about jass.
  *
  * The resume's summary states the same belief in its own register. That is two
  * copies of an idea, which is a real cost, and it is accepted because they are
@@ -55,33 +54,34 @@ export const INTRO =
   "i build a lot of toys, occasionally useful things. im on twitter releasing & watching what's releasing every day. i love doing work that has 0 user impact, but 100x the dev's lives. im excited about & scared of my agents, mostly the former.";
 
 /**
- * The human bit, and the invitation. Jass's words, unchanged — this used to be
- * the last two sentences of INTRO and not one character of it is different.
+ * THE CLOSER SLOT IS OPEN, AND IT IS DELIBERATELY EMPTY RATHER THAN FILLED.
  *
- * IT IS A SEPARATE PARAGRAPH NOW, and that is the whole fix. It read as sticking
- * out, and the reason was structural rather than a fault in the writing. INTRO
- * is four sentences of the same kind of thing: assertive present-tense claims
- * about work, each adding information. These two break that twice over — the
- * only change of subject, the only concession ("i don't get to play them as much
- * now" is the one place the copy takes something back), and the only sentence
- * that addresses the reader at all.
+ * It held "i also love video games, but i don't get to play them as much now.
+ * gimme an excuse and join me for a sesh?" — cut by jass. Splitting it into its
+ * own paragraph fixed how it sat on the page but not what it was doing.
  *
- * Four sentences is enough to establish a contract about what the paragraph is
- * for. Breaking it inside the same block reads as a stumble; breaking it across
- * a paragraph reads as a turn. Same words, and the pivot is now announced by the
- * white space instead of ambushing the reader mid-block.
+ * What he wants there instead, in his words: something that "forms a connection
+ * between me and the reader", so that "people who like things i like" end up in
+ * his circle. What he does not want is asking for a follow, which he calls
+ * cringe, and he is right — an ask is a transaction, and it arrives before the
+ * reader has decided they care.
  *
- * The concession is load-bearing, so do not "tighten" it away: not getting to
- * play is precisely why an excuse is needed, and without it the last sentence
- * has no setup. It is also the most relatable line on the site, which is what it
- * is here to be.
+ * Two constraints for whoever writes it, jass included:
  *
- * It is NOT in TAGLINE and must not be — the meta description and the /llms.txt
- * summary are what someone reads before deciding to visit, and "join me for a
- * sesh?" out of context is not what that moment is for.
+ * 1. It goes ABOVE the socials row, in the paragraph slot at `mt-5`. The row is
+ *    six unlabelled words and no reason. One line above it turns a list of links
+ *    into an invitation without a single word of asking — the mechanism is
+ *    already on the page, it just has no reason attached.
+ *
+ * 2. `/404` already solves this exact problem in his voice: "just talk to me",
+ *    then "(pls no one talks to me 😔)" in the hand font. It states the want and
+ *    undercuts it in the same breath, and it is warm rather than needy. The
+ *    self-awareness is what removes the cringe. Whatever lands here should be in
+ *    that register, and it should not repeat that joke.
+ *
+ * Nothing renders in this slot until he writes it. An empty slot is honest; a
+ * placeholder closer would be the writing section all over again.
  */
-export const ASIDE =
-  "i also love video games, but i don't get to play them as much now. gimme an excuse and join me for a sesh?";
 
 /**
  * What search results and link previews show. It is the intro's first sentence,
