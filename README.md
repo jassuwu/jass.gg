@@ -1,5 +1,5 @@
-# jass.gg
+<p align="center">
+  <img src="public/og.png" alt="jass.gg" width="420" />
+</p>
 
-![jass.gg](public/og.png)
-
-my place on the web.
+<p align="center">my place on the web.</p>
