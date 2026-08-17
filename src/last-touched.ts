@@ -7,9 +7,8 @@
  * this exists to avoid. If git isn't available (it always is on Vercel, but
  * still), it degrades to build time rather than failing the build.
  *
- * It also carries the commit URL, so the stamp can link to the thing it is
- * claiming. A date on its own is an assertion; a date that hands you the diff
- * is evidence.
+ * The sha stays off the page. The date is the claim; the commit is only how
+ * we found it.
  *
  * Runs once, at build, in Astro's frontmatter. Nothing ships to the browser.
  */
@@ -17,28 +16,22 @@ import { execSync } from "node:child_process";
 
 const TRACKED = ["src/data", "src/pages", "src/layouts", "src/styles"];
 
-const REPO = "https://github.com/jassuwu/jass.gg";
-
 export interface LastTouched {
   date: Date;
-  /** Absent when git isn't available, which is the only case with no commit. */
-  commitUrl?: string;
 }
 
-/* The commit's subject line used to ride along here, revealed under the stamp
-   on hover. jass killed it in ticket 19: nobody cares what commit he made on
-   a portfolio site. The date and its link were always the whole claim. */
+/* The stamp used to link to the commit and reveal its subject on hover.
+   jass killed both: nobody cares what commit he made on a portfolio site.
+   The date is the whole claim. */
 function lastContentCommit(): LastTouched {
   try {
-    const [iso, sha] = execSync(
-      `git log -1 --format=%cI%n%H -- ${TRACKED.join(" ")}`,
-      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
-    )
-      .trim()
-      .split("\n");
-    const date = new Date(iso ?? "");
-    if (Number.isNaN(date.getTime()) || !sha) return { date: new Date() };
-    return { date, commitUrl: `${REPO}/commit/${sha}` };
+    const iso = execSync(`git log -1 --format=%cI -- ${TRACKED.join(" ")}`, {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return { date: new Date() };
+    return { date };
   } catch {
     return { date: new Date() };
   }
