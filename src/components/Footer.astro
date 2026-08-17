@@ -1,9 +1,8 @@
 ---
 import { LAST_TOUCHED, formatStamp } from "@/last-touched";
 
-/* The stamp links to the commit it is claiming. A date on its own is an
-   assertion; a date that hands you the diff is evidence — and it is the only
-   thing on the page that is true because of how the page was built. */
+/* The stamp is a date, not a link. The commit it came from is how we found
+   the date; the page only claims when content last changed. */
 ---
 
 <footer class="mt-20 font-machine text-micro text-muted-foreground">
@@ -15,30 +14,18 @@ import { LAST_TOUCHED, formatStamp } from "@/last-touched";
   question the rendered text already glosses. Found only by whoever reads
   source, which is who it is for. */
   }
-  {
-    LAST_TOUCHED.commitUrl ? (
-      <a class="inline-block py-1.5" href={LAST_TOUCHED.commitUrl}>
-        last touched{" "}
-        <time datetime={LAST_TOUCHED.date.toISOString()}>
-          {formatStamp(LAST_TOUCHED.date)}
-        </time>
-      </a>
-    ) : (
-      <span>
-        last touched{" "}
-        <time datetime={LAST_TOUCHED.date.toISOString()}>
-          {formatStamp(LAST_TOUCHED.date)}
-        </time>
-      </span>
-    )
-  }
+  <span>
+    last touched{" "}
+    <time datetime={LAST_TOUCHED.date.toISOString()}>
+      {formatStamp(LAST_TOUCHED.date)}
+    </time>
+  </span>
 
   {
     /* AGENT DRAFT — jass rewrites (ticket 20). A rights fact, so it lives in
   the machine role the footer already speaks. Its own line rather than the
-  stamp's: the stamp is a link, and a sentence sharing a link's line reads
-  as part of the claim being linked. Facts stack — this room is a colophon,
-  one fact per line. */
+  stamp's: two facts sharing a line read as one claim. This room is a
+  colophon, one fact per line. */
   }
   <p>© jass. all rights reserved, none exercised</p>
 </footer>

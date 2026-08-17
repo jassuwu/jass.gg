@@ -1,5 +1,5 @@
 /**
- * THE AGENTS GAG (ticket 16). "im excited about & scared of my agents,
+ * THE AGENTS GAG (ticket 16). "im excited & scared of my agents,
  * mostly the former" is the only sentence on the site about how jass thinks,
  * and this is that sentence demonstrated rather than illustrated: dwell on
  * "agents" and a second cursor fades in and acts on its own — drifts over,

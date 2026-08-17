@@ -51,7 +51,7 @@
  * nowhere on the page, maintained by nobody.
  */
 export const INTRO =
-  "i build a lot of toys, occasionally useful things. im on twitter releasing & watching what's releasing every day. i love doing work that has 0 user impact, but 100x the dev's lives. im excited about & scared of my agents, mostly the former.";
+  "i build a lot of toys, occasionally useful things. im on twitter shipping & watching what's shipping every day. i love work that has 0 user impact, but 100x the dx. im excited & scared of my agents, mostly the former.";
 
 /**
  * THE CLOSER. Two lines, and they are one move — do not ship either alone.
@@ -65,7 +65,7 @@ export const INTRO =
  *
  * CLOSER IS AN OFFER, NOT A REQUEST, and that is why it works. It gives the
  * reader attention rather than asking for theirs, and it is already true of him
- * — INTRO says he watches what's releasing every day. It also filters by
+ * — INTRO says he watches what's shipping every day. It also filters by
  * activity: someone who builds reads it and feels seen, someone who doesn't
  * quietly isn't the audience. That is the filter jass wanted. An earlier draft
  * said "exclusive circle", which filters by permission instead, and that is the
@@ -84,9 +84,9 @@ export const INTRO =
  * voice into a tic, so this one deflates by admitting the MOTIVE instead: the
  * quiet true reason under a line that would otherwise be pure generosity.
  *
- * "just" is the whole tone and must survive any edit. "i'm trying to find my
- * people" is a plan. "i'm JUST trying to find my people" is a confession, and
- * only the second one is warm.
+ * "just" is the whole tone and must survive any edit. "im tryna to find ma
+ * ppl" is a plan. "im JUST tryna to find ma ppl" is a confession, and only
+ * the second one is warm.
  *
  * The aside deliberately does NOT restate who — CLOSER already filtered. Two
  * lines doing the same filtering would be one line's work done twice.
@@ -111,7 +111,7 @@ export const CLOSER = "i'd like to see what you ship.";
  * `accent-quiet`. The 11px-against-18px size gap is what makes it an aside —
  * it used to be a separate paragraph, which made it a second statement instead.
  */
-export const CLOSER_ASIDE = "(i'm just trying to find my people)";
+export const CLOSER_ASIDE = "(im just tryna to find ma ppl)";
 
 /**
  * THE VIEW SOURCE COMMENT. Empty until jass writes it, and it must be his —
