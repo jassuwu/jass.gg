@@ -1,0 +1,13 @@
+The kalimba, piano, sitar and harp samples in this directory are the ones
+music-to-my-ai plays, copied from that project so this site's entry can
+perform it without a round trip to another origin. They were hotlinked from
+music-to-my-ai.jass.gg first; that cost a cross-origin connection on the
+reader's first hover, which is the one thing a dwell act cannot spend.
+
+Source:  gleitz/midi-js-soundfonts (pre-rendered FluidR3_GM),
+         sparse 2-per-octave extraction
+Licence: FluidR3_GM is MIT; the hosting repo labels its derivative CC BY 3.0.
+
+Only the notes the entry's pitch walk can actually reach are kept, which is
+why each instrument carries three to five files rather than the full nine.
+See src/scripts/demos/music-to-my-ai.ts for which, and why.
