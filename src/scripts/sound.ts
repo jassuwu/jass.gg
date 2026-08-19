@@ -75,6 +75,17 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) stopAll();
 });
 
+/**
+ * The bus's context, or nothing before the gate. A cue whose samples must be
+ * decoded BEFORE its moment arrives asks here — decoding takes a context and
+ * there must only ever be one, since a second would defeat the gate this
+ * module exists to hold. Handing it out is not permission to play: `play()`
+ * is still the only way to make a sound, and it still owns the one mouth.
+ */
+export function context(): AudioContext | undefined {
+  return ctx;
+}
+
 export function isMuted(): boolean {
   return muted;
 }
