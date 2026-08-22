@@ -9,9 +9,12 @@ import "@/styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  /** The 404 sets this: the status code already keeps it out of the index,
+   * but a crawler that reaches the page some other way gets told directly. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex } = Astro.props;
 
 // Absolute, because a link preview is fetched by a crawler that has no page to
 // resolve a relative URL against. `Astro.site` is set in astro.config.mjs, so
@@ -49,6 +52,7 @@ const ogImage = new URL("/og.png", Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
 
     {
