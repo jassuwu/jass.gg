@@ -152,13 +152,14 @@ export function start(): void {
   };
   readInk();
 
-  const dpr = Math.min(devicePixelRatio || 1, 2);
+  let dpr = 1;
   let w = 0;
   let h = 0;
 
   /* the columns. u = deviation from the resting level (px, down-positive),
-     v = velocity (px per step). Rebuilt flat on resize; a resize is a scene
-     cut, not a physics event. */
+     v = velocity (px per step). The columns are x-indexed, so only a WIDTH
+     change is a scene cut; a height change (the iOS URL bar collapses on
+     every scroll) just re-hangs the same water in a taller frame. */
   let n = 0;
   let spacing = BASE_SPACING;
   let u = new Float32Array(0);
@@ -167,18 +168,26 @@ export function start(): void {
   let rDelta = new Float32Array(0);
   let passes = FULL_PASSES;
 
-  const rebuild = (): void => {
+  /* Size the frame: viewport, backing store, transform. dpr is re-read here
+     every time — zoom and monitor moves change it mid-visit, and a stale
+     value leaves the canvas blurry for the rest of the flood. */
+  const sizeCanvas = (): void => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
     w = innerWidth;
     h = innerHeight;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    readInk();
+  };
+
+  const rebuild = (): void => {
+    sizeCanvas();
     n = Math.max(16, Math.ceil(w / spacing) + 1);
     u = new Float32Array(n);
     v = new Float32Array(n);
     lDelta = new Float32Array(n);
     rDelta = new Float32Array(n);
-    readInk();
   };
   rebuild();
 
@@ -420,7 +429,19 @@ export function start(): void {
   };
   document.addEventListener("visibilitychange", onVis);
 
-  const onResize = (): void => rebuild();
+  /* Debounced, and split by axis: iOS fires resize on every URL-bar
+     collapse — which is to say on scrolling — and the old undebounced
+     full-rebuild flattened the flood every time. A height-only change
+     re-hangs the frame and keeps the water; only a real width change
+     rebuilds the columns. */
+  let resizeTimer: number | undefined;
+  const onResize = (): void => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      if (innerWidth === w) sizeCanvas();
+      else rebuild();
+    }, 200);
+  };
   addEventListener("resize", onResize);
 
   const scheme = matchMedia("(prefers-color-scheme: dark)");
@@ -432,6 +453,7 @@ export function start(): void {
   const drain = (): void => {
     if (!reduced.matches) return;
     cancelAnimationFrame(raf);
+    window.clearTimeout(resizeTimer);
     document.removeEventListener("visibilitychange", onVis);
     removeEventListener("resize", onResize);
     removeEventListener("pointermove", onMove);
