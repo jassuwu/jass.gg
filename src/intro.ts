@@ -1,23 +1,34 @@
 /**
  * The intro paragraph, and the one-line description derived from it.
  *
- * COPY IS JASS'S, VERBATIM. It was written by him and reproduced exactly. One
- * spelling was corrected ("everyday" to "every day") and nothing else. Do not
+ * COPY IS JASS'S. His first draft was rewritten with him sentence by sentence
+ * (aug 2026) and he approved every line; the register is his throughout. Do not
  * "improve" it and do not restore any earlier version.
  *
  * It is doing four jobs at once and it is worth not breaking any of them: its
  * first two nouns are the two sections below it on the page, the third sentence
  * is the only one about paid work, the agents line is the only sentence on the
- * site that says how jass thinks, and "every day" is the only claim of currency.
+ * site that says how jass thinks, and "terminally" is the only claim of
+ * currency — a condition where the old copy's "every day" was a schedule.
  *
  * There used to be a fifth job — an invitation — and it is gone for now. The
  * closer that replaces it is an open question; see the block below INTRO.
  *
- * The work sentence was added later, in jass's words, and it is the only thing
- * here about his job. The site had nothing at all on that, which left a visitor
- * who liked the toys with no idea what he does for a living. It says taste
- * rather than credentials on purpose: no years, no titles, no employers. Those
- * live on the resume, which is a different document for a different reader.
+ * "monitoring the situation" is a twitter meme, kept knowingly. jass worried
+ * people wouldn't get it; it stays because it degrades gracefully — a reader
+ * who has never seen the meme still gets a coherent literal sentence — and
+ * because it filters the same way the closer does: the people who grin at it
+ * are exactly the people the site is fishing for. The twitter sentence also
+ * carries the "watching" that earns the closer; without it, "i'd like to see
+ * what you ship" arrives from nowhere.
+ *
+ * The work sentence is the only thing here about his job. It says taste rather
+ * than credentials on purpose: no years, no titles, no employers. Those live on
+ * the resume, which is a different document for a different reader. An earlier
+ * version scored the work ("0 user impact, but 100x the dx"); this one says who
+ * it is for instead, because the true version — jass's, out loud — is that the
+ * devs come back and tell him it landed, and that is the part that feels good.
+ * "come thank you for" is that direct contact, kept in four words.
  *
  * ORDER. The paragraph runs: what he ships in public, then where he ships it,
  * then what he values in the work he is paid for, then how he thinks about the
@@ -36,6 +47,14 @@
  * summary. It should not go last either; the end of the header belongs to a
  * closer aimed at the reader, not to another claim about jass.
  *
+ * THE AGENTS LINE HAS A LOAD-BEARING SUBSTRING. agents-gag.ts finds "agents"
+ * and "mostly the former" by literal text match and drags a ghost selection
+ * across the phrase; edit either and the gag silently disappears. "mostly the
+ * former" survived a rewrite pass for exactly this reason — the spoken-register
+ * alternative ("mostly excited") read warmer but deleted the gag's target, and
+ * jass chose the gag. "excited & scared BY" (not "of") is the one word that
+ * changed: "of" served only "scared" and read as a snag.
+ *
  * The resume's summary states the same belief in its own register. That is two
  * copies of an idea, which is a real cost, and it is accepted because they are
  * deliberately different sentences for different audiences rather than one
@@ -51,7 +70,7 @@
  * nowhere on the page, maintained by nobody.
  */
 export const INTRO =
-  "i build a lot of toys, occasionally useful things. im on twitter shipping & watching what's shipping every day. i love work that has 0 user impact, but 100x the dx. im excited & scared of my agents, mostly the former.";
+  "i build a lot of toys, and occasionally useful things. im terminally on twitter, shipping & monitoring the situation. i love the quiet work, the kind users never notice & devs come thank you for. im excited & scared by my agents, mostly the former.";
 
 /**
  * THE CLOSER. Two lines, and they are one move — do not ship either alone.
@@ -65,7 +84,8 @@ export const INTRO =
  *
  * CLOSER IS AN OFFER, NOT A REQUEST, and that is why it works. It gives the
  * reader attention rather than asking for theirs, and it is already true of him
- * — INTRO says he watches what's shipping every day. It also filters by
+ * — INTRO says he is terminally on twitter monitoring the situation. It also
+ * filters by
  * activity: someone who builds reads it and feels seen, someone who doesn't
  * quietly isn't the audience. That is the filter jass wanted. An earlier draft
  * said "exclusive circle", which filters by permission instead, and that is the
