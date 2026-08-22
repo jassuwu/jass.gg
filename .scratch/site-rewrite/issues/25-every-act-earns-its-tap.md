@@ -42,5 +42,19 @@ Work the list against [research/mobile-audit.md](../research/mobile-audit.md)
   friend's -35% band for cooldown/preload; must die with scroll-dwell or it
   keeps a hidden scroll dependency.
 
+- **music-to-my-ai** (new, post-merge) — the whole page streams itself
+  with sound, registered via `ambient()`: on a phone today it fires
+  uninvited from a scroll pause, and the tap that would stop it is also
+  the gesture that kills it instantly. The most dramatic act on the site
+  and the most in need of the tap grammar. Its four-second, quittable,
+  whole-page shape may actually be the *easiest* honest tap port.
+
+Per-act fix-notes from [the site audit](../research/site-audit.md) to
+carry into whichever verdict each act gets: toys-wobble taps flam the
+marimba (enter+down both ding); a dwell during the load-signing is
+swallowed (no re-arm without leave); quilt's error path leaves residue;
+ass and andrew-dictate are audio-only (nothing for deaf readers — does
+the tap form add a visible half?).
+
 One session with jass, on his phone, act by act. Verdicts recorded here;
 build work lands in the acts' own tickets where they're still open.

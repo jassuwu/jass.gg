@@ -104,3 +104,29 @@ The liquid glass takeover is live and jass keeps it; the grammar section
 above graduates to the map if a second instance ships. **The graduation
 condition is met** — the grammar is in the map as of aug 20. What remains is
 jass's play test on both instances.
+
+## Audit findings (aug 22) — the play test has two known defects to judge against
+
+From [site-audit.md](../research/site-audit.md) §2–3, verified against the
+package source and the built page:
+
+1. **The entrance breaks the illusion.** The package hides the native
+   cursor synchronously but renders its glass from (−9999,−9999) on a 0.15
+   lerp; the synthetic mousemove sets the target, not the position.
+   Measured: ~300ms of no pointer at all, then the glass flying in
+   diagonally (~950ms to reach the hand). The fix wants the package's
+   render position seeded, not just its target — possibly an upstream
+   patch to liquid-glass-cursor itself (it's jass's package).
+2. **The halo swallows savemefrom.** `HALO_Y = 56` vs ~33px row pitch, and
+   savemefrom sits directly below. Moving down one row keeps the takeover
+   alive (easy-out never fires) and dwell then runs the vergil cut *under*
+   the glass — arrows over the slice, and an arrow found mid-cut takes the
+   bus and silences the judgment cut mid-swing. The grammar needs either a
+   tighter halo, or a rule that a takeover blocks other ambient acts while
+   live (a "one act at a time" arbiter — which the tap redesign in ticket
+   14 wants anyway).
+3. Small: a failed dynamic import is memoized rejected — every later dwell
+   logs an unhandled rejection; wants a `.catch` + retry-or-retire.
+
+Instance two (music-to-my-ai) runs the same grammar, so 2's arbiter
+question covers it; its own mobile port is in ticket 25.

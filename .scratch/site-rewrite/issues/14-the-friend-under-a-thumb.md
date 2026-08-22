@@ -108,3 +108,24 @@ targets; no long-press, no haptics.
 
 Deliverable unchanged: the mechanism working on the real page, judged by
 jass on his actual phone.
+
+## Audit additions (aug 22) — the rebuild's scope grows three ways
+
+From [site-audit.md](../research/site-audit.md):
+
+- **Keyboard is an input class** (§7). No act on the site is reachable by
+  keyboard — `ambient()` arms only pointerenter/IO, `deliberate()` has no
+  callers. The tap grammar's handle should also be focusable and fire on
+  Enter/Space; `deliberate()` on a focusable handle gets this nearly free.
+  (WCAG 2.5.2: activate on the up event — same rule the touch research
+  already set.)
+- **One act at a time is a grammar rule, not a per-act flag** (§3, the
+  takeover/vergil collision). Scroll-dwell's all-at-once firing dies with
+  it, but pointer overlap (halo + adjacent dwell) proves the arbiter
+  belongs in friend.ts, not in each demo's `running` flag.
+- **Mechanism bugs to fix in the rebuild** (§P3): `armDwell` timer
+  clobbered by a second pointerenter on hybrid devices (act fires twice);
+  agents-gag's `done()` can wipe a reader's own just-started selection;
+  music-to-my-ai's pointerdown-ends-it meets the same "a tap kills the bit
+  it summoned" problem agents-gag has — under tap grammar, the ending
+  gesture needs to be distinct from the summoning one.
