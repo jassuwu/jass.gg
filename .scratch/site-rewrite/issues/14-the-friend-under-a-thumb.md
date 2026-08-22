@@ -95,7 +95,16 @@ what does tap-as-grammar concretely mean —
 5. **Repeats and reduced-motion** carry over unchanged (once-per-visit for
    gags, still-forms for reduced motion).
 
-Blocked by: [24 — the touch grammar facts](24-touch-grammar-facts.md)
-(platform facts: activation rules, hover-emulation quirks, affordance
-patterns). Deliverable unchanged: the mechanism working on the real page,
-judged by jass on his actual phone.
+~~Blocked by: 24~~ — **resolved aug 22; build to its constraints**
+([resolution](24-touch-grammar-facts.md), [full facts](../research/touch-grammar.md)):
+acts fire on the up-event (tap = `pointerup`/`click`, never `pointerdown`);
+the bus's wake listener moves off `pointerdown` (on touch it grants no
+activation and a scroll's `pointercancel` strands a suspended context);
+gated calls run synchronously in the handler (transient activation ~5s);
+branch on `(hover: hover) and (pointer: fine)` — iPads are touch; hover
+styles stay inside `@media (hover: hover)` (sticky :hover); no
+first-tap-hijack — name navigates, description performs, as separate
+targets; no long-press, no haptics.
+
+Deliverable unchanged: the mechanism working on the real page, judged by
+jass on his actual phone.
