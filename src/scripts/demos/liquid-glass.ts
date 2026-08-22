@@ -59,7 +59,7 @@
  */
 import type { createLiquidGlassCursor } from "liquid-glass-cursor";
 
-import { ambient } from "../friend";
+import { ambient, occupy } from "../friend";
 import { play } from "../sound";
 
 type Destroy = ReturnType<typeof createLiquidGlassCursor>;
@@ -465,11 +465,15 @@ export function register(): void {
     if (!destroy) return;
     destroy();
     destroy = undefined;
+    release?.();
+    release = undefined;
     endPuzzle?.();
     endPuzzle = undefined;
     wanted = false;
     droplet(LEAVE);
   };
+
+  let release: (() => void) | undefined;
 
   ambient({
     el: row,
@@ -479,6 +483,10 @@ export function register(): void {
       void loading.then((create) => {
         if (!wanted || destroy) return;
         destroy = create({ saturation: SATURATION });
+        /* A takeover holds the stage: no other ambient act may start
+           until the easy out runs. This is what kept the vergil cut from
+           ever again firing under a live glass. */
+        release = occupy();
         document.dispatchEvent(
           new MouseEvent("mousemove", { clientX: px, clientY: py }),
         );

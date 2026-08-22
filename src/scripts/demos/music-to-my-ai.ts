@@ -122,7 +122,7 @@
  * entire idea; text that is already there is just the page, which the reader
  * already has.
  */
-import { ambient } from "@/scripts/friend";
+import { ambient, occupy } from "@/scripts/friend";
 import { context, play, stopAll } from "@/scripts/sound";
 
 /* ---- the voices, tuned as the product tunes them ---- */
@@ -728,6 +728,8 @@ export function register(): void {
   const end = (silence: boolean): void => {
     if (!running) return;
     running = false;
+    releaseStage?.();
+    releaseStage = undefined;
     lastEnd = Date.now();
     window.clearTimeout(timer);
     removeEventListener("pointerdown", out, true);
@@ -750,9 +752,14 @@ export function register(): void {
     if (document.hidden) end(true);
   };
 
+  let releaseStage: (() => void) | undefined;
+
   const start = (): void => {
     if (running || Date.now() - lastEnd < COOLDOWN_MS) return;
     running = true;
+    /* A takeover holds the stage — while the page is streaming itself, no
+       other ambient act may start over it (the friend's arbiter). */
+    releaseStage = occupy();
 
     const { sheet, chunks } = build(main);
     place = (): void => {
