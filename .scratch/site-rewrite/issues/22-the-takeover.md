@@ -105,7 +105,7 @@ above graduates to the map if a second instance ships. **The graduation
 condition is met** — the grammar is in the map as of aug 20. What remains is
 jass's play test on both instances.
 
-## Audit findings (aug 22) — the play test has two known defects to judge against
+## Audit findings (aug 22) — FIXED same day; the play test judges the repaired build
 
 From [site-audit.md](../research/site-audit.md) §2–3, verified against the
 package source and the built page:
@@ -130,3 +130,16 @@ package source and the built page:
 
 Instance two (music-to-my-ai) runs the same grammar, so 2's arbiter
 question covers it; its own mobile port is in ticket 25.
+
+**Fix record (aug 22, this branch):** (1) the entrance is repaired from
+outside the package — the native cursor stays (the package's cursor:none
+style is detached), the glass rides its lerp invisible, and only on
+arrival (or a 1.2s cap) do the two swap: the arrow turns to glass instead
+of vanishing while glass flies in. Verified in-browser: cursor preserved
+through the glide, swap fires, exit restores everything. (2) the collision
+is closed by the friend's new arbiter — `occupy()` in friend.ts: a live
+takeover blocks every ambient act until the easy out releases the stage;
+music-to-my-ai claims it too. (3) a failed import is no longer memoized
+rejected — the next dwell retries. An upstream fix (seed the package's
+render position at mount) would make the veil dance unnecessary; worth a
+patch to liquid-glass-cursor itself someday.

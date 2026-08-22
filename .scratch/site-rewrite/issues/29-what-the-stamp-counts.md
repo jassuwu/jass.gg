@@ -1,7 +1,7 @@
 # What the stamp counts
 
 Type: grilling (HITL, small) + task
-Status: open
+Status: closed — resolved aug 22, fixed on this branch
 Blocked by: nothing
 
 ## Question
@@ -22,3 +22,13 @@ Finding: [site-audit.md](../research/site-audit.md) §8.
    fallback to **build time** — the exact lie the stamp exists to avoid.
    Guard the empty string explicitly; prefer failing loud over lying
    quiet. (Check Vercel's clone depth while at it.)
+
+## Resolution
+
+**Everything that ships counts: `TRACKED = ["src", "public"]`.** A new
+friend act, a reworked component, a new sound — each now moves the date;
+`.scratch`, README, resume sources and configs stay excluded by not being
+listed. The shallow-clone lie is closed: an empty path-filtered `git log`
+now degrades to HEAD's own commit date (a real date, at worst slightly
+newer than the true last touch) instead of flowing through `new Date("")`
+into build time. Build time remains only for the no-git-at-all case.

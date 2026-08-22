@@ -155,3 +155,20 @@ Production was 5 commits ahead of this worktree during the audit
 now merged in; music-to-my-ai was audited post-merge — it runs the same
 dwell grammar (whole-page stream via `ambient()`), so it inherits the
 mobile findings wholesale and joins ticket 25's inventory.
+
+## Fix record (aug 22, same branch)
+
+jass's "fix all of these" pass, nine commits, `bun run verify` green,
+riskiest fixes verified in-browser: P1 1–4 fixed (ring → themed accent;
+entrance handoff repaired; halo collision closed by the friend's new
+`occupy()` arbiter; canonical → www with tripwire). P2 5, 6, 8 fixed
+(water calibrated + iOS-resize-proof + live dpr; stamp counts src+public
+and degrades honestly); P2 7 (keyboard) and 9 (repo spoilers) remain with
+tickets 14 and 30 — the first is the grammar rebuild's, the second is
+jass's alone. P2 10 fixed (404 fallback focusable + Enter/Space). P3s
+fixed: hybrid double-fire, gag selection wipe, marimba flam, rejected
+import memo, vergil clone ids, quilt residue, discord domain, cache
+headers, robots.txt, apple-touch-icon. P3s deliberately left: wordmark
+swallowed-dwell (benign — the reader is watching the load signing),
+audio-only acts (ticket 25's taste call), light-mode flash (jass's eye),
+WebKit chroma key (needs a real iPhone), muted-foreground margin (compliant).

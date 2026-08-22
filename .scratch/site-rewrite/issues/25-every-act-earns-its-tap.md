@@ -49,12 +49,12 @@ Work the list against [research/mobile-audit.md](../research/mobile-audit.md)
   and the most in need of the tap grammar. Its four-second, quittable,
   whole-page shape may actually be the *easiest* honest tap port.
 
-Per-act fix-notes from [the site audit](../research/site-audit.md) to
-carry into whichever verdict each act gets: toys-wobble taps flam the
-marimba (enter+down both ding); a dwell during the load-signing is
-swallowed (no re-arm without leave); quilt's error path leaves residue;
-ass and andrew-dictate are audio-only (nothing for deaf readers — does
-the tap form add a visible half?).
+Per-act fix-notes from [the site audit](../research/site-audit.md):
+~~the marimba flam~~ and ~~quilt's error residue~~ were fixed in the
+aug 22 fix pass. Still open for this session's verdicts: a dwell during
+the load-signing is swallowed (benign — the reader is watching the load
+signing — recorded as accepted); ass and andrew-dictate are audio-only
+(nothing for deaf readers — does the tap form add a visible half?).
 
 One session with jass, on his phone, act by act. Verdicts recorded here;
 build work lands in the acts' own tickets where they're still open.

@@ -129,3 +129,13 @@ From [site-audit.md](../research/site-audit.md):
   music-to-my-ai's pointerdown-ends-it meets the same "a tap kills the bit
   it summoned" problem agents-gag has — under tap grammar, the ending
   gesture needs to be distinct from the summoning one.
+
+## Landed early (aug 22, the fix pass)
+
+Two pieces of this rebuild shipped ahead of the grammar session, because
+they were plain bugs: **the bus wakes on `pointerup`** (the event that
+actually grants activation; a scroll's `pointercancel` can no longer
+strand a suspended context), and **the arbiter exists** — `occupy()` in
+friend.ts, one act at a time, claimed by both takeovers. The rebuild
+inherits both; what remains here is the tap grammar itself: the handle,
+the affordance, arrival/leaving, and keyboard as an input class.

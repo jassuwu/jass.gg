@@ -1,7 +1,7 @@
 # The invisible ring
 
 Type: grilling + prototype (HITL, small)
-Status: open
+Status: closed — resolved aug 22, fixed on this branch
 Blocked by: nothing
 
 ## Question
@@ -27,3 +27,13 @@ What does the ring become in light mode? Candidates, each with a cost:
 Related, recorded here so it's judged in the same sitting:
 `muted-foreground` on white is 4.73:1 — AA with 0.23 of headroom. Not a
 failure; a tripwire if the token ever shifts.
+
+## Resolution
+
+**The ring takes `accent` — the themed strength.** In dark mode that is the
+same value as accent-mark, so nothing changes; in light mode it is the
+L=0.5 lime at ~5:1 on white. The accent-budget question resolved itself:
+the focus ring is the keyboard's link hover, and link hover is already one
+of the accent's four things — this is not a fifth. `global.css` updated
+with the reasoning in place. The muted-foreground tripwire stays recorded
+in [site-audit.md](../research/site-audit.md).
