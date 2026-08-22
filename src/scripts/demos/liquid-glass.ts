@@ -477,68 +477,75 @@ export function register(): void {
     droplet(LEAVE);
   };
 
-  let release: (() => void) | undefined;
-  /* The entrance's repair loop (audit, aug 22). */
+  /* The entrance's repair loop and the stage claim (audit, aug 22). */
   let unveil: number | undefined;
+  let release: (() => void) | undefined;
 
   ambient({
     el: row,
     act: () => {
       wanted = true;
       loading ??= load();
-      void loading.then((create) => {
-        if (!wanted || destroy) return;
-        destroy = create({ saturation: SATURATION });
-        /* A takeover holds the stage: no other ambient act may start
-           until the easy out runs. This is what kept the vergil cut from
-           ever again firing under a live glass. */
-        release = occupy();
+      void loading
+        .then((create) => {
+          if (!wanted || destroy) return;
+          destroy = create({ saturation: SATURATION });
+          /* A takeover holds the stage: no other ambient act may start
+             until the easy out runs. This is what kept the vergil cut from
+             ever again firing under a live glass. */
+          release = occupy();
 
-        /* THE ENTRANCE (audit fix). The package hides the native cursor
-           synchronously but renders its glass from (-9999,-9999) on a
-           lerp, and the synthetic mousemove below only sets the lerp's
-           TARGET — the stock mount is ~300ms of no pointer at all, then
-           an arrow flying in from off-screen. Repaired from outside the
-           package: hand the native cursor back (the package's cursor:none
-           style is detached), hold the glass invisible, and only when the
-           lerp has actually delivered it to the hand — or a 1.2s cap —
-           swap the two. The read becomes "the arrow turned to glass", not
-           "the arrow vanished and glass flew in". */
-        const glass = document.body.lastElementChild as HTMLElement | null;
-        const veil = [...document.head.querySelectorAll("style")]
-          .filter((s) => s.textContent === "* { cursor: none !important; }")
-          .pop();
-        if (glass?.querySelector("svg") && veil) {
-          veil.remove();
-          glass.style.opacity = "0";
-          glass.style.transition = "opacity 140ms ease-out";
-          const t0 = performance.now();
-          const settle = (): void => {
-            unveil = undefined;
-            /* Exited mid-glide: the cursor stays native, correctly —
-               destroy() already ran and its S.remove() was a no-op on the
-               detached veil. */
-            if (!destroy) return;
-            const m = new DOMMatrix(getComputedStyle(glass).transform);
-            const near = Math.hypot(m.e - px, m.f - py) < 28;
-            if (near || performance.now() - t0 > 1200) {
-              glass.style.opacity = "";
-              document.head.append(veil);
-            } else {
-              unveil = requestAnimationFrame(settle);
-            }
-          };
-          unveil = requestAnimationFrame(settle);
-        }
+          /* THE ENTRANCE (audit fix). The package hides the native cursor
+             synchronously but renders its glass from (-9999,-9999) on a
+             lerp, and the synthetic mousemove below only sets the lerp's
+             TARGET — the stock mount is ~300ms of no pointer at all, then
+             an arrow flying in from off-screen. Repaired from outside the
+             package: hand the native cursor back (the package's cursor:none
+             style is detached), hold the glass invisible, and only when the
+             lerp has actually delivered it to the hand — or a 1.2s cap —
+             swap the two. The read becomes "the arrow turned to glass", not
+             "the arrow vanished and glass flew in". */
+          const glass = document.body.lastElementChild as HTMLElement | null;
+          const veil = [...document.head.querySelectorAll("style")]
+            .filter((s) => s.textContent === "* { cursor: none !important; }")
+            .pop();
+          if (glass?.querySelector("svg") && veil) {
+            veil.remove();
+            glass.style.opacity = "0";
+            glass.style.transition = "opacity 140ms ease-out";
+            const t0 = performance.now();
+            const settle = (): void => {
+              unveil = undefined;
+              /* Exited mid-glide: the cursor stays native, correctly —
+                 destroy() already ran and its S.remove() was a no-op on the
+                 detached veil. */
+              if (!destroy) return;
+              const m = new DOMMatrix(getComputedStyle(glass).transform);
+              const near = Math.hypot(m.e - px, m.f - py) < 28;
+              if (near || performance.now() - t0 > 1200) {
+                glass.style.opacity = "";
+                document.head.append(veil);
+              } else {
+                unveil = requestAnimationFrame(settle);
+              }
+            };
+            unveil = requestAnimationFrame(settle);
+          }
 
-        document.dispatchEvent(
-          new MouseEvent("mousemove", { clientX: px, clientY: py }),
-        );
-        endPuzzle = startPuzzle(row, px, py, exit);
-        /* Only here, where the glass is actually on screen — a dwell whose
-           import is still in flight has nothing to sound like yet. */
-        droplet(ARRIVE);
-      });
+          document.dispatchEvent(
+            new MouseEvent("mousemove", { clientX: px, clientY: py }),
+          );
+          endPuzzle = startPuzzle(row, px, py, exit);
+          /* Only here, where the glass is actually on screen — a dwell whose
+             import is still in flight has nothing to sound like yet. */
+          droplet(ARRIVE);
+        })
+        .catch(() => {
+          /* A failed chunk load used to be memoized rejected — every later
+             dwell logged an unhandled rejection and the act was dead for
+             the visit. Forget the attempt; the next dwell retries. */
+          loading = undefined;
+        });
     },
   });
 
