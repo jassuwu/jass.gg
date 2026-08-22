@@ -368,6 +368,14 @@ export function start(): void {
   let last = 0;
   let acc = 0;
   let slow = 0;
+  /* The load-shed threshold, calibrated to the display rather than assumed.
+     A hard-coded 25ms read a 30Hz monitor — every frame 33ms by DESIGN — as
+     a machine in trouble and shed the sim to the floor in seconds. So the
+     first 40 frames establish the display's own cadence (median, so one GC
+     hiccup can't skew it) and "slow" means half again over THAT. Until
+     calibration lands, nothing is judged. */
+  const sample: number[] = [];
+  let slowT = 0;
 
   const frame = (now: number): void => {
     raf = requestAnimationFrame(frame);
@@ -383,7 +391,13 @@ export function start(): void {
     if (steps === 3) acc = 0;
     draw();
 
-    if (raw > 0.025) slow++;
+    if (!slowT) {
+      sample.push(raw);
+      if (sample.length === 40)
+        slowT = 1.5 * [...sample].sort((a, b) => a - b)[20];
+      return;
+    }
+    if (raw > slowT) slow++;
     else if (slow > 0) slow--;
     if (slow > 45) {
       slow = 0;
