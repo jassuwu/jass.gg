@@ -13,7 +13,13 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://jass.gg",
+  // www, because that is where the site actually answers: Vercel's primary
+  // domain is www and the apex 307s to it on every path. A canonical must be
+  // the URL the page finally lives at, or every crawler reads a tag that
+  // redirects away from itself (and resume.json already said www). If the
+  // Vercel primary ever flips to the apex, flip this line with it — the two
+  // must always agree, and this comment is the tripwire.
+  site: "https://www.jass.gg",
 
   fonts: [
     {
