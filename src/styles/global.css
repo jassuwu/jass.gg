@@ -220,8 +220,13 @@
      the whole of that affordance. It is doing more work here than a focus ring
      usually does.
 
-     Lime, at the invariant value, because a ring is a mark and marks are the
-     one job accent-mark is allowed to hold in either theme. Square, following
+     Lime, in the themed strength — accent, not accent-mark. In dark mode the
+     two are the same value, so nothing changes there. In light mode the ring
+     is the whole keyboard affordance on a page whose links carry no resting
+     decoration, and the invariant lime is 1.16:1 on white: an invisible ring
+     for exactly the reader it exists for. The themed accent holds ~5:1 on
+     white. A ring is the keyboard's link hover, and link hover is already one
+     of the accent's four things — this is not a fifth. Square, following
      ::selection, since nothing on this site is rounded. The offset keeps it
      off the letterforms; on the socials row, where the links are padded to be
      thumb-sized, it lands on the tap target and quietly shows how big it is.
@@ -229,7 +234,7 @@
      Author colours are overridden in forced-colors mode, so this becomes the
      system focus colour there on its own. Nothing to add for that. */
   a:focus-visible {
-    outline: 2px solid var(--color-accent-mark);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
 
