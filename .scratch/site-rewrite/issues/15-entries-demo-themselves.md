@@ -57,6 +57,20 @@ about quality than any stat — and ticket 17 handles the numbers side.
   one ships, the fallback is depth-in-writing for the `things` — never
   manufactured filler details.
 
+## Added later (aug 20)
+
+- **music-to-my-ai performs as a full-page takeover**, not an in-row demo —
+  the second entry to earn that, after savemefrom. Its mechanic is one note
+  per chunk of an arriving reply, which has no in-row form: a row that
+  rewrote only itself would be a thumbnail of the idea. Click the row's line
+  and the page itself arrives, chunk by chunk, in four of the product's own
+  voices. Details and what it settled live in
+  [ticket 22](22-the-takeover.md#instance-two-the-page-writes-itself).
+- It is also the first row whose description carries a **pointer cursor**.
+  Every other description is deliberately not clickable, and the rule holds
+  because this one actually is — the cursor is the affordance, and it is
+  removed under reduced motion, where the act does not run.
+
 ## Done when
 
 Every entry has either a working demo jass kept or an explicit "stays plain"
