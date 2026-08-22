@@ -205,8 +205,11 @@ def main():
     # downscales cleanly to it, while anything larger is an icon nobody asks
     # this site for.
     rasterise(mark, PUBLIC / "favicon.png", 32, 32, LIME, 1200)
+    # iOS Add-to-Home-Screen asks for this one; without it the tile is a page
+    # screenshot. Full-bleed square — iOS rounds the corners itself.
+    rasterise(mark, PUBLIC / "apple-touch-icon.png", 180, 180, LIME, 1200)
 
-    for name in ("og.png", "favicon.svg", "favicon.png"):
+    for name in ("og.png", "favicon.svg", "favicon.png", "apple-touch-icon.png"):
         p = PUBLIC / name
         print(f"  {name:14} {p.stat().st_size:>7,} bytes", file=sys.stderr)
 
