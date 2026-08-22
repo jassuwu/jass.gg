@@ -1,0 +1,22 @@
+{
+  "headers": [
+    {
+      "source": "/(og\\.png|resume\\.pdf|resume\\.json|favicon\\.png|favicon\\.svg|apple-touch-icon\\.png|vergil\\.mp4|vergil\\.m4a)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(sounds|brainrot)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ]
+}
