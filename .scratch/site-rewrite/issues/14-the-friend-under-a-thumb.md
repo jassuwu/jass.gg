@@ -52,3 +52,50 @@ now the site's entire interaction budget was hover-gated.
 The dwell/act mechanism working on the real page with one throwaway demo
 wired to it, judged by jass on his actual phone. The throwaway gets deleted;
 the grammar and the module stay.
+
+## Reversed (jass, aug 22) — scroll-dwell is dead
+
+jass, from his phone: *"middle of the scroll view initiating actions is not
+it at all. it's confusing. i think for mobile it has to be on click."*
+
+Scroll-dwell was the settled touch grammar and it did not survive contact.
+The audit ([research/mobile-audit.md](../research/mobile-audit.md)) found the
+failure is structural, not a tuning problem:
+
+- No arbitration: one scroll settle fires **every** act resting in the band
+  at once (`friend.ts:107`) — 4–8 rows fit the band on a phone.
+- The band's geometry makes the top and bottom ~35% of the page dead
+  zones (43% of the page at 390×844): the signature's **re-sign** can never
+  fire on a phone (the load signing is inline and survives), and any future
+  footer act could never fire — the footer is unreachable by construction.
+- Acts that fire before the reader's first tap play **with their sound
+  stripped** (the bus's gate needs a real gesture), so mobile has been
+  running half-mute performances. Tap-initiation makes the trigger and the
+  audio unlock the same gesture.
+- The closer sits in the band at load, so its sweep plays uninvited 400ms
+  after the page opens.
+
+**The touch grammar is now TAP.** The open question this ticket returns to:
+what does tap-as-grammar concretely mean —
+
+1. **The handle.** Description-tap was already settled as the deliberate
+   path and never wired (`deliberate()` has zero call sites). Is the
+   description the one handle everywhere? What's the hit area (23px text
+   wants padded hit targets, not visual change)?
+2. **The affordance.** Every "this row is alive" signal today is
+   `:hover`-gated — a phone reader can't tell any row performs. What marks
+   a performing row on touch, within the no-decoration thesis? One
+   consistent mark, or discovered-by-accident?
+3. **Arrival and leaving on touch.** Dwell-beats that made sense positionally
+   (wordmark at top, footer at bottom) need touch translations that aren't
+   scroll-position — first touch anywhere? load? tap on the wordmark itself?
+4. **Audio legality.** A tap is a user gesture, so tap-initiated acts may
+   legally start sound — scroll-dwell couldn't. The tap grammar un-breaks
+   ticket 21 on mobile; keep the sound bus's unlock tied to the tap.
+5. **Repeats and reduced-motion** carry over unchanged (once-per-visit for
+   gags, still-forms for reduced motion).
+
+Blocked by: [24 — the touch grammar facts](24-touch-grammar-facts.md)
+(platform facts: activation rules, hover-emulation quirks, affordance
+patterns). Deliverable unchanged: the mechanism working on the real page,
+judged by jass on his actual phone.
