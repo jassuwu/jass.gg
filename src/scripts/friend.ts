@@ -91,6 +91,10 @@ function run(a: FriendAct): void {
 function armDwell(a: FriendAct): void {
   let timer: number | undefined;
   a.el.addEventListener("pointerenter", () => {
+    /* Hybrid devices can deliver a second enter (mouse resting + finger
+       tap) with no leave between; without the clear the first timer is
+       orphaned and the act fires twice. */
+    window.clearTimeout(timer);
     timer = window.setTimeout(() => run(a), DWELL_MS);
   });
   a.el.addEventListener("pointerleave", () => window.clearTimeout(timer));
