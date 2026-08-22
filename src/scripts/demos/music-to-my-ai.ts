@@ -701,20 +701,22 @@ export function register(): void {
   });
 
   /* Decoding needs the bus's context, which exists only after the reader's
-     first click or keypress — so it happens THEN, not on hover. By the time
-     a dwell lands the buffers are usually already sitting there. The bus
-     registers its own wake handler at import, before this one, so the
-     context is up by the time this runs. Touch gets its preload here too:
-     a tap is a pointerdown long before it is a scroll-dwell. */
+     first completed gesture — so it happens THEN, not on hover. By the time
+     a dwell lands the buffers are usually already sitting there. pointerup,
+     matching the bus's own wake (the up event is the one that grants
+     activation — see touch-grammar.md): the bus's import-time listener runs
+     first on the same gesture, so the context is up by the time this runs.
+     Touch gets its preload here too: a tap's up-edge lands long before any
+     dwell. */
   const warmUp = (): void => {
     preload();
     const ctx = context();
     if (!ctx) return;
     warm(ctx);
-    removeEventListener("pointerdown", warmUp, true);
+    removeEventListener("pointerup", warmUp, true);
     removeEventListener("keydown", warmUp, true);
   };
-  addEventListener("pointerdown", warmUp, true);
+  addEventListener("pointerup", warmUp, true);
   addEventListener("keydown", warmUp, true);
 
   let timer: number | undefined;
