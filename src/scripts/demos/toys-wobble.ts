@@ -119,13 +119,22 @@ export function register(): void {
        selection — prefixed twice for safari. */
     s.style.cssText =
       "display:inline-block;transform-origin:50% 85%;touch-action:manipulation;-webkit-user-select:none;user-select:none";
+    let lastDing = 0;
     const poke = (e: PointerEvent): void => {
       /* Checked again here, not just at register: a reader who asks for less
          motion mid-visit gets it, even with the letters already wrapped. The
          note lives inside the same check — a dead act makes no sound. */
       if (!reduced.matches) {
         kick(s, e.clientX);
-        ding(i);
+        /* A tap fires enter and down in the same instant; the kick dedupes
+           itself (cancel + restart), the note did not — the second play()
+           cut the first 0ms into its attack and the bar flammed. One strike
+           per beat: the note debounces where the kick already does. */
+        const now = performance.now();
+        if (now - lastDing > 80) {
+          lastDing = now;
+          ding(i);
+        }
       }
     };
     /* enter kicks on hover and on a touch's first contact; down lets a
