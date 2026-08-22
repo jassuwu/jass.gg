@@ -173,6 +173,12 @@ function slice(onDone: () => void): void {
        survive cloneNode; these are stills of the page, which is all a piece
        of debris needs to be. */
     const copy = main.cloneNode(true) as HTMLElement;
+    /* Six copies of <main> is seven of every id — sections, the wordmark's
+       mask defs — and only tree order kept url(#)/getElementById resolving
+       to the originals. The clones are stills of the page; stills don't
+       need names, and the originals' defs render them regardless. */
+    for (const el of copy.querySelectorAll("[id]")) el.removeAttribute("id");
+    copy.removeAttribute("id");
     copy.style.cssText = `position:absolute;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;margin:0`;
     strip.append(copy);
     sheet.append(strip);
