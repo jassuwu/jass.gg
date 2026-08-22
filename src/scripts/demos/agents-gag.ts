@@ -129,7 +129,12 @@ function play(word: Element, node: Text, from: number, to: number): void {
   const done = (): void => {
     cancelAnimationFrame(raf);
     removeEventListener("pointerdown", done);
-    if (sel.anchorNode === node) sel.removeAllRanges();
+    /* Release only a selection the ghost is mid-drag on (held >= 0). The
+       old anchorNode check couldn't tell the ghost's selection from the
+       reader's own brand-new one — the pointerdown that starts a drag
+       collapses the caret into this same text node, and the bit was wiping
+       the reader's selection as it bowed out. */
+    if (held !== -1) sel.removeAllRanges();
     ghost.remove();
   };
   addEventListener("pointerdown", done);

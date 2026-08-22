@@ -26,7 +26,7 @@ const TALK = [
 ];
 ---
 
-<Layout title="404 | jass.gg" description="lost?">
+<Layout title="404 | jass.gg" description="lost?" noindex>
   <main class="mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
     <p class="font-machine text-display">404</p>
 
@@ -128,8 +128,23 @@ const TALK = [
         false);
 
     if (easy) {
+      /* The accommodation must be operable by the readers it serves, and
+         reduced-motion users are not all mouse users. Focusable, named, and
+         toggled by Enter/Space as well as click — and no longer aria-hidden,
+         because a thing you can tab to must exist. */
       v.classList.add("cursor-pointer");
-      v.addEventListener("click", () => (v.paused ? play() : v.pause()));
+      v.removeAttribute("aria-hidden");
+      v.tabIndex = 0;
+      v.setAttribute("role", "button");
+      v.setAttribute("aria-label", "brainrot, paused. play it");
+      const toggle = (): void => (v.paused ? play() : v.pause());
+      v.addEventListener("click", toggle);
+      v.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      });
     } else {
       /* Play only while visible. The page is short, so this mostly means
          "always" — but a loop grinding away below the fold is a tab warming

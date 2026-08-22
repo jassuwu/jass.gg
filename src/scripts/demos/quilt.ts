@@ -70,6 +70,7 @@ export function register(): void {
   if (!row) return;
 
   let img: HTMLImageElement | undefined;
+  let style: HTMLStyleElement | undefined;
   let loaded = false;
   /** A failed fetch retires the act for the visit. Silence, never an error:
    * a friend who can't find the thing doesn't announce that he can't. */
@@ -97,7 +98,7 @@ export function register(): void {
       if (loaded) lift();
       return; /* still in flight — the load handler checks `wanted` */
     }
-    const style = document.createElement("style");
+    style = document.createElement("style");
     style.textContent = CSS;
     document.head.append(style);
     row.classList.add("friend-quilt-row");
@@ -111,8 +112,13 @@ export function register(): void {
       if (wanted) lift();
     });
     img.addEventListener("error", () => {
+      /* Retired for the visit — so the scaffolding retires with it: the
+         injected style and the row's positioning class have no image left
+         to serve. */
       dead = true;
       img?.remove();
+      style?.remove();
+      row.classList.remove("friend-quilt-row");
     });
     /* The request starts here, on first act — never at rest. Revealing is
        gated on `load` so the quilt appears whole or not at all; a broken-image

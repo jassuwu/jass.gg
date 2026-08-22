@@ -73,7 +73,32 @@ const remember = (key: string): void => {
 
 const playedThisPage = new Set<FriendAct>();
 
+/* ---- one act at a time ---- */
+
+/* A takeover holds the whole stage; while one is live no ambient act may
+   start (audit, aug 22: the glass halo overlaps the savemefrom row, and the
+   vergil cut fired UNDER a live takeover — two acts fighting over one page
+   and one mouth). Deliberate acts stay ungated: a click is the reader
+   overriding the bill. The tap-grammar rebuild (ticket 14) inherits this as
+   a grammar rule; today it is the minimal honest arbiter. */
+let occupied = 0;
+
+/**
+ * Claim the stage. Returns the one release — idempotent, so an exit path
+ * that runs twice cannot free someone else's claim.
+ */
+export function occupy(): () => void {
+  occupied++;
+  let done = false;
+  return () => {
+    if (done) return;
+    done = true;
+    occupied--;
+  };
+}
+
 function run(a: FriendAct): void {
+  if (occupied) return;
   if (reduced.matches) {
     a.still?.();
     return;
@@ -91,6 +116,10 @@ function run(a: FriendAct): void {
 function armDwell(a: FriendAct): void {
   let timer: number | undefined;
   a.el.addEventListener("pointerenter", () => {
+    /* Hybrid devices can deliver a second enter (mouse resting + finger
+       tap) with no leave between; without the clear the first timer is
+       orphaned and the act fires twice. */
+    window.clearTimeout(timer);
     timer = window.setTimeout(() => run(a), DWELL_MS);
   });
   a.el.addEventListener("pointerleave", () => window.clearTimeout(timer));

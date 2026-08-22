@@ -122,7 +122,7 @@
  * entire idea; text that is already there is just the page, which the reader
  * already has.
  */
-import { ambient } from "@/scripts/friend";
+import { ambient, occupy } from "@/scripts/friend";
 import { context, play, stopAll } from "@/scripts/sound";
 
 /* ---- the voices, tuned as the product tunes them ---- */
@@ -701,20 +701,22 @@ export function register(): void {
   });
 
   /* Decoding needs the bus's context, which exists only after the reader's
-     first click or keypress — so it happens THEN, not on hover. By the time
-     a dwell lands the buffers are usually already sitting there. The bus
-     registers its own wake handler at import, before this one, so the
-     context is up by the time this runs. Touch gets its preload here too:
-     a tap is a pointerdown long before it is a scroll-dwell. */
+     first completed gesture — so it happens THEN, not on hover. By the time
+     a dwell lands the buffers are usually already sitting there. pointerup,
+     matching the bus's own wake (the up event is the one that grants
+     activation — see touch-grammar.md): the bus's import-time listener runs
+     first on the same gesture, so the context is up by the time this runs.
+     Touch gets its preload here too: a tap's up-edge lands long before any
+     dwell. */
   const warmUp = (): void => {
     preload();
     const ctx = context();
     if (!ctx) return;
     warm(ctx);
-    removeEventListener("pointerdown", warmUp, true);
+    removeEventListener("pointerup", warmUp, true);
     removeEventListener("keydown", warmUp, true);
   };
-  addEventListener("pointerdown", warmUp, true);
+  addEventListener("pointerup", warmUp, true);
   addEventListener("keydown", warmUp, true);
 
   let timer: number | undefined;
@@ -726,6 +728,8 @@ export function register(): void {
   const end = (silence: boolean): void => {
     if (!running) return;
     running = false;
+    releaseStage?.();
+    releaseStage = undefined;
     lastEnd = Date.now();
     window.clearTimeout(timer);
     removeEventListener("pointerdown", out, true);
@@ -748,9 +752,14 @@ export function register(): void {
     if (document.hidden) end(true);
   };
 
+  let releaseStage: (() => void) | undefined;
+
   const start = (): void => {
     if (running || Date.now() - lastEnd < COOLDOWN_MS) return;
     running = true;
+    /* A takeover holds the stage — while the page is streaming itself, no
+       other ambient act may start over it (the friend's arbiter). */
+    releaseStage = occupy();
 
     const { sheet, chunks } = build(main);
     place = (): void => {

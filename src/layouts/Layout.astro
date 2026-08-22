@@ -9,9 +9,12 @@ import "@/styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  /** The 404 sets this: the status code already keeps it out of the index,
+   * but a crawler that reaches the page some other way gets told directly. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex } = Astro.props;
 
 // Absolute, because a link preview is fetched by a crawler that has no page to
 // resolve a relative URL against. `Astro.site` is set in astro.config.mjs, so
@@ -39,13 +42,17 @@ const ogImage = new URL("/og.png", Astro.site);
     bonus at larger sizes.
 
     SVG first for every current browser; the 32px PNG is the fallback for the
-    ones that predate SVG favicons. No apple-touch-icon — nothing asks this site
-    for one. */
+    ones that predate SVG favicons. The apple-touch-icon exists because iOS's
+    Add-to-Home-Screen does ask for one — without it the home-screen tile is a
+    page screenshot, and the lime tile was built to do the recognising at
+    exactly these sizes. */
     }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
 
     {
@@ -64,6 +71,7 @@ const ogImage = new URL("/og.png", Astro.site);
     out from the markup instead of blocking on the image. */
     }
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="jass.gg" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}

@@ -38,3 +38,25 @@ it, that is the funniest object on the site.
 
 jass sees it and laughs, or kills it. There is no middle outcome for this
 one.
+
+## Audit findings (aug 22) — hardware manners, FIXED same day
+
+From [site-audit.md](../research/site-audit.md) §5–6: the adaptive-quality
+and resize paths were never exercised off a 60Hz desktop.
+
+1. Load-shedding reads wall-clock frame delta, so a 30Hz display counts
+   every frame as slow — within ~8s the sim sheds to minimum and visibly
+   flat-lines twice on healthy hardware. Budget against work done (or
+   calibrate the threshold to the display's own refresh) instead.
+2. `onResize` calls `rebuild()` undebounced, and iOS fires resize on
+   URL-bar collapse — scrolling the 404 on a phone flat-lines the flood.
+   Debounce, and preserve the surface across rebuilds.
+3. `dpr` is captured once; zoom or a monitor move leaves the canvas blurry
+   for the visit. Re-read it in `rebuild()`.
+
+**Fix record (aug 22, this branch):** the slow threshold is calibrated to
+the display's own cadence (median of the first 40 frames × 1.5) before
+anything is judged; resize is debounced 200ms and split by axis — a
+height-only change (the iOS URL bar) re-hangs the frame and keeps the
+water, only a real width change rebuilds the columns; `dpr` is re-read on
+every re-size. `bun run verify` green.

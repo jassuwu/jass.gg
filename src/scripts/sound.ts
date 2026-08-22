@@ -9,7 +9,7 @@
  *
  *   THE GATE. Browsers rightly refuse audio before the reader's first real
  *   gesture (hover is not user activation). The bus arms silently on import
- *   and wakes on the first pointerdown/keydown anywhere; until then every
+ *   and wakes on the first pointerup/keydown anywhere; until then every
  *   play() is a no-op that does NOT queue — a sound whose moment passed
  *   ungated stays unplayed. Late is worse than never.
  *
@@ -62,12 +62,19 @@ try {
   /* no memory, no problem */
 }
 
+/* pointerup, not pointerdown, and the difference is the whole gate: the HTML
+   spec grants activation on the UP event for touch (pointerdown with a finger
+   grants nothing), and a scroll gesture ends in pointercancel with no up at
+   all — so waking on down let a mere scroll create a context the browser
+   would never let speak, and the bus then played silence into it for the
+   visit. On the up event every wake is a real, completed gesture on every
+   input class. (Facts: .scratch/site-rewrite/research/touch-grammar.md §1.) */
 function wake(): void {
   ctx = new AudioContext();
-  removeEventListener("pointerdown", wake, true);
+  removeEventListener("pointerup", wake, true);
   removeEventListener("keydown", wake, true);
 }
-addEventListener("pointerdown", wake, true);
+addEventListener("pointerup", wake, true);
 addEventListener("keydown", wake, true);
 
 /* Hidden tab: silent — even mid-cue. */

@@ -104,3 +104,42 @@ The liquid glass takeover is live and jass keeps it; the grammar section
 above graduates to the map if a second instance ships. **The graduation
 condition is met** — the grammar is in the map as of aug 20. What remains is
 jass's play test on both instances.
+
+## Audit findings (aug 22) — FIXED same day; the play test judges the repaired build
+
+From [site-audit.md](../research/site-audit.md) §2–3, verified against the
+package source and the built page:
+
+1. **The entrance breaks the illusion.** The package hides the native
+   cursor synchronously but renders its glass from (−9999,−9999) on a 0.15
+   lerp; the synthetic mousemove sets the target, not the position.
+   Measured: ~300ms of no pointer at all, then the glass flying in
+   diagonally (~950ms to reach the hand). The fix wants the package's
+   render position seeded, not just its target — possibly an upstream
+   patch to liquid-glass-cursor itself (it's jass's package).
+2. **The halo swallows savemefrom.** `HALO_Y = 56` vs ~33px row pitch, and
+   savemefrom sits directly below. Moving down one row keeps the takeover
+   alive (easy-out never fires) and dwell then runs the vergil cut *under*
+   the glass — arrows over the slice, and an arrow found mid-cut takes the
+   bus and silences the judgment cut mid-swing. The grammar needs either a
+   tighter halo, or a rule that a takeover blocks other ambient acts while
+   live (a "one act at a time" arbiter — which the tap redesign in ticket
+   14 wants anyway).
+3. Small: a failed dynamic import is memoized rejected — every later dwell
+   logs an unhandled rejection; wants a `.catch` + retry-or-retire.
+
+Instance two (music-to-my-ai) runs the same grammar, so 2's arbiter
+question covers it; its own mobile port is in ticket 25.
+
+**Fix record (aug 22, this branch):** (1) the entrance is repaired from
+outside the package — the native cursor stays (the package's cursor:none
+style is detached), the glass rides its lerp invisible, and only on
+arrival (or a 1.2s cap) do the two swap: the arrow turns to glass instead
+of vanishing while glass flies in. Verified in-browser: cursor preserved
+through the glide, swap fires, exit restores everything. (2) the collision
+is closed by the friend's new arbiter — `occupy()` in friend.ts: a live
+takeover blocks every ambient act until the easy out releases the stage;
+music-to-my-ai claims it too. (3) a failed import is no longer memoized
+rejected — the next dwell retries. An upstream fix (seed the package's
+render position at mount) would make the veil dance unnecessary; worth a
+patch to liquid-glass-cursor itself someday.
