@@ -15,15 +15,19 @@
  * Whisper tier, non-negotiable: dwell is the reader leaning in, not asking,
  * and the ladder says leaning gets a whisper. The bus owns the gate, the
  * mute and the mouth — before the first real gesture, muted, or in a hidden
- * tab, play() is a no-op and this module does not ask twice. Re-dwell
- * replays: ambient() with no `once` is exactly that, and a slap toy that
- * only slapped once would be a defective unit.
+ * tab, play() is a no-op and this module does not ask twice. It replays on
+ * re-dwell and on every tap of the description — the deliberate entry, and
+ * on touch the only one — because a slap toy that only slapped once would
+ * be a defective unit. The tap is itself the wake gesture (the bus wakes on
+ * pointerup, the click lands after), so even the very first tap sounds.
  *
  * Reduced motion: friend.ts never runs the act, so the audio dies with it.
  * No `still` — the honest static form of a slap is a toy at rest, which is
- * silence, which the page already has.
+ * silence, which the page already has — and so no registration either: a
+ * row whose tap can never do anything must not wear the cursor that says
+ * it can.
  */
-import { ambient } from "@/scripts/friend";
+import { entry } from "@/scripts/friend";
 import { play } from "@/scripts/sound";
 
 /* Internal levels are staged so the mix peaks near 1.0 into the bus's gain
@@ -93,8 +97,10 @@ function slap(ctx: AudioContext, out: GainNode): void {
 export function register(): void {
   const row = document.querySelector('[data-entry="ass"]');
   if (!row) return;
-  ambient({
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  entry({
     el: row,
+    sound: true,
     act: () => play({ tier: "whisper", synth: slap }),
   });
 }
