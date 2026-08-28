@@ -8,9 +8,9 @@
  * and the departure needs defending: dwell is the grammar for bits the friend
  * does UNINVITED — the 500ms is what keeps an uninvited bit from being a
  * soundboard. A poke is the reader's own act, and a flick that answers half a
- * second late reads as broken, not considered. `deliberate()` is the right
- * spirit but the wrong shape — one handle, one act — and this is four handles
- * sharing one spring.
+ * second late reads as broken, not considered. friend.ts's deliberate path is
+ * the right spirit but the wrong shape — one handle, one act — and this is
+ * four handles sharing one spring.
  *
  * The spring is a damped sine baked into WAAPI keyframes rather than a rAF
  * loop: exponential decay is literally how a spring settles, the browser

@@ -8,7 +8,10 @@ in `src/scripts/sound.ts`) is the knob, the mute egg is the © line. The
 vergil cut's ring was cut to fade with the strip drift so the snap home
 lands in silence; the touch cat walk is silent by geometry (its synthetic
 cursor never enters the rest radius); unmute plays no confirmation, because
-a confirmation sound is a UI bleep.
+a confirmation sound is a UI bleep. The tap grammar (aug 22) made mobile
+sound real — the tap that starts an act is the gesture that wakes the bus —
+and added the one text-only murmur exception below; the grammar itself is
+unchanged.
 Follows: the nine details of tickets 13/15/16/18/19
 
 ## The grammar (approved, do not re-derive)
@@ -56,6 +59,23 @@ Follows: the nine details of tickets 13/15/16/18/19
 Link hovers and the underline draw: silent forever. The 404 monitor: stays
 muted (funnier object; clips carry no audio stream anyway). The 2am murmur:
 text only.
+
+## The murmur exception (aug 22)
+
+The gate has a blind spot the tap grammar exposed: a sound-bearing act
+dwelled *before* the reader's first gesture legally runs with its sound
+withheld, and the reader has no way to know they got half a performance.
+So, once per visit: when that exact case fires, the friend leans in beside
+the row's description and admits it — *(psst. im 🤐 til u click me)* — hand
+font, micro, the quiet accent, a gentle fade in, and it takes the aside
+back the moment any gesture wakes the bus. sessionStorage holds the once.
+
+**It is not a sound and it makes none** — a note about withheld sound that
+made sound would be a liar. The grammar above is untouched: silence still
+rests, dwell still whispers, nothing sounds before the gate, and the named
+refusals all stand — the murmur is the 2am register given one more line,
+not a new mouth. The click path never earns it, because a click is a
+gesture and arrives with its sound intact.
 
 ## Settled decisions
 

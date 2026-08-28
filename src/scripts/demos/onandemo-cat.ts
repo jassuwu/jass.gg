@@ -1,10 +1,12 @@
 /**
  * THE ROW THAT PERFORMS ITS OWN PRODUCT (ticket 15). onandemo.js is a
  * published cursor-chasing engine — 11.9 KB, dependency-free — and the only
- * honest demo of a cursor-chasing engine is a chase. Dwell on the row and the
- * engine is imported from npm, the same package anyone else would install,
- * and the cat chases the reader's actual cursor. Nothing here reimplements
- * the trick; the product does its own job on the page that lists it.
+ * honest demo of a cursor-chasing engine is a chase. Dwell on the row — or
+ * tap its description, the deliberate entry and on touch the only one — and
+ * the engine is imported from npm, the same package anyone else would
+ * install, and the cat chases the reader's actual cursor. Nothing here
+ * reimplements the trick; the product does its own job on the page that
+ * lists it.
  *
  * THE BIT ENDS ON A TIMER, not when the cursor leaves the column. The engine
  * positions the cat `fixed`, so the chase is viewport-wide — a cursor leaving
@@ -33,7 +35,7 @@
  * that never catches anything has nothing to say.
  */
 
-import { ambient } from "@/scripts/friend";
+import { entry } from "@/scripts/friend";
 import { play } from "@/scripts/sound";
 
 const ROW = 'li[data-entry="onandemo.js"]';
@@ -67,8 +69,9 @@ const CHASE_MS = 10_000;
    does not amble. */
 const EXIT_SPEED = 30;
 
-/* One cat at a time. Ambient acts re-fire on every re-dwell; this makes the
-   second dwell a no-op until the first cat has fully left. */
+/* One cat at a time. Both entries repeat freely; this makes a second dwell
+   or tap a no-op until the first cat has fully left — not a cooldown, just
+   the act refusing to overlap itself. */
 let active = false;
 
 /* The engine's destroy() is instant, and a cat does not teleport. So the
@@ -227,8 +230,18 @@ async function walk(rowY: number): Promise<void> {
 export function register(): void {
   const row = document.querySelector(ROW);
   if (!row) return;
-  ambient({
+  /* Under reduced motion the act can never run — no `still`, and the engine
+     itself mounts nothing — so don't register at all: a `data-acts` cursor
+     on a row whose tap does nothing would be a promise with no cat behind
+     it. The row stays bare, which is the honest form. */
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  entry({
     el: row,
+    /* `sound` because the chase can speak — the nya at the catch — so a
+       dwell before the bus wakes earns the murmur. The touch walk is silent
+       by design, but the murmur only ever rides the dwell, which only hover
+       devices have, so the declaration stays honest. */
+    sound: true,
     /* No `once` and no `still`, both on purpose: the act repeats because a
        working product bears repeating, and there is no static form because a
        chase is pure motion — reduced-motion readers get the page at rest.

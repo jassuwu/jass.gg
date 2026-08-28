@@ -1,4 +1,6 @@
 // @ts-check
+import { existsSync } from "node:fs";
+
 import { defineConfig, fontProviders } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -111,6 +113,17 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Whether the mojify row has its film is a fact about this checkout, and
+    // a static site should know its own files at build time: the demo module
+    // reads this constant and, without the asset, registers nothing — no
+    // request at rest, no 404 in anyone's console. Only jass can produce
+    // the file (.scratch/mojify-asset-handoff.md); a rebuild is the honest
+    // re-probe, and so is restarting dev after dropping it in.
+    define: {
+      "import.meta.env.MOJIFY_FILM": JSON.stringify(
+        existsSync("public/demos/mojify.frames.json"),
+      ),
+    },
     // Both demo packages load lazily, on first dwell. Left alone, Vite's dev
     // optimizer discovers each one the first time someone dwells and reloads
     // the whole page mid-act — once per package per dev session. Pre-bundling

@@ -1,7 +1,8 @@
 # The friend under a thumb
 
 Type: prototype (HITL)
-Status: open
+Status: built (aug 22) — the tap grammar is in friend.ts and live on the
+page; keyboard is the open remainder
 Blocks: 15 (entries demo themselves), 16 (the intro comes alive)
 
 ## Question
@@ -139,3 +140,41 @@ strand a suspended context), and **the arbiter exists** — `occupy()` in
 friend.ts, one act at a time, claimed by both takeovers. The rebuild
 inherits both; what remains here is the tap grammar itself: the handle,
 the affordance, arrival/leaving, and keyboard as an input class.
+
+## Settled and built (aug 22, the grammar session) — the answers
+
+- **The handle is the description, everywhere.** `entry()` in friend.ts —
+  the wired successor to the never-called `deliberate()` — gives every
+  act-bearing row both doors: whole-row dwell at 500ms on hover devices,
+  and a click or tap on the description that starts the act *immediately*,
+  no dwell wait, because a tap already is the wait. On touch the tap is
+  the only entry. The name's `<a>` is never touched; a tap on the name
+  navigates, always, on every device.
+- **The affordance is the cursor.** Registration marks the row `data-acts`
+  and global.css gives its description `cursor: pointer` plus the hover
+  lift — from CSS rather than markup, because an act may refuse its row at
+  runtime and only registration knows. The bare rows (better-splitwise,
+  skills, subway-cursors) get no handler, no cursor, no marker: a pointer
+  over a row with nothing behind it would be the first lie on the page.
+- **Scroll-dwell is deleted, not deprecated.** `armScrollDwell`, the IO
+  band, and vergil's private copy of it are all out of the code; scroll
+  position initiates nothing, anywhere, and nothing is left to reactivate
+  by accident. The doc block in friend.ts says "do not rebuild it" so the
+  next session doesn't have to relearn this on jass's phone.
+- **The trigger and the audio unlock are the same gesture**, as the audit
+  wanted: a tap that starts an act is a real activation, so tap-borne acts
+  play whole. (What the *dwell* path does about pre-gesture silence is
+  ticket 21's murmur exception, mechanically housed here.)
+- **The click path ignores `once` on purpose** — consent means it may
+  repeat. Dwell keeps the once-per-visit memory; reduced motion keeps the
+  still-form rule; both unchanged from the aug 15 settlement.
+- **The exits are one implementation** — `easyOut()` in friend.ts,
+  recorded properly in ticket 22: entry gesture swallowed, Escape and a
+  click anywhere always end it, natural outs stay each act's own.
+- **Keyboard stays open.** Escape already ends any takeover (the shared
+  out), but the handle is a span with a click listener, not a focusable
+  target — Enter/Space per the audit's §7 is the remainder, not forgotten,
+  just not this pass.
+
+Ports of the nine hover-built acts onto this grammar are ticket 25's
+session with jass, act by act, on his actual phone.

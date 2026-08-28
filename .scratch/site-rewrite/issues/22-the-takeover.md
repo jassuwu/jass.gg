@@ -1,7 +1,7 @@
 # The takeover
 
 Type: prototype (HITL)
-Status: built (aug 15; instance two aug 20) — instance one is live: three copies of the package's own cursor polygon hidden at sub-JND contrast in the row's halo, legible only through the lens's saturation; found arrows fill accent-mark, all three pin the row's underline. Wordless, so the copy rule is satisfied by silence. Instance two (music-to-my-ai) shipped aug 20 and the grammar has graduated to the map. Both awaiting jass's play test.
+Status: built (aug 15; instance two aug 20; the click door and instances three & four aug 22) — instance one is live: three copies of the package's own cursor polygon hidden at sub-JND contrast in the row's halo, legible only through the lens's saturation; found arrows fill accent-mark, all three pin the row's underline. Wordless, so the copy rule is satisfied by silence. Instance two (music-to-my-ai) shipped aug 20 and the grammar has graduated to the map. All awaiting jass's play test; mojify additionally awaits its one asset.
 
 ## The direction, jass's words
 
@@ -93,17 +93,21 @@ What it settles, beyond the ticket's own grammar:
 
 ## Later instances (fog — graduate one at a time, each judged on screen)
 
-Candidates, not commitments: incomerank's guess-puck in miniature; quilt
-letting the reader type a github name; mojify turning the reader's cursor
-trail to text. Each must pass the same bar: the product's own mechanic, an
-easy out, no confusion, no new copy.
+Candidates, not commitments: ~~incomerank's guess-puck in miniature~~;
+quilt letting the reader type a github name; ~~mojify turning the reader's
+cursor trail to text~~. Each must pass the same bar: the product's own
+mechanic, an easy out, no confusion, no new copy. (incomerank and mojify
+graduated aug 22 — see below; both shapes changed on contact with what the
+products actually are, which is the candidate list working as intended.
+quilt remains the standing candidate.)
 
 ## Done when
 
 The liquid glass takeover is live and jass keeps it; the grammar section
 above graduates to the map if a second instance ships. **The graduation
 condition is met** — the grammar is in the map as of aug 20. What remains is
-jass's play test on both instances.
+jass's play test — four instances now, not two, and mojify's only
+once its asset lands.
 
 ## Audit findings (aug 22) — FIXED same day; the play test judges the repaired build
 
@@ -143,3 +147,44 @@ music-to-my-ai claims it too. (3) a failed import is no longer memoized
 rejected — the next dwell retries. An upstream fix (seed the package's
 render position at mount) would make the veil dance unnecessary; worth a
 patch to liquid-glass-cursor itself someday.
+
+## The click door, and instances three & four (aug 22)
+
+- **`deliberate()` is finally wired** — it shipped with zero call sites and
+  now lives as `entry()` in friend.ts, and with it the grammar goes
+  symmetric: **the description is the act's handle — rest on it and it
+  whispers, press it and it speaks.** Dwell still arms every takeover
+  exactly as jass ruled on instance two; the click is the immediate,
+  consented entry, and on touch the only one. "Speaks" as in starts on
+  the spot: the press keeps the dwell's whisper for now — every level in
+  the acts is one jass already tuned to his ear, and the ladder's step up
+  for a press is his knob to turn, not this pass's. The name's link is
+  never part of any of this.
+- **The easy out is one implementation now** — `easyOut()` in friend.ts,
+  beside the arbiter, the sacred rule finally written once instead of
+  promised per act: the entry gesture is swallowed (an act can never be
+  killed by its own birth), then **Escape and a click anywhere always end
+  it**, on top of each act's natural outs — pointer leaving the region,
+  scroll, a hidden tab. Every takeover claims it; every future one
+  inherits it for free, which is the point.
+- **The affordance is `cursor: pointer` on the handle.** Registration
+  marks the row `data-acts` and the css does the rest — the one honest
+  signal a text page has that a thing can be pressed, and within the
+  no-decoration thesis because a cursor is not decoration, it is the
+  browser telling the truth. Which is also why **the three bare rows stay
+  bare on purpose** (better-splitwise, skills, subway-cursors): no
+  handler, no cursor, no marker. A pointer over a row with nothing behind
+  it would be the first lie on the page.
+- **Instance three: incomerank's ascent** — a self-running miniature of
+  the climb built from the product's real tower and sound modules, never a
+  re-creation, per the map's rule. It performs rather than puzzles, which
+  the grammar permits: instance two already established a takeover the
+  reader watches. Its text is a third kind the map now admits alongside
+  site copy and machine facts: the product's own output copy (floor
+  labels, pills, the gap in people), rendered by the product's own code —
+  the product speaking, never jass.
+- **Instance four: mojify's text-frame video** — built and wired, dark
+  until the one asset only jass can export lands; the handoff with the
+  export steps is [.scratch/mojify-asset-handoff.md](../../mojify-asset-handoff.md).
+  This retires "mojify stays plain (not forced)" from ticket 11 the honest
+  way — not forced then, earned now.

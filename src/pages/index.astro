@@ -165,10 +165,14 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
               // wakes as one thing — a name and its line — which is what it is
               // and which nothing at rest says.
               //
-              // Keyed off `a:hover` rather than the row's own hover on
-              // purpose: pointing at the description does nothing. Text that
-              // brightens under the cursor promises a click, and the
-              // description isn't clickable. Only the link speaks for the row.
+              // Keyed off `a:hover`, not the row's own hover: for a bare
+              // row, pointing at the description does nothing, and text that
+              // brightens under the cursor promises a click it can't keep.
+              // Act-bearing rows DO keep it — friend.ts marks them
+              // `data-acts` at registration and global.css gives exactly
+              // those descriptions a cursor and their own hover lift,
+              // because there a tap on the description performs the act.
+              // The markup stays uniform; the name stays a pure link.
               // `data-entry` is the handle the demo modules select by — the
               // friend finds a row by the name of the thing it performs.
               <li class="group" data-entry={entry.data.name}>
@@ -214,7 +218,9 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
   import { register as dictateSong } from "@/scripts/demos/andrew-dictate-song";
   import { register as assSlap } from "@/scripts/demos/ass-slap";
   import { register as closerSweep } from "@/scripts/demos/closer-sweep";
+  import { register as incomerankAscent } from "@/scripts/demos/incomerank-ascent";
   import { register as liquidGlass } from "@/scripts/demos/liquid-glass";
+  import { register as mojifyTextVideo } from "@/scripts/demos/mojify-text-video";
   import { register as musicToMyAi } from "@/scripts/demos/music-to-my-ai";
   import { register as onandemoCat } from "@/scripts/demos/onandemo-cat";
   import { register as quilt } from "@/scripts/demos/quilt";
@@ -225,7 +231,9 @@ const LIST = "mt-3 space-y-2 text-body leading-[1.4]";
   dictateSong();
   assSlap();
   closerSweep();
+  incomerankAscent();
   liquidGlass();
+  mojifyTextVideo();
   musicToMyAi();
   onandemoCat();
   quilt();
