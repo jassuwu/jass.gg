@@ -11,3 +11,7 @@ bun.lock
 # every push — the two would rewrite the same file forever, in opposite
 # directions. the generator owns this file.
 public/resume.json
+
+# the mojify film — written by .scratch/mojify-asset/convert.ts, read by the
+# player, never by a human. the converter owns its shape.
+public/demos
