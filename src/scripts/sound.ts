@@ -72,10 +72,19 @@ try {
 function wake(): void {
   ctx = new AudioContext();
   removeEventListener("pointerup", wake, true);
-  removeEventListener("keydown", wake, true);
+  removeEventListener("keydown", wakeKey, true);
+  for (const cb of waking.splice(0)) cb();
+}
+/* Not Escape: the HTML spec's activation-triggering keys exclude it, so a
+   context born of an Escape (the first thing a reader may press, to end a
+   dwell-borne takeover) would sit suspended — awake by this module's count,
+   mute by the browser's — and the friend's murmur would retract on a
+   gesture that unlocked nothing. */
+function wakeKey(e: KeyboardEvent): void {
+  if (e.key !== "Escape") wake();
 }
 addEventListener("pointerup", wake, true);
-addEventListener("keydown", wake, true);
+addEventListener("keydown", wakeKey, true);
 
 /* Hidden tab: silent — even mid-cue. */
 document.addEventListener("visibilitychange", () => {
@@ -91,6 +100,30 @@ document.addEventListener("visibilitychange", () => {
  */
 export function context(): AudioContext | undefined {
   return ctx;
+}
+
+/* Callbacks parked until the gate opens. Flushed once, in wake(), and never
+   consulted again — after that onWake() runs its callback on the spot. */
+const waking: Array<() => void> = [];
+
+/**
+ * Whether the gate has opened. Read-only on purpose: the context is created
+ * in exactly one place, inside the wake handler, and its absence IS the
+ * gate. Nothing outside this module gets to change that fact — only ask it.
+ */
+export function isAwake(): boolean {
+  return ctx !== undefined;
+}
+
+/**
+ * Run `cb` the moment the gate opens — or now, if it already has. For
+ * things that must react to the first real gesture without being a sound:
+ * the friend's murmur retracts on it. Registering here queues no audio and
+ * creates nothing; the gate philosophy is untouched.
+ */
+export function onWake(cb: () => void): void {
+  if (ctx) cb();
+  else waking.push(cb);
 }
 
 export function isMuted(): boolean {
