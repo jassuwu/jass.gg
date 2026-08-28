@@ -1,8 +1,9 @@
 /**
  * THE QUILT ROW PERFORMS ITS OWN PRODUCT (ticket 15). quilt's pitch is
  * "merge the calendars, get an SVG endpoint" — so the demo IS the endpoint.
- * Dwell on the row and the friend holds up jass's real merged contribution
- * graph, rendered live by the deployed service at quilt.jass.gg. Hotlinking
+ * Dwell on the row — or tap its description, which on touch is the only way
+ * in — and the friend holds up jass's real merged contribution graph,
+ * rendered live by the deployed service at quilt.jass.gg. Hotlinking
  * it is the point: the row proves the product by using it, and if the
  * service were down the proof would honestly not exist, which is the
  * correct amount of fakery (none).
@@ -18,11 +19,13 @@
  * accent-mark, the invariant lime that can never be text on white — here it
  * never has to be, because it sits inside the SVG's own dark ground.
  *
- * Ambient, no `once`: the graph is a fact, not a gag, and a fact bears
- * repeating. It leaves when the pointer does, or after a beat — the beat
- * exists for touch, where there is no leave.
+ * No `once`: the graph is a fact, not a gag, and a fact bears repeating —
+ * on re-dwell, and on tap, where consent may always repeat. It leaves when
+ * the pointer does, or after a beat — the beat exists for touch, where
+ * there is no leave. The act is silent (an SVG has no voice), so no `sound`
+ * and no murmur.
  */
-import { ambient } from "@/scripts/friend";
+import { entry } from "@/scripts/friend";
 
 /** jass's real merged graph — both accounts — generated at request time by
  * the live service. The colours are the site's own tokens converted to sRGB
@@ -114,11 +117,14 @@ export function register(): void {
     img.addEventListener("error", () => {
       /* Retired for the visit — so the scaffolding retires with it: the
          injected style and the row's positioning class have no image left
-         to serve. */
+         to serve, and the `data-acts` cursor comes off too — a description
+         that still invites the tap would be promising a graph that isn't
+         coming. */
       dead = true;
       img?.remove();
       style?.remove();
       row.classList.remove("friend-quilt-row");
+      row.removeAttribute("data-acts");
     });
     /* The request starts here, on first act — never at rest. Revealing is
        gated on `load` so the quilt appears whole or not at all; a broken-image
@@ -131,6 +137,7 @@ export function register(): void {
 
   /* `still` is the same appearance — the CSS above already strips its motion,
      so the honest static form falls out of the media query rather than a
-     second code path. The pointerleave above and the beat are its exits. */
-  ambient({ el: row, act: show, still: show });
+     second code path, and it serves both entries: reduced-motion readers get
+     it from the tap too. The pointerleave above and the beat are its exits. */
+  entry({ el: row, act: show, still: show });
 }
