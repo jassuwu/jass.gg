@@ -257,6 +257,33 @@
    was no second candidate, so the utility is deleted rather than left sitting
    here unused. Lime as text now goes through --color-accent instead. */
 
+/* AN ACT-BEARING DESCRIPTION IS A HANDLE. friend.ts marks a row `data-acts`
+   when a module registers an act for it — the markup can't know, because an
+   act may refuse its row at runtime (the glass gates on Chromium) and a bare
+   row must stay bare. Exactly those descriptions then promise a click and
+   keep it: a pointer cursor, and their own hover lift — the same wake the
+   link's hover already lends them, now earned directly, because tapping the
+   description performs the act. `> a + span` so the murmur the friend may
+   whisper after the description never inherits the promise.
+
+   Unlayered, like the print block, so the lift beats the muted-foreground
+   utility without an !important. Hover stays inside (hover: hover): sticky
+   :hover on touch would leave a row lit after every tap. */
+li[data-acts] > a + span {
+  cursor: pointer;
+  /* The handle is the only touch entry there is, and a bare line box is a
+     25px target. Block padding on an inline box paints and hit-tests
+     without touching the line's height — the socials' `py-1` trick — so
+     the thumb gets ~33px and not one glyph moves. */
+  padding-block: 0.25rem;
+}
+
+@media (hover: hover) {
+  li[data-acts] > a + span:hover {
+    color: var(--color-foreground);
+  }
+}
+
 /* PRINT. Someone will hit Cmd+P on a page that sits one link away from a
    résumé, and paper is the one medium where this site's central decision stops
    working: links carry no decoration at rest and nothing can be hovered, so
