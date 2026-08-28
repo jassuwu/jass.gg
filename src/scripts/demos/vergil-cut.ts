@@ -7,12 +7,14 @@
  * because a page-sized effect shrunk into a row would be a thumbnail of
  * itself.
  *
- * Ambient, on the row: dwell on pointer, scroll-dwell on touch. The friend
- * cuts when the reader lingers, not when they ask — the egg goes back to
- * being unmarked. It repeats on re-dwell, but one cut per stay: a pointer
- * parked on the row fires once, and the row must be left and re-entered
- * before the blade comes out again. The link keeps navigating; nothing here
- * steals a tap.
+ * On the row, both entries (the settled grammar): dwell is the whisper — the
+ * friend cuts when the reader lingers, and the egg stays unmarked — and a
+ * tap on the description is the deliberate ask, immediate, and on touch the
+ * only way in (scroll-dwell is dead grammar; scroll position initiates
+ * nothing). It repeats freely: the dwell timer arms once per enter, so a
+ * parked pointer fires once and must leave and return for another, while a
+ * tap may always cut again — consent is consent. The name keeps navigating;
+ * nothing here steals that tap.
  *
  * The mechanism is savemefrom's own, not an homage to it: the same clip,
  * re-cut to its 1.5s of green-screen (160 KB against the original 15.2 MB —
@@ -39,14 +41,15 @@
  * cuts in silence — the bus's law, not this module's problem. See AUDIO
  * below for why the track ships beside the mp4 instead of inside it.
  *
- * Lazy: nothing is fetched until intent — first pointer into the row, or on
- * touch the row's first arrival in the dwell band. Reduced motion: nothing
+ * Lazy: nothing is fetched until intent — the first pointer into the row,
+ * which on touch is the tap itself (late, and fine: the watchdog below
+ * already covers a clip that hasn't arrived). Reduced motion: nothing
  * at all, and no `still` — a slice with no motion is a broken page, not a
  * quieter one — so the module also skips the preload, and the row is just a
  * row. A dead act makes no sound: the register bails before any listener
  * exists, so the cue dies with it.
  */
-import { ambient } from "@/scripts/friend";
+import { entry } from "@/scripts/friend";
 import { play, stopAll } from "@/scripts/sound";
 
 /* Six pieces at tan(12°). More strips read as confetti, fewer as a page
@@ -73,16 +76,13 @@ const Z = 40;
 const AUDIO = "/vergil.m4a";
 
 let video: HTMLVideoElement | undefined;
-let running = false;
 
-/* The cooldown. `running` only stops the act overlapping itself; dwell
-   needs more. On pointer the dwell timer arms once per enter, so a parked
-   cursor is already safe — but on touch the friend re-runs everything in
-   the band at every scroll pause, and a row that happens to rest mid-screen
-   would chain-cut the page back to back. One cut per stay: set when the
-   blade comes out, cleared only when the row is left — pointerleave on
-   pointer, band exit on touch. */
-let cooling = false;
+/* The only guard left: the act must not overlap itself. There used to be a
+   cooldown beside it, built for scroll-dwell's chain-fires; scroll-dwell
+   died and the cooldown went with it — the dwell timer arms once per enter,
+   so a parked cursor is already one cut per stay, and a cooldown that
+   outlived its reason was quietly eating the deliberate tap's replay. */
+let running = false;
 
 /* Built on first intent, kept for repeats. The filter is savemefrom's,
    verbatim: the matrix drives any green-dominant pixel's alpha below zero,
@@ -214,16 +214,15 @@ function slice(onDone: () => void): void {
 }
 
 function perform(): void {
-  if (running || cooling) return;
+  if (running) return;
   running = true;
-  cooling = true;
   const v = ensureVideo();
   flash();
   document.body.append(v);
   v.currentTime = 0;
 
   /* One path out, whatever the video does: ended, errored, or never came
-     (a quick scroll-dwell can race the lazy load; offline gets nothing). The
+     (a fast tap on touch can race the lazy load; offline gets nothing). The
      watchdog outlives the clip by a second — worst case the flash lands,
      nothing slashes, and the page still gets cut, which is most of the
      joke. */
@@ -262,41 +261,18 @@ export function register(): void {
 
   /* First intent fetches the clip and warms the http cache for the audio —
      a bare fetch, no Audio(), no bus: the bus does its own fetch on first
-     play, and this makes that one instant instead of late. Doubly useful
-     now: dwell gives 500ms of warning where a click gave a whole approach. */
-  let preloaded = false;
+     play, and this makes that one instant instead of late. On pointer the
+     enter comes a whole dwell before the blade; on touch it comes with the
+     tap itself, which only warms the replay — the first cut leans on the
+     watchdog, as the header says. */
   const preload = (): void => {
-    if (preloaded) return;
-    preloaded = true;
     ensureVideo();
     fetch(AUDIO).catch(() => {});
   };
   row.addEventListener("pointerenter", preload, { once: true });
 
-  if (matchMedia("(hover: hover)").matches) {
-    /* Leaving the row is what ends a stay on pointer devices. */
-    row.addEventListener("pointerleave", () => {
-      cooling = false;
-    });
-  } else {
-    /* On touch a stay ends when the row leaves the dwell band. The margin
-       mirrors the friend's — its band is private, so the number lives here
-       twice; if the friend ever moves its band, this one drifts a little
-       and the cooldown just clears slightly early or late, nothing worse.
-       Entering the band is also the earliest honest intent touch has, so
-       it doubles as the preload. */
-    new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) preload();
-          else cooling = false;
-        }
-      },
-      { rootMargin: "-35% 0px -35% 0px" },
-    ).observe(row);
-  }
-
-  /* No `once`: the cut repeats on a fresh stay, and `cooling` above is what
-     keeps a single stay to a single cut. */
-  ambient({ el: row, act: perform });
+  /* No `once`: the cut repeats on a fresh dwell or a fresh tap, and
+     `running` alone keeps it from overlapping itself. `sound` because the
+     cut speaks — dwelled before the bus wakes, it earns the murmur. */
+  entry({ el: row, act: perform, sound: true });
 }
