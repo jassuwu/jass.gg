@@ -36,8 +36,16 @@
  * row plus the halo, implied rather than outlined, and leaving it ends
  * everything instantly and completely — glass destroyed, arrows removed,
  * underline retracting the way it came — back to the exact page, every time.
- * Nothing is locked. Re-dwell deals a fresh board: ambient acts repeat, and
- * the arrows land in new blank spots each hand.
+ * Escape and a click anywhere end it too, through the friend's shared
+ * easyOut — the universal exits every takeover now carries — while the
+ * region, scroll and resize rules below stay this act's own. Nothing is
+ * locked. Re-dwell deals a fresh board: ambient acts repeat, and the arrows
+ * land in new blank spots each hand.
+ *
+ * Two entries, one act (the settled grammar, aug 22): dwell is the whisper
+ * path, and a click on the row's description starts the glass immediately —
+ * both behind the same capability gates, because a tap can't summon a
+ * cursor an engine can't draw.
  *
  * Chromium only, and silent elsewhere. The effect needs `backdrop-filter:
  * url(#svg-filter)`, which Firefox and Safari parse but do not render — so
@@ -59,7 +67,7 @@
  */
 import type { createLiquidGlassCursor } from "liquid-glass-cursor";
 
-import { ambient, occupy } from "../friend";
+import { easyOut, entry, occupy } from "../friend";
 import { play } from "../sound";
 
 type Destroy = ReturnType<typeof createLiquidGlassCursor>;
@@ -410,6 +418,10 @@ export function register(): void {
   if (!matchMedia("(hover: hover)").matches) return;
   if (!("userAgentData" in navigator)) return;
   if (!CSS.supports("backdrop-filter", "url(#f)")) return;
+  /* No `still` and no act under reduced motion — so no registration either:
+     a row that can't act stays bare, or the cursor on its description
+     would promise a glass that never comes. */
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   /* The package's module entry auto-invokes createLiquidGlassCursor() at
      import time — built to self-demo when dropped in a <script> tag. Imported
@@ -453,14 +465,16 @@ export function register(): void {
     py = e.clientY;
   });
 
-  /* THE easy out — the only exit, so there is exactly one and it cannot
-     half-run. destroy() is the package's own teardown and removes everything
-     it made: the glass, the filter <svg>, the cursor-hiding <style>, both
-     document listeners. The puzzle's dispose removes everything IT made:
-     arrows, timers, listeners, the pinned underline. Each entrance builds
-     fresh, so enter/leave any number of times leaves no residue. The leave
-     drop is guarded by destroy: a pass-through that left mid-import took no
-     glass with it, so it gets no drop. The sound is OF the leaving. */
+  /* THE easy out — every exit funnels here, so there is exactly one and it
+     cannot half-run. destroy() is the package's own teardown and removes
+     everything it made: the glass, the filter <svg>, the cursor-hiding
+     <style>, both document listeners. The puzzle's dispose removes
+     everything IT made: arrows, timers, listeners, the pinned underline.
+     The shared easyOut uninstalls its Escape and click-anywhere listeners.
+     Each entrance builds fresh, so enter/leave any number of times leaves
+     no residue. The leave drop is guarded by destroy: a pass-through that
+     left mid-import took no glass with it, so it gets no drop. The sound is
+     OF the leaving. */
   const exit = (): void => {
     if (!destroy) return;
     if (unveil) {
@@ -471,18 +485,23 @@ export function register(): void {
     destroy = undefined;
     release?.();
     release = undefined;
+    offOut?.();
+    offOut = undefined;
     endPuzzle?.();
     endPuzzle = undefined;
     wanted = false;
     droplet(LEAVE);
   };
 
-  /* The entrance's repair loop and the stage claim (audit, aug 22). */
+  /* The entrance's repair loop, the stage claim, and the shared exits
+     (audit, aug 22). */
   let unveil: number | undefined;
   let release: (() => void) | undefined;
+  let offOut: (() => void) | undefined;
 
-  ambient({
+  entry({
     el: row,
+    sound: true,
     act: () => {
       wanted = true;
       loading ??= load();
@@ -536,6 +555,10 @@ export function register(): void {
             new MouseEvent("mousemove", { clientX: px, clientY: py }),
           );
           endPuzzle = startPuzzle(row, px, py, exit);
+          /* The universal exits arrive with the glass, not with the intent:
+             installed here, the deliberate click that summoned it is already
+             stamped before them, so an entry can never be its own exit. */
+          offOut = easyOut(exit);
           /* Only here, where the glass is actually on screen — a dwell whose
              import is still in flight has nothing to sound like yet. */
           droplet(ARRIVE);
