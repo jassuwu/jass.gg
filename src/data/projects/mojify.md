@@ -1,7 +1,7 @@
 ---
 name: "mojify"
 description: "turn media into text. videos in, colored ascii/emoji out"
-kind: "thing"
+kind: "toy"
 github: "https://github.com/jassuwu/mojify"
 link: "https://mojify.jass.gg"
 date: 2026-06-02
