@@ -221,7 +221,8 @@
 
 <script>
   /* The re-sign goes through the friend, so the wordmark keeps the site's
-     dwell grammar — 500ms on pointer, scroll-dwell on touch — instead of
+     dwell grammar — 500ms on hover devices; on touch the wordmark has no
+     tap handle, so it never re-signs there (ticket 25) — instead of
      inventing a hover of its own. No `once`: signing again on request is the
      point, and reduced motion is the friend's problem, already solved.
 
