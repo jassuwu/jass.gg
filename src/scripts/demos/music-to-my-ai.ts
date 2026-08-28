@@ -14,15 +14,16 @@
  * copy rule by construction — the streamed words are the site's own,
  * verbatim, every one of them, so nothing new is ever put in jass's voice.
  *
- * IT RUNS ON LIQUID GLASS'S GRAMMAR, which is jass's call and the second
- * thing this instance settles. Dwell arms it, not a click; leaving the row
- * ends it instantly and completely; there is no marker, no cursor change and
- * no instruction, because the takeover is found the way instance one's
- * arrows are. An earlier build was click-armed with a pointer cursor and ran
- * the page out over fifteen seconds. Both were wrong for the same reason: a
- * reader touches a row to see what happens, and a thing that asks for a
- * click and then holds them for fifteen seconds has mistaken itself for a
- * video. It is now about four seconds, and any moment of it is quittable.
+ * IT RUNS ON THE SETTLED GRAMMAR (aug 22): dwell is the whisper entry, and
+ * a click or tap on the row's description starts it immediately — the
+ * deliberate path, and on touch the only one, now that scroll-dwell is dead
+ * grammar. Leaving the row still ends it instantly and completely. The
+ * cursor on the description comes from the shared handle rule in
+ * global.css, not from here. An earlier build was click-armed and ran the
+ * page out over fifteen seconds, and the sin was the fifteen seconds, not
+ * the click: a reader touches a row to see what happens, and a thing that
+ * holds them that long has mistaken itself for a video. It is now about
+ * four seconds, and any moment of it is quittable.
  *
  * THE ARRANGEMENT IS THE PAGE'S OWN STRUCTURE. The product ships six voices;
  * this plays four of them, and which one you hear is where you are: the
@@ -104,8 +105,11 @@
  * `#things`. Assistive tech and the keyboard keep talking to the real one.
  *
  * THE EASY OUT IS SACRED (ticket 22's one law). Leaving the row ends it, and
- * so does a click anywhere, Escape, or hiding the tab. It also just ends on
- * its own. Nothing is ever locked, and re-dwelling replays it.
+ * so does a click anywhere, Escape — both through the friend's shared
+ * easyOut, which also swallows the entry gesture, so the tap that summons
+ * the piece can never be the pointerdown that kills it — or hiding the tab.
+ * It also just ends on its own. Nothing is ever locked, and re-dwelling or
+ * re-tapping replays it.
  *
  * It whispers, because a dwell is not consent (ticket 21's ladder) and
  * because jass's ear had already called the click-armed version too loud.
@@ -122,7 +126,7 @@
  * entire idea; text that is already there is just the page, which the reader
  * already has.
  */
-import { ambient, occupy } from "@/scripts/friend";
+import { easyOut, entry, occupy } from "@/scripts/friend";
 import { context, play, stopAll } from "@/scripts/sound";
 
 /* ---- the voices, tuned as the product tunes them ---- */
@@ -600,8 +604,13 @@ function build(main: HTMLElement): {
      streaming 1.4 KB of JavaScript that renders nothing, so the first
      several seconds played notes over a page that visibly did nothing. That
      was the bug, not the network. */
-  for (const el of clone.querySelectorAll("script, style, noscript, template"))
+  for (const el of clone.querySelectorAll(
+    "script, style, noscript, template, [data-murmur]",
+  ))
     el.remove();
+  /* `[data-murmur]` is the friend's aside about withheld sound, which can
+     land beside this very row a breath before the clone is taken. It is
+     not page copy and it must not be typed — least of all with a note. */
 
   /* The text of the page, in order, as the stream will deliver it. */
   const pieces: Array<{ node: Text; full: string; voice: string }> = [];
@@ -614,7 +623,10 @@ function build(main: HTMLElement): {
     if (!/\S/.test(full)) continue;
     /* The wordmark's only text is its `sr-only` label; the mark itself is
        drawn. A signature is not prose and does not get typed. */
-    if (node.parentElement?.closest("svg, .sr-only, script, style")) continue;
+    if (
+      node.parentElement?.closest("svg, .sr-only, script, style, [data-murmur]")
+    )
+      continue;
     const voice = node.parentElement
       ?.closest("[data-mtma]")
       ?.getAttribute("data-mtma");
@@ -672,15 +684,11 @@ function build(main: HTMLElement): {
 /* ---- the act ---- */
 
 let running = false;
-/** When the last run ended, for the cooldown below. */
-let lastEnd = 0;
-/**
- * On pointer the dwell timer arms once per enter, so a parked cursor is
- * already safe. Touch is why this exists: scroll-dwell re-runs whenever the
- * row settles in the band, and without a cooldown a thumb resting mid-page
- * would restart the piece the instant it finished.
- */
-const COOLDOWN_MS = 1500;
+/* No cooldown anymore, and its absence is a decision: the cooldown existed
+   for scroll-dwell, which re-ran whenever a resting thumb let the row
+   settle. Both entries left are intentional — a dwell arms once per enter,
+   and a tap is consent, which may repeat the instant it likes. A guard here
+   would eat exactly the tap that means "again". */
 
 export function register(): void {
   const row = document.querySelector<HTMLElement>(
@@ -688,6 +696,10 @@ export function register(): void {
   );
   const main = document.querySelector<HTMLElement>("main");
   if (!row || !main) return;
+  /* Reduced motion gets no act and no `still` (a page that is already
+     written is just the page) — and therefore no registration: the row
+     stays bare rather than wearing a cursor with nothing behind it. */
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   styles();
 
@@ -730,10 +742,9 @@ export function register(): void {
     running = false;
     releaseStage?.();
     releaseStage = undefined;
-    lastEnd = Date.now();
     window.clearTimeout(timer);
-    removeEventListener("pointerdown", out, true);
-    removeEventListener("keydown", esc, true);
+    offOut?.();
+    offOut = undefined;
     removeEventListener("resize", place);
     document.removeEventListener("visibilitychange", hidden);
     clear?.();
@@ -744,18 +755,15 @@ export function register(): void {
     if (silence) stopAll();
   };
 
-  const out = (): void => end(true);
-  const esc = (e: KeyboardEvent): void => {
-    if (e.key === "Escape") end(true);
-  };
   const hidden = (): void => {
     if (document.hidden) end(true);
   };
 
   let releaseStage: (() => void) | undefined;
+  let offOut: (() => void) | undefined;
 
   const start = (): void => {
-    if (running || Date.now() - lastEnd < COOLDOWN_MS) return;
+    if (running) return;
     running = true;
     /* A takeover holds the stage — while the page is streaming itself, no
        other ambient act may start over it (the friend's arbiter). */
@@ -770,8 +778,10 @@ export function register(): void {
     document.body.append(sheet);
     clear = () => sheet.remove();
 
-    addEventListener("pointerdown", out, true);
-    addEventListener("keydown", esc, true);
+    /* The universal exits — Escape, click-anywhere — from the shared
+       helper, which swallows the entry tap by timestamp: the pointerdown
+       that summoned this piece is already history when this installs. */
+    offOut = easyOut(() => end(true));
     addEventListener("resize", place);
     document.addEventListener("visibilitychange", hidden);
 
@@ -817,13 +827,14 @@ export function register(): void {
     tick();
   };
 
-  /* THE EASY OUT, and the reason this is a dwell act rather than a click:
-     the region is the row, and leaving it ends the piece the way stepping
-     out of the glass ends instance one. */
+  /* The natural exit that is this act's own: the region is the row, and
+     leaving it ends the piece the way stepping out of the glass ends
+     instance one. Escape and click-anywhere live in the shared helper. */
   row.addEventListener("pointerleave", () => end(true));
 
-  /* Dwell on pointer, scroll-dwell on touch. No `once` — re-dwelling
-     replays it, subject to the cooldown above. Reduced motion gets no act
-     and no `still`: a page that is already written is just the page. */
-  ambient({ el: row, act: start });
+  /* Dwell on hover devices, tap on the description everywhere — and the
+     act speaks, so the row earns the murmur. No `once`: re-entering
+     replays it. Reduced motion gets no act and no `still`: a page that is
+     already written is just the page. */
+  entry({ el: row, act: start, sound: true });
 }
